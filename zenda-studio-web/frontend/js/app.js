@@ -1,6 +1,6 @@
 ﻿const CONFIG = {
-  APPS_SCRIPT_URL: 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT',
-  WHATSAPP_NUMBER: '50200000000',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwEdxXVqAyg9XlOsEVZqaVKtn76hwvYV0qXjbSdHHQbVcU34dNPjDeCJrlT5lYZAz_mXQ/exec',
+  WHATSAPP_NUMBER: '50258798301',
   MONEDA: 'Q'
 };
 
