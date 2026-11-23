@@ -5,27 +5,109 @@ const CONFIG = {
   MONEDA: 'Q'
 };
 
-// Paletas curadas: cada persona que entra recibe un acento diferente
-const PALETTES = [
-  { name: 'Cobalto',   hex: '#0066ff', soft: 'rgba(0, 102, 255, 0.12)',  glow: 'rgba(0, 102, 255, 0.36)' },
-  { name: 'Bermellón', hex: '#ff4d00', soft: 'rgba(255, 77, 0, 0.12)',   glow: 'rgba(255, 77, 0, 0.36)' },
-  { name: 'Esmeralda', hex: '#059669', soft: 'rgba(5, 150, 105, 0.12)',  glow: 'rgba(5, 150, 105, 0.36)' },
-  { name: 'Violeta',   hex: '#7c3aed', soft: 'rgba(124, 58, 237, 0.12)', glow: 'rgba(124, 58, 237, 0.36)' },
-  { name: 'Carmesí',   hex: '#e11d48', soft: 'rgba(225, 29, 72, 0.12)',  glow: 'rgba(225, 29, 72, 0.36)' },
-  { name: 'Cian',      hex: '#0891b2', soft: 'rgba(8, 145, 178, 0.12)',  glow: 'rgba(8, 145, 178, 0.36)' },
-  { name: 'Ámbar',     hex: '#d97706', soft: 'rgba(217, 119, 6, 0.12)',  glow: 'rgba(217, 119, 6, 0.36)' }
+// 4 prismas luminosos sobrios (cambian silenciosamente en cada visita, sin texto "Edición")
+const PRISMS = [
+  { c1: '#2563eb', c2: '#06b6d4', c3: '#6366f1', soft: 'rgba(37, 99, 235, 0.12)' },
+  { c1: '#0284c7', c2: '#14b8a6', c3: '#3b82f6', soft: 'rgba(2, 132, 199, 0.12)' },
+  { c1: '#4f46e5', c2: '#38bdf8', c3: '#8b5cf6', soft: 'rgba(79, 70, 229, 0.12)' },
+  { c1: '#0891b2', c2: '#3b82f6', c3: '#6366f1', soft: 'rgba(8, 145, 178, 0.12)' }
+];
+
+// Paquetes estructurados por tamaño de negocio (1, 2-3, 4-6, 6+ integrantes) y complejidad
+const TEAM_PLANS = [
+  {
+    key: 'solo',
+    id: 'PLAN-SOLO',
+    range: '1 persona',
+    short: 'Solo tú',
+    title: 'Plan Emprendedor',
+    subtitle: 'Ideal si atiendes ventas, entregas y redes tú solo y necesitas verte profesional hoy mismo.',
+    complexity: 'Nivel 1 · Esencial',
+    complexityPct: 28,
+    delivery: '5 a 7 días',
+    priceNum: 1400,
+    priceLabel: '1,400',
+    features: [
+      'Página web comercial optimizada para enlace de Instagram',
+      'Catálogo en vivo conectado a Google Sheets y Drive',
+      'Botones directos a tu WhatsApp con mensaje prellenado',
+      'Formulario de cotización que guarda prospectos automáticamente',
+      'Cero pagos mensuales de servidor'
+    ]
+  },
+  {
+    key: 'duo',
+    id: 'PLAN-DUO',
+    range: '2 a 3 integrantes',
+    short: 'Equipo base',
+    title: 'Plan Negocio en Crecimiento',
+    subtitle: 'Pensado para equipos pequeños donde 2 o 3 personas comparten pedidos, precios e inventario.',
+    complexity: 'Nivel 2 · Comercial',
+    complexityPct: 54,
+    delivery: '7 a 10 días',
+    priceNum: 2400,
+    priceLabel: '2,400',
+    featured: true,
+    features: [
+      'Tienda online completa con carrito de compras y folios de orden',
+      'Panel administrativo privado para subir fotos y editar precios en segundos',
+      'Base de datos compartida en Google Sheets para todo tu equipo',
+      'Alertas automáticas por correo y resumen ordenado a WhatsApp',
+      'Capacitación en vivo para los integrantes del negocio'
+    ]
+  },
+  {
+    key: 'squad',
+    id: 'PLAN-SQUAD',
+    range: '4 a 6 integrantes',
+    short: 'Operación',
+    title: 'Plan Operación & Flujos',
+    subtitle: 'Para negocios con ventas constantes que necesitan seguimiento de clientes, automatización y métricas.',
+    complexity: 'Nivel 3 · Automatizado',
+    complexityPct: 78,
+    delivery: '10 a 15 días',
+    priceNum: 3900,
+    priceLabel: '3,900',
+    features: [
+      'Todo lo del Plan Negocio + CRM ligero para seguimiento de prospectos',
+      'Automatizaciones de notificaciones y tareas repetitivas (Apps Script / n8n)',
+      'Dashboard de ventas, estados de pedidos y rendimiento en tiempo real',
+      'Separación por áreas o responsables dentro de tu hoja maestra',
+      'Soporte prioritario durante 30 días después del lanzamiento'
+    ]
+  },
+  {
+    key: 'scale',
+    id: 'PLAN-SCALE',
+    range: '6+ integrantes',
+    short: 'Empresa',
+    title: 'Plan Escala a Medida',
+    subtitle: 'Arquitectura diseñada para empresas o múltiples áreas que requieren integraciones y BI gerencial.',
+    complexity: 'Nivel 4 · Corporativo',
+    complexityPct: 100,
+    delivery: '15 a 25 días',
+    priceNum: 6500,
+    priceLabel: '6,500',
+    features: [
+      'Arquitectura web y base de datos diseñada según tus procesos internos',
+      'Integración con APIs, formularios avanzados y flujos multi-área',
+      'Tableros gerenciales (Looker Studio / BI) con reportes programados',
+      'Control de accesos, trazabilidad de órdenes e inventario multi-equipo',
+      'Acompañamiento técnico y escalabilidad modular continua'
+    ]
+  }
 ];
 
 const ICON_SUN = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
 const ICON_MOON = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
-const ICON_CHECK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+const ICON_CHECK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>';
 
 let catalogoGlobal = [];
 let cart = JSON.parse(localStorage.getItem('zenda_cart') || '[]');
 let activeModalItem = null;
 let currentView = 'grid';
+let activeTeamKey = 'duo';
 let cardRotatorTimer = null;
-let currentPaletteIdx = 0;
 
 const linkWhatsApp = (msg) => `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 const parsePrice = (val) => parseFloat(String(val || '0').replace(/,/g, '').replace(/[^\d.]/g, '')) || 0;
@@ -36,116 +118,198 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.hidden = false;
   clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => { t.hidden = true; }, 2500);
+  window._toastTimer = setTimeout(() => { t.hidden = true; }, 2400);
 }
 
-// ================= COLOR ALEATORIO POR VISITA =================
-function applyPalette(idx) {
-  currentPaletteIdx = idx;
-  const p = PALETTES[idx];
-  const root = document.documentElement.style;
-  root.setProperty('--accent', p.hex);
-  root.setProperty('--accent-soft', p.soft);
-  root.setProperty('--accent-glow', p.glow);
-  sessionStorage.setItem('zenda_last_palette', String(idx));
-  const label = document.getElementById('palette-name');
-  if (label) label.textContent = `Edición ${p.name}`;
-}
-
-function initRandomPalette() {
-  const last = Number(sessionStorage.getItem('zenda_last_palette'));
-  let next = Math.floor(Math.random() * PALETTES.length);
-  if (!Number.isNaN(last) && PALETTES.length > 1 && next === last) {
-    next = (next + 1 + Math.floor(Math.random() * (PALETTES.length - 1))) % PALETTES.length;
+// ================= PRISMA ALEATORIO SILENCIOSO POR VISITA =================
+function initRandomPrism() {
+  const last = Number(sessionStorage.getItem('zenda_prism'));
+  let idx = Math.floor(Math.random() * PRISMS.length);
+  if (!Number.isNaN(last) && PRISMS.length > 1 && idx === last) {
+    idx = (idx + 1) % PRISMS.length;
   }
-  applyPalette(next);
-
-  document.getElementById('palette-chip')?.addEventListener('click', () => {
-    applyPalette((currentPaletteIdx + 1) % PALETTES.length);
-    botSay('ESTILO', `¡Nuevo color activado: ${PALETTES[currentPaletteIdx].name}! Cada visitante vive una edición distinta.`, 'happy');
-  });
+  sessionStorage.setItem('zenda_prism', String(idx));
+  const p = PRISMS[idx];
+  const r = document.documentElement.style;
+  r.setProperty('--c1', p.c1);
+  r.setProperty('--c2', p.c2);
+  r.setProperty('--c3', p.c3);
+  r.setProperty('--accent-soft', p.soft);
 }
 
-// ================= SALUDO DINÁMICO + RELOJ GUATEMALA =================
+// ================= SALUDO DINÁMICO SEGÚN HORA =================
 function initGreeting() {
   let hour = new Date().getHours();
   try {
-    const gtHour = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Guatemala', hour: 'numeric', hour12: false }).format(new Date());
-    hour = Number(gtHour);
+    hour = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Guatemala', hour: 'numeric', hour12: false }).format(new Date()));
   } catch {}
 
   let greeting = 'Hola';
   let phrases = [];
-
   if (hour >= 5 && hour < 12) {
     greeting = 'Buenos días';
-    phrases = [
-      'Buen momento para dejar de llevar todo en libretas.',
-      'Hoy es un gran día para automatizar tu negocio.',
-      'Arranquemos el día haciendo que tu web trabaje por ti.',
-      'Café listo. ¿Qué sistema construimos hoy?'
-    ];
+    phrases = ['Buen momento para ordenar tu negocio.', 'Haz que tu web trabaje por tu equipo hoy.', 'Sistemas claros desde el primer café.'];
   } else if (hour >= 12 && hour < 19) {
     greeting = 'Buenas tardes';
-    phrases = [
-      'Si pasas la tarde respondiendo precios a mano, te urge un sistema.',
-      'Qué bueno verte por aquí — explora lo que podemos armar para tu marca.',
-      'Menos caos operativo, más tiempo para cerrar ventas.',
-      'Cada visita aquí cambia de color. Tu sistema también puede destacar así.'
-    ];
+    phrases = ['Menos trabajo manual, más ventas cerradas.', 'Sistemas pensados para equipos que no se detienen.', 'Qué gusto recibirte en Zenda Studio.'];
   } else if (hour >= 19 && hour < 24) {
     greeting = 'Buenas noches';
-    phrases = [
-      'Mientras otros cierran, una buena tienda en línea sigue vendiendo.',
-      'Buena hora para planear el siguiente salto de tu negocio.',
-      'Qué gusto recibirte. Mira lo que un sistema ordenado hace por ti.',
-      'Tu negocio no debería detenerse cuando apagas el teléfono.'
-    ];
+    phrases = ['Mientras descansas, tu sistema sigue vendiendo.', 'Buena hora para planear el siguiente nivel de tu negocio.', 'Tu catálogo en línea nunca cierra.'];
   } else {
-    greeting = '¿Trasnochando con una idea?';
-    phrases = [
-      'Las mejores empresas nacen a esta hora. Hagámosla realidad.',
-      'A esta hora tu web debería estar captando clientes sola.'
-    ];
+    greeting = '¿Trabajando de madrugada?';
+    phrases = ['Tu negocio merece un sistema que trabaje contigo 24/7.', 'Las mejores decisiones se toman con calma.'];
   }
 
   document.getElementById('greeting-time').textContent = greeting;
   document.getElementById('greeting-phrase').textContent = phrases[Math.floor(Math.random() * phrases.length)];
-
-  const clockEl = document.getElementById('hero-clock');
-  const updateClock = () => {
-    try {
-      const t = new Intl.DateTimeFormat('es-GT', { timeZone: 'America/Guatemala', hour: '2-digit', minute: '2-digit', hour12: true }).format(new Date());
-      clockEl.textContent = `GUATEMALA · ${t}`;
-    } catch { clockEl.textContent = 'GUATEMALA'; }
-  };
-  updateClock();
-  setInterval(updateClock, 20000);
 }
 
-// ================= EL AMIGUITO SÚPER INTERACTIVO =================
+// ================= NAVEGACIÓN POR SECCIONES (SPA) =================
+const VALID_ROUTES = ['inicio', 'equipos', 'catalogo', 'proceso', 'cotizar'];
+
+function navigateTo(route, updateHash = true) {
+  const target = VALID_ROUTES.includes(route) ? route : 'inicio';
+  document.querySelectorAll('.page-view').forEach(sec => {
+    sec.hidden = sec.id !== `view-${target}`;
+  });
+  document.querySelectorAll('[data-route]').forEach(el => {
+    if (el.classList.contains('nav-tab')) {
+      el.classList.toggle('active', el.dataset.route === target);
+    }
+  });
+  if (updateHash && window.location.hash !== `#${target}`) {
+    history.replaceState(null, '', `#${target}`);
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Reacción sutil del amiguito según sección
+  if (!botDismissed) {
+    if (target === 'equipos') botSay('Por equipo', 'Selecciona cuántos son en tu negocio para ver complejidad, entregables y precio.', 'normal');
+    else if (target === 'catalogo') botSay('Catálogo vivo', 'Puedes filtrar por categoría, cambiar a lista o abrir la galería de cada paquete.', 'normal');
+    else if (target === 'cotizar') botSay('A medida', 'Al enviar el formulario tu solicitud se guarda y abre directo en nuestro WhatsApp.', 'normal');
+  }
+}
+
+function initRouter() {
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-route]');
+    if (!trigger) return;
+    e.preventDefault();
+    navigateTo(trigger.dataset.route);
+  });
+  window.addEventListener('hashchange', () => {
+    const h = window.location.hash.replace('#', '');
+    navigateTo(h || 'inicio', false);
+  });
+  const initial = window.location.hash.replace('#', '');
+  navigateTo(VALID_ROUTES.includes(initial) ? initial : 'inicio', false);
+}
+
+// ================= SELECTOR DE PAQUETES POR EQUIPO =================
+function renderHomeQuickFinder(key) {
+  const plan = TEAM_PLANS.find(p => p.key === key) || TEAM_PLANS[0];
+  document.querySelectorAll('#home-size-pills .size-pill').forEach(b => b.classList.toggle('active', b.dataset.tier === plan.key));
+  document.getElementById('home-quick-result').innerHTML = `
+    <div class="quick-result-top">
+      <h4>${esc(plan.title)}</h4>
+      <span class="quick-result-price">Desde ${CONFIG.MONEDA}${plan.priceLabel}</span>
+    </div>
+    <p>${esc(plan.subtitle)}</p>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button type="button" class="btn btn-prism btn-sm" onclick="goToTeamPlan('${plan.key}')">Ver qué incluye &rarr;</button>
+      <button type="button" class="btn btn-secondary btn-sm" onclick="addTeamPlanToCart('${plan.key}')">Agregar al carrito</button>
+    </div>`;
+}
+
+window.goToTeamPlan = function(key) {
+  activeTeamKey = key;
+  renderTeamView();
+  navigateTo('equipos');
+};
+
+window.addTeamPlanToCart = function(key) {
+  const plan = TEAM_PLANS.find(p => p.key === key);
+  if (!plan) return;
+  addRawToCart({ id: plan.id, nombre: `${plan.title} (${plan.range})`, precio: plan.priceNum });
+};
+
+function renderTeamView() {
+  const bar = document.getElementById('team-selector-bar');
+  bar.innerHTML = TEAM_PLANS.map(p => `
+    <button type="button" class="team-tab ${p.key === activeTeamKey ? 'active' : ''}" data-key="${p.key}">
+      <span class="team-tab-num">${esc(p.range)}</span>
+      <strong>${esc(p.title)}</strong>
+      <span>${esc(p.complexity)}</span>
+    </button>`).join('');
+
+  bar.querySelectorAll('.team-tab').forEach(b => {
+    b.onclick = () => { activeTeamKey = b.dataset.key; renderTeamView(); };
+  });
+
+  const plan = TEAM_PLANS.find(p => p.key === activeTeamKey) || TEAM_PLANS[0];
+  const wa = linkWhatsApp(`Hola Zenda Studio, somos un negocio de ${plan.range} y nos interesa el ${plan.title} (${CONFIG.MONEDA}${plan.priceLabel}).`);
+
+  document.getElementById('team-detail-card').innerHTML = `
+    <div>
+      <span class="view-kicker prism-text">${esc(plan.range)} &middot; ${esc(plan.complexity)}</span>
+      <h3 style="font-size:1.65rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:8px;">${esc(plan.title)}</h3>
+      <p style="color:var(--text-secondary); margin-bottom:18px;">${esc(plan.subtitle)}</p>
+
+      <div class="complexity-wrap">
+        <div class="complexity-label"><span>Nivel de automatización y alcance</span><span>${plan.complexityPct}%</span></div>
+        <div class="complexity-track"><div class="complexity-fill" style="width:${plan.complexityPct}%;"></div></div>
+      </div>
+
+      <ul class="feature-list" style="margin-bottom:0;">
+        ${plan.features.map(f => `<li>${ICON_CHECK}<span>${esc(f)}</span></li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="team-side-box">
+      <div>
+        <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:4px;">Inversión estimada</div>
+        <div class="team-price-big prism-text">${CONFIG.MONEDA}${plan.priceLabel}</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">50% al iniciar · 50% al entregar</div>
+
+        <div style="margin-top:18px;">
+          <div class="team-meta-row"><span>Equipo ideal</span><strong>${esc(plan.range)}</strong></div>
+          <div class="team-meta-row"><span>Tiempo de entrega</span><strong>${esc(plan.delivery)}</strong></div>
+          <div class="team-meta-row" style="border:none;"><span>Mantenimiento mensual</span><strong>Q0 (en tus cuentas)</strong></div>
+        </div>
+      </div>
+
+      <div style="display:grid; gap:8px;">
+        <button type="button" class="btn btn-prism btn-full" onclick="addTeamPlanToCart('${plan.key}')">Agregar al carrito</button>
+        <a href="${wa}" target="_blank" rel="noopener" class="btn btn-secondary btn-full">Consultar por WhatsApp</a>
+      </div>
+    </div>`;
+
+  document.getElementById('team-compare-grid').innerHTML = TEAM_PLANS.map(p => `
+    <div class="compare-card ${p.key === activeTeamKey ? 'highlight' : ''}">
+      <span style="font-size:0.74rem; color:var(--text-muted); font-weight:700;">${esc(p.range)}</span>
+      <h4>${esc(p.title)}</h4>
+      <div class="c-price">${CONFIG.MONEDA}${p.priceLabel}</div>
+      <p>${esc(p.subtitle)}</p>
+      <button type="button" class="btn btn-secondary btn-sm btn-full" onclick="activeTeamKey='${p.key}'; renderTeamView();">Ver detalle</button>
+    </div>`).join('');
+}
+
+// ================= AMIGUITO TRANSLÚCIDO MULTICOLOR =================
 const BOT_TIPS = [
-  { tag: 'BENEFICIO', text: 'Un buen sistema vende, cotiza y ordena tus pedidos 24/7 sin que tengas que responder todo manual.' },
-  { tag: 'CONSEJO',   text: 'El 80% de tus clientes entra desde Instagram en celular. Si tu enlace tarda o confunde, se van con la competencia.' },
-  { tag: 'AHORRO',    text: 'Con Sheets + GitHub + Drive evitas pagar Q300–Q800 mensuales en plataformas que ni aprovechas al 100%.' },
-  { tag: 'CONSEJO',   text: 'Mostrar precios y entregables claros filtra a los curiosos y te trae clientes ya listos para comprar.' },
-  { tag: 'BENEFICIO', text: '¿Tienes varios productos o servicios? Con un panel privado subes fotos y cambias precios en 15 segundos.' },
-  { tag: 'TIP PRO',   text: 'Conectar tu formulario directo a WhatsApp y una hoja de cálculo evita que pierdas un solo prospecto.' },
-  { tag: 'BENEFICIO', text: 'Un tablero de datos en tiempo real te dice qué servicio te deja más ganancia sin hacer cuentas a mano.' },
-  { tag: 'CONSEJO',   text: 'No necesitas un sitio gigante de 20 páginas; necesitas una tienda rápida, clara y enfocada en cerrar ventas.' },
-  { tag: 'DATO',      text: 'En Zenda inicias con el 50% y liquidas el resto cuando ya ves tu sistema funcionando en vivo.' },
-  { tag: 'CONSEJO',   text: 'Si ya vendes por WhatsApp, un carrito que arme el pedido ordenado reduce los errores y acelera el pago.' },
-  { tag: 'SECRETO',   text: 'Cada persona que entra a esta página ve un color distinto. Imagina ese nivel de detalle en tu propia marca.' },
-  { tag: 'BENEFICIO', text: 'Automatizar confirmaciones y registros te devuelve horas cada semana para enfocarte en crecer.' },
-  { tag: 'TIP PRO',   text: 'Haz clic en cualquier paquete del catálogo para abrir su galería completa y ver todos los entregables.' },
-  { tag: 'CONSEJO',   text: 'Una imagen limpia y seria te permite cobrar lo que realmente vale tu trabajo.' },
-  { tag: 'CONTACTO',  text: '¿Dudas sobre qué paquete elegir? Escríbenos por WA o IG y te asesoramos sin compromiso.' }
+  { tag: 'Emprendedores (1)', text: 'Si trabajas solo, un catálogo con precios y WhatsApp automático te ahorra horas cada semana.' },
+  { tag: 'Equipos (2–3)', text: 'Cuando 2 o 3 personas atienden clientes, tener pedidos en una sola hoja evita duplicados y errores.' },
+  { tag: 'Equipos (4–6)', text: 'Con 4 o más personas, automatizar el seguimiento de clientes y ver métricas diarias marca la diferencia.' },
+  { tag: 'Ahorro real', text: 'Al trabajar sobre tus propias cuentas de Google y GitHub no pagas alquileres mensuales por tu tienda.' },
+  { tag: 'Consejo', text: 'Mostrar paquetes claros por tamaño de negocio ayuda a que tu cliente decida mucho más rápido.' },
+  { tag: 'Tip de ventas', text: 'El 80% de tus prospectos llega desde Instagram en celular. Tu enlace debe cargar en menos de 2 segundos.' },
+  { tag: 'Escalable', text: 'Puedes arrancar con el Plan Emprendedor hoy y sumar CRM o reportes después sin rehacer tu web.' },
+  { tag: 'Confianza', text: 'Pagas 50% al iniciar y 50% cuando ya ves tu sistema funcionando en producción.' }
 ];
 
 const DODGE_LINES = [
-  '¡Casi! Así de rápida carga tu futura página web.',
+  '¡Casi! Así de ágil corre tu futura página web.',
   '¡Uy! No me atrapes a mí, atrapa más clientes.',
-  '¡Tercera y última! Ok, me rindo... dale clic o pide otro consejo.'
+  'Ok, ganaste. Escríbenos por WA o IG y armamos tu sistema.'
 ];
 
 let botIdx = Math.floor(Math.random() * BOT_TIPS.length);
@@ -164,23 +328,19 @@ function botSay(tag, text, mood = 'normal') {
   document.getElementById('bot-msg').textContent = text;
 
   if (mood === 'happy') {
-    mouth.setAttribute('d', 'M11.5 21 Q18 28.5 24.5 21');
-    orb.classList.remove('excited');
-    void orb.offsetWidth;
-    orb.classList.add('excited');
-    setTimeout(() => mouth.setAttribute('d', 'M12.5 22.5 Q18 26.8 23.5 22.5'), 1600);
+    mouth.setAttribute('d', 'M12 21 Q18 28 24 21');
+    orb.classList.remove('excited'); void orb.offsetWidth; orb.classList.add('excited');
+    setTimeout(() => mouth.setAttribute('d', 'M13 22.5 Q18 26.5 23 22.5'), 1500);
   } else if (mood === 'surprised') {
     mouth.setAttribute('d', 'M15.5 23 Q18 25.5 20.5 23');
-    setTimeout(() => mouth.setAttribute('d', 'M12.5 22.5 Q18 26.8 23.5 22.5'), 700);
-  } else if (mood === 'wink') {
-    mouth.setAttribute('d', 'M13 22 Q18.5 26 24 21.5');
+    setTimeout(() => mouth.setAttribute('d', 'M13 22.5 Q18 26.5 23 22.5'), 650);
   }
 }
 
 function nextBotTip() {
   botIdx = (botIdx + 1) % BOT_TIPS.length;
   const item = BOT_TIPS[botIdx];
-  botSay(item.tag, item.text, 'normal');
+  botSay(item.tag, item.text);
 }
 
 function initZendaBot() {
@@ -193,116 +353,77 @@ function initZendaBot() {
   const eyeR = document.getElementById('eye-r');
   if (!bot || !orb) return;
 
-  // Primer mensaje aleatorio
   const first = BOT_TIPS[botIdx];
   document.getElementById('bot-tag').textContent = first.tag;
   document.getElementById('bot-msg').textContent = first.text;
 
-  // Rotación automática cada 9 segundos
-  botTimer = setInterval(() => {
-    if (!botDismissed) nextBotTip();
-  }, 9000);
-
-  nextBtn.addEventListener('click', () => {
+  botTimer = setInterval(() => { if (!botDismissed) nextBotTip(); }, 10000);
+  nextBtn.onclick = () => {
     nextBotTip();
     clearInterval(botTimer);
-    botTimer = setInterval(() => { if (!botDismissed) nextBotTip(); }, 9000);
-  });
+    botTimer = setInterval(() => { if (!botDismissed) nextBotTip(); }, 10000);
+  };
 
-  // Ojos que siguen el cursor
   document.addEventListener('mousemove', (e) => {
     const r = orb.getBoundingClientRect();
     const dx = e.clientX - (r.left + r.width / 2);
     const dy = e.clientY - (r.top + r.height / 2);
-    const angle = Math.atan2(dy, dx);
-    const dist = Math.min(2.4, Math.hypot(dx, dy) / 85);
-    const ox = Math.cos(angle) * dist;
-    const oy = Math.sin(angle) * dist;
-    eyeL.setAttribute('cx', (12.5 + ox).toFixed(2));
-    eyeL.setAttribute('cy', (14.5 + oy).toFixed(2));
-    eyeR.setAttribute('cx', (23.5 + ox).toFixed(2));
-    eyeR.setAttribute('cy', (14.5 + oy).toFixed(2));
+    const ang = Math.atan2(dy, dx);
+    const d = Math.min(2.3, Math.hypot(dx, dy) / 90);
+    eyeL.setAttribute('cx', (12.5 + Math.cos(ang) * d).toFixed(2));
+    eyeL.setAttribute('cy', (14.5 + Math.sin(ang) * d).toFixed(2));
+    eyeR.setAttribute('cx', (23.5 + Math.cos(ang) * d).toFixed(2));
+    eyeR.setAttribute('cy', (14.5 + Math.sin(ang) * d).toFixed(2));
   });
 
-  // Esquive juguetón (3 veces) en escritorio
-  let dodgeCount = 0;
-  let lastDodge = 0;
-  const offsets = [{ x: -120, y: -42 }, { x: -30, y: -135 }, { x: 0, y: 0 }];
-
+  let dodges = 0, lastDodge = 0;
+  const offsets = [{ x: -110, y: -38 }, { x: -24, y: -120 }, { x: 0, y: 0 }];
   orb.addEventListener('mouseenter', () => {
     if (window.innerWidth < 768) return;
     const now = Date.now();
-    if (dodgeCount < 3 && now - lastDodge > 360) {
+    if (dodges < 3 && now - lastDodge > 360) {
       lastDodge = now;
-      const pos = offsets[dodgeCount];
-      bot.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
-      botSay('¡UPS!', DODGE_LINES[dodgeCount], 'surprised');
-      dodgeCount++;
+      const p = offsets[dodges];
+      bot.style.transform = `translate(${p.x}px, ${p.y}px)`;
+      botSay('¡Ups!', DODGE_LINES[dodges], 'surprised');
+      dodges++;
     }
   });
 
-  orb.addEventListener('click', () => {
+  orb.onclick = () => {
     bot.style.transform = 'translate(0, 0)';
-    botSay('¡ME ATRAPASTE!', 'Dale a "Otro consejo" para más tips, o escríbenos directo en WA / IG.', 'happy');
-  });
+    botSay('¡Me atrapaste!', 'Usa "Otro tip" para ideas rápidas, o escríbenos directo en WA / IG.', 'happy');
+  };
 
-  closeBtn.addEventListener('click', () => {
+  closeBtn.onclick = () => {
     bubble.hidden = true;
     botDismissed = true;
     bot.style.transform = 'translate(0, 0)';
-    dodgeCount = 0;
-  });
-
-  // Reacciones contextuales al hacer scroll por secciones
-  const seen = new Set();
-  if ('IntersectionObserver' in window) {
-    const secIO = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (!e.isIntersecting || botDismissed || seen.has(e.target.id)) return;
-        seen.add(e.target.id);
-        if (e.target.id === 'catalogo') {
-          botSay('CATÁLOGO', 'Puedes cambiar entre vista de cuadrícula o lista, y abrir cada paquete para ver su galería.', 'wink');
-        } else if (e.target.id === 'cotizar') {
-          botSay('A MEDIDA', '¿Tu proyecto tiene requisitos especiales? Llena este formulario y se abre directo en nuestro WhatsApp.', 'wink');
-        }
-      });
-    }, { threshold: 0.3 });
-    ['catalogo', 'cotizar'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) secIO.observe(el);
-    });
-  }
+    dodges = 0;
+  };
 }
 
-// ================= TEMA, CONTACTOS Y REVEAL =================
-function renderMediaHTML(m, alt) {
-  if (!m || !m.url) return '<div style="height:100%;display:grid;place-items:center;color:var(--text-muted);font-size:0.85rem;">Sin imagen</div>';
-  if (m.type === 'video') return `<video src="${m.url}" autoplay loop muted playsinline></video>`;
-  if (m.type === 'drive_video') return `<iframe src="${m.url}" allow="autoplay"></iframe>`;
-  return `<img src="${m.url}" alt="${esc(alt)}" loading="lazy" />`;
-}
-
-function updateContactLinks() {
-  const waMsg = linkWhatsApp('Hola Zenda Studio, me interesa conocer sus paquetes y soluciones digitales.');
-  ['hero-whatsapp', 'direct-whatsapp', 'footer-whatsapp', 'bot-wa'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.href = waMsg;
-  });
-}
-
+// ================= TEMA Y CONTACTOS =================
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   const btn = document.getElementById('theme-toggle');
   if (btn) btn.innerHTML = theme === 'dark' ? ICON_SUN : ICON_MOON;
 }
 
-function initTheme(def = 'light') {
-  applyTheme(localStorage.getItem('zenda_theme') || def);
+function initTheme() {
+  applyTheme(localStorage.getItem('zenda_theme') || 'dark');
   document.getElementById('theme-toggle')?.addEventListener('click', () => {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     localStorage.setItem('zenda_theme', next);
     applyTheme(next);
-    botSay('MODO ' + (next === 'dark' ? 'OSCURO' : 'CLARO'), next === 'dark' ? 'Modo oscuro activado. Tus ojos lo agradecen.' : 'Modo claro activado. Limpio y nítido.', 'happy');
+  });
+}
+
+function updateContactLinks() {
+  const waMsg = linkWhatsApp('Hola Zenda Studio, me interesa conocer los paquetes para mi negocio.');
+  ['hero-whatsapp', 'direct-whatsapp', 'footer-whatsapp', 'bot-wa'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.href = waMsg;
   });
 }
 
@@ -310,30 +431,22 @@ function aplicarConfigRemota(cfg) {
   if (!cfg) return;
   const cleanWa = String(cfg.whatsapp || '').replace(/\D/g, '');
   if (cleanWa && cleanWa !== '50200000000') CONFIG.WHATSAPP_NUMBER = cleanWa;
-  // Nota: el color NO se sobrescribe desde Config porque es aleatorio para cada visitante
-  if (cfg.hero_titulo) document.getElementById('hero-title').innerHTML = `${esc(cfg.hero_titulo)}<span class="text-accent">.</span>`;
-  if (cfg.hero_subtitulo) document.getElementById('hero-subtitle').textContent = cfg.hero_subtitulo;
   if (cfg.banner_promo && cfg.banner_promo.trim()) {
     const bar = document.getElementById('promo-bar');
     bar.textContent = cfg.banner_promo;
     bar.hidden = false;
   }
-  if (cfg.tema_default && !localStorage.getItem('zenda_theme')) applyTheme(cfg.tema_default === 'dark' ? 'dark' : 'light');
   updateContactLinks();
 }
 
-function initReveal() {
-  if (!('IntersectionObserver' in window)) {
-    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
-    return;
-  }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+// ================= CATÁLOGO GOOGLE SHEETS + DRIVE =================
+function renderMediaHTML(m, alt) {
+  if (!m || !m.url) return '<div style="height:100%;display:grid;place-items:center;color:var(--text-muted);font-size:0.85rem;">Sin vista previa</div>';
+  if (m.type === 'video') return `<video src="${m.url}" autoplay loop muted playsinline></video>`;
+  if (m.type === 'drive_video') return `<iframe src="${m.url}" allow="autoplay"></iframe>`;
+  return `<img src="${m.url}" alt="${esc(alt)}" loading="lazy" />`;
 }
 
-// ================= CATÁLOGO =================
 async function cargarCatalogo() {
   const grid = document.getElementById('catalogo-grid');
   try {
@@ -345,7 +458,7 @@ async function cargarCatalogo() {
     renderCatalogo(catalogoGlobal);
     poblarSelectPaquetes(catalogoGlobal);
   } catch (err) {
-    grid.innerHTML = '<div class="empty-state">No se pudo conectar con el catálogo. Recarga la página.</div>';
+    grid.innerHTML = '<div class="empty-state">No se pudo cargar el catálogo. Recarga la página.</div>';
     console.error(err);
   }
 }
@@ -367,21 +480,21 @@ function renderFiltros(items) {
   };
 
   container.querySelectorAll('.tag-pill').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.onclick = () => {
       container.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       filtrar();
-    });
+    };
   });
   document.getElementById('search-input')?.addEventListener('input', filtrar);
 
   document.querySelectorAll('.view-switch button').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.onclick = () => {
       document.querySelectorAll('.view-switch button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentView = btn.dataset.view;
       document.getElementById('catalogo-grid').classList.toggle('view-list', currentView === 'list');
-    });
+    };
   });
 }
 
@@ -391,7 +504,7 @@ function renderCatalogo(items) {
   clearInterval(cardRotatorTimer);
 
   if (!items.length) {
-    grid.innerHTML = '<div class="empty-state">No hay paquetes que coincidan con tu búsqueda.</div>';
+    grid.innerHTML = '<div class="empty-state">No hay servicios en esta categoría.</div>';
     return;
   }
 
@@ -421,15 +534,15 @@ function renderCatalogo(items) {
             ${feats.slice(0, 4).map(f => `<li>${ICON_CHECK}<span>${esc(f.trim())}</span></li>`).join('')}
           </ul>
           <div class="card-footer">
-            <button type="button" class="btn btn-primary btn-sm" data-action="add" data-id="${esc(item.id)}">Agregar al carrito</button>
+            <button type="button" class="btn btn-prism btn-sm" data-action="add" data-id="${esc(item.id)}">Agregar al carrito</button>
             <button type="button" class="btn btn-secondary btn-sm" data-action="modal" data-id="${esc(item.id)}">Ver detalle</button>
           </div>
         </div>
       </article>`;
   }).join('');
 
-  grid.querySelectorAll('[data-action="add"]').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.id)));
-  grid.querySelectorAll('[data-action="modal"]').forEach(b => b.addEventListener('click', () => abrirModal(b.dataset.id)));
+  grid.querySelectorAll('[data-action="add"]').forEach(b => b.onclick = () => addCatalogItemToCart(b.dataset.id));
+  grid.querySelectorAll('[data-action="modal"]').forEach(b => b.onclick = () => abrirModal(b.dataset.id));
 
   cardRotatorTimer = setInterval(() => {
     grid.querySelectorAll('.product-card').forEach(card => {
@@ -448,16 +561,20 @@ function renderCatalogo(items) {
 // ================= CARRITO =================
 function saveCart() { localStorage.setItem('zenda_cart', JSON.stringify(cart)); renderCart(); }
 
-function addToCart(id) {
-  const item = catalogoGlobal.find(i => String(i.id) === String(id));
-  if (!item) return;
+function addRawToCart({ id, nombre, precio }) {
   const ex = cart.find(c => String(c.id) === String(id));
   if (ex) ex.qty += 1;
-  else cart.push({ id: item.id, nombre: item.nombre, precio: parsePrice(item.precio), qty: 1 });
+  else cart.push({ id, nombre, precio, qty: 1 });
   saveCart();
-  showToast(`Agregado al carrito: ${item.nombre}`);
-  botSay('¡BUENA ELECCIÓN!', `"${item.nombre}" ya está en tu carrito. Puedes iniciar con 50% de anticipo.`, 'happy');
+  showToast(`Agregado al carrito: ${nombre}`);
+  botSay('En tu carrito', `"${nombre}" agregado. Recuerda que puedes iniciar con el 50%.`, 'happy');
   openCart();
+}
+
+function addCatalogItemToCart(id) {
+  const item = catalogoGlobal.find(i => String(i.id) === String(id));
+  if (!item) return;
+  addRawToCart({ id: item.id, nombre: item.nombre, precio: parsePrice(item.precio) });
 }
 
 window.changeQty = function(id, delta) {
@@ -473,7 +590,7 @@ function renderCart() {
   const list = document.getElementById('cart-items');
   const area = document.getElementById('cart-checkout-area');
   if (!cart.length) {
-    list.innerHTML = '<div class="empty-state" style="padding:32px 16px;">Tu carrito está vacío.</div>';
+    list.innerHTML = '<div class="empty-state" style="padding:30px 16px;">Tu carrito está vacío. Explora los planes por equipo o el catálogo.</div>';
     area.hidden = true;
     return;
   }
@@ -484,8 +601,8 @@ function renderCart() {
     return `
       <div class="cart-row">
         <div>
-          <strong style="font-size:0.92rem; display:block;">${esc(c.nombre)}</strong>
-          <span style="font-size:0.82rem; color:var(--accent); font-weight:600;">${formatMoney(c.precio)}</span>
+          <strong style="font-size:0.9rem; display:block;">${esc(c.nombre)}</strong>
+          <span style="font-size:0.82rem; color:var(--c1); font-weight:700;">${formatMoney(c.precio)}</span>
         </div>
         <div class="qty-control">
           <button type="button" class="qty-btn" onclick="changeQty('${esc(c.id)}', -1)">-</button>
@@ -501,8 +618,8 @@ function openCart() { document.getElementById('cart-overlay').hidden = false; re
 function closeCart() { document.getElementById('cart-overlay').hidden = true; }
 
 function initCart() {
-  document.getElementById('cart-open-btn').addEventListener('click', openCart);
-  document.getElementById('cart-close-btn').addEventListener('click', closeCart);
+  document.getElementById('cart-open-btn').onclick = openCart;
+  document.getElementById('cart-close-btn').onclick = closeCart;
   document.getElementById('cart-overlay').addEventListener('click', e => { if (e.target.id === 'cart-overlay') closeCart(); });
 
   document.getElementById('checkout-form').addEventListener('submit', async (e) => {
@@ -510,7 +627,7 @@ function initCart() {
     if (!cart.length) return;
     const btn = document.getElementById('btn-checkout');
     const st = document.getElementById('chk-status');
-    btn.disabled = true; btn.textContent = 'Confirmando orden...'; st.textContent = '';
+    btn.disabled = true; btn.textContent = 'Confirmando...'; st.textContent = '';
 
     const totalNum = cart.reduce((s, c) => s + c.precio * c.qty, 0);
     const resumen = cart.map(c => `${c.qty}x ${c.nombre} (${formatMoney(c.precio * c.qty)})`).join(' | ');
@@ -529,12 +646,12 @@ function initCart() {
       const json = await res.json();
       const orderId = json.orderId || 'ZS-OK';
       const wa = linkWhatsApp(`Hola Zenda Studio, confirmé mi pedido *${orderId}*:\n• Cliente: ${payload.cliente}\n• Paquetes: ${resumen}\n• Total: ${payload.total}\n• Pago: ${payload.metodo_pago}`);
-      st.innerHTML = `Orden <strong>${esc(orderId)}</strong> registrada. <a href="${wa}" target="_blank" style="color:var(--accent)">Abrir WhatsApp &rarr;</a> · <a href="${CONFIG.INSTAGRAM_URL}" target="_blank" style="color:var(--accent)">Instagram &nearr;</a>`;
+      st.innerHTML = `Orden <strong>${esc(orderId)}</strong> registrada. <a href="${wa}" target="_blank" style="color:var(--c2)">Abrir WhatsApp &rarr;</a>`;
       cart = []; saveCart(); e.target.reset();
       showToast(`Pedido ${orderId} confirmado`);
       window.open(wa, '_blank', 'noopener');
     } catch {
-      st.textContent = 'Error de conexión. Escríbenos directo por WhatsApp o Instagram.';
+      st.textContent = 'Error de conexión. Escríbenos por WhatsApp o Instagram.';
     } finally {
       btn.disabled = false; btn.textContent = 'Confirmar pedido →';
     }
@@ -560,7 +677,7 @@ function abrirModal(id) {
       <button type="button" class="modal-thumb ${i === 0 ? 'active' : ''}" data-i="${i}">
         ${m.type === 'image' ? `<img src="${m.url}" alt="" />` : 'VIDEO'}
       </button>`).join('');
-    thumbs.querySelectorAll('.modal-thumb').forEach(b => b.addEventListener('click', () => setMain(Number(b.dataset.i))));
+    thumbs.querySelectorAll('.modal-thumb').forEach(b => b.onclick = () => setMain(Number(b.dataset.i)));
   } else thumbs.innerHTML = '';
 
   setMain(0);
@@ -577,14 +694,20 @@ function abrirModal(id) {
 function initModal() {
   const modal = document.getElementById('service-modal');
   const close = () => { modal.hidden = true; document.getElementById('modal-media').innerHTML = ''; };
-  document.getElementById('modal-close').addEventListener('click', close);
+  document.getElementById('modal-close').onclick = close;
   modal.addEventListener('click', e => { if (e.target === modal) close(); });
-  document.getElementById('modal-add-btn').addEventListener('click', () => { if (activeModalItem) { close(); addToCart(activeModalItem.id); } });
+  document.getElementById('modal-add-btn').onclick = () => { if (activeModalItem) { close(); addCatalogItemToCart(activeModalItem.id); } };
 }
 
 function poblarSelectPaquetes(items) {
   const sel = document.getElementById('paquete');
   sel.innerHTML = '<option value="Proyecto a medida">Proyecto a medida</option>';
+  TEAM_PLANS.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = `${p.title} (${p.range})`;
+    opt.textContent = `${p.title} — ${p.range} (${CONFIG.MONEDA}${p.priceLabel})`;
+    sel.appendChild(opt);
+  });
   items.forEach(item => {
     const opt = document.createElement('option');
     opt.value = `${item.nombre} (${CONFIG.MONEDA}${item.precio})`;
@@ -600,19 +723,20 @@ function initQuoteForm() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     btn.disabled = true; btn.textContent = 'Enviando...'; st.textContent = '';
+    const equipo = document.getElementById('equipo-tamano').value;
     const payload = {
       action: 'quote',
       nombre: document.getElementById('nombre').value.trim(),
       telefono: document.getElementById('telefono').value.trim(),
       correo: document.getElementById('correo').value.trim(),
-      paquete: document.getElementById('paquete').value,
+      paquete: `${document.getElementById('paquete').value} [${equipo}]`,
       presupuesto: document.getElementById('presupuesto').value,
       mensaje: document.getElementById('mensaje').value.trim()
     };
     try {
       await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-      const wa = linkWhatsApp(`Hola Zenda Studio, envié una cotización:\n• Nombre: ${payload.nombre}\n• Servicio: ${payload.paquete}\n• Presupuesto: ${payload.presupuesto}\n• Detalle: ${payload.mensaje}`);
-      st.innerHTML = `Solicitud registrada. <a href="${wa}" target="_blank" style="color:var(--accent)">Abrir WhatsApp &rarr;</a> · <a href="${CONFIG.INSTAGRAM_URL}" target="_blank" style="color:var(--accent)">Instagram &nearr;</a>`;
+      const wa = linkWhatsApp(`Hola Zenda Studio, envié una cotización:\n• Nombre: ${payload.nombre}\n• Equipo: ${equipo}\n• Solución: ${payload.paquete}\n• Presupuesto: ${payload.presupuesto}\n• Detalle: ${payload.mensaje}`);
+      st.innerHTML = `Solicitud registrada. <a href="${wa}" target="_blank" style="color:var(--c2)">Abrir WhatsApp &rarr;</a>`;
       form.reset(); showToast('Solicitud enviada');
       window.open(wa, '_blank', 'noopener');
     } catch { st.textContent = 'Error al enviar. Escríbenos directo por WhatsApp o Instagram.'; }
@@ -631,15 +755,20 @@ function initSecretAccess() {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('year').textContent = new Date().getFullYear();
-  initRandomPalette();
+  initRandomPrism();
+  initTheme();
   initGreeting();
-  initTheme('light');
   updateContactLinks();
-  initReveal();
+  document.querySelectorAll('#home-size-pills .size-pill').forEach(b => {
+    b.onclick = () => renderHomeQuickFinder(b.dataset.tier);
+  });
+  renderHomeQuickFinder('solo');
+  renderTeamView();
   initZendaBot();
   initCart();
   initModal();
   initQuoteForm();
   initSecretAccess();
+  initRouter();
   cargarCatalogo();
 });
