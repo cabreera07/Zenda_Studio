@@ -2,18 +2,24 @@
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Control // zenda studio.</title>
+  <title>Admin // zenda studio.</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
   <style>
-    .admin-wrap { max-width: 860px; margin: 40px auto; padding: 0 20px; }
-    .admin-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; padding-bottom:18px; border-bottom:1px solid var(--border); }
-    .tabs { display:flex; gap:8px; margin-bottom:24px; }
-    .tab-btn { padding:10px 18px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--text-muted); font-family:var(--mono); font-size:0.78rem; cursor:pointer; }
+    .admin-wrap { max-width: 960px; margin: 36px auto; padding: 0 20px; }
+    .admin-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); flex-wrap:wrap; gap:12px; }
+    .tabs { display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; }
+    .tab-btn { padding:10px 16px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--text-muted); font-family:var(--mono); font-size:0.75rem; cursor:pointer; }
     .tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-    .panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:26px; margin-bottom:24px; }
-    .admin-item { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-bottom:1px solid var(--border); gap:12px; }
-    .admin-item:last-child { border-bottom:none; }
+    .panel { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:22px; }
+    .upload-zone { border:1px dashed var(--accent); background:var(--accent-soft); border-radius:10px; padding:18px; text-align:center; margin-bottom:12px; }
+    .media-list { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:10px; margin:12px 0; }
+    .media-chip { position:relative; border:1px solid var(--border-strong); border-radius:8px; overflow:hidden; aspect-ratio:16/10; background:var(--surface-2); display:flex; align-items:center; justify-content:center; }
+    .media-chip img { width:100%; height:100%; object-fit:cover; }
+    .media-chip button { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.75); color:#fff; border:none; border-radius:50%; width:22px; height:22px; cursor:pointer; font-size:0.8rem; }
+    .inv-row { display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+    .inv-row:last-child { border-bottom:none; }
+    .pill-on { color:#22c55e; } .pill-off { color:#ef4444; }
     .tab-pane[hidden] { display:none; }
   </style>
 </head>
@@ -23,83 +29,107 @@
     <div class="admin-top">
       <div>
         <a href="index.html" class="brand-logo"><span>zenda studio</span><span class="brand-dot"></span></a>
-        <div class="mono-xs" style="color:var(--text-muted); margin-top:4px;">PANEL INTERNO DE CONTROL</div>
+        <div class="mono-xs" style="color:var(--text-muted); margin-top:4px;">GESTOR DE INVENTARIO, DRIVE Y TIENDA</div>
       </div>
       <div style="display:flex; gap:10px; align-items:center;">
         <button id="theme-toggle" class="icon-btn" type="button"><span id="theme-icon">☀</span></button>
-        <a href="index.html" class="btn btn-outline btn-sm">&larr; Volver a la web</a>
+        <a href="index.html" class="btn btn-outline btn-sm">&larr; Ver Tienda</a>
       </div>
     </div>
 
-    <div class="panel" style="padding:18px 24px;">
-      <div class="form-group" style="margin:0;">
-        <label for="global-pin">PIN de Administrador (requerido para guardar cambios)</label>
-        <input type="password" id="global-pin" placeholder="Ej. 2026" />
+    <!-- Acceso con PIN -->
+    <div class="panel" style="display:flex; gap:12px; align-items:end; flex-wrap:wrap;">
+      <div class="form-group" style="flex:1; margin:0; min-width:200px;">
+        <label for="global-pin">PIN de Administrador</label>
+        <input type="password" id="global-pin" placeholder="Ingresa tu PIN (ej. 2026)" />
       </div>
+      <button id="btn-connect" class="btn btn-primary" type="button">Desbloquear y cargar datos</button>
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" data-tab="tab-catalogo">01 // CATÁLOGO E INVENTARIO</button>
-      <button class="tab-btn" data-tab="tab-interfaz">02 // INTERFAZ Y TEXTOS</button>
+      <button class="tab-btn active" data-tab="tab-inv">01 // INVENTARIO &amp; DRIVE</button>
+      <button class="tab-btn" data-tab="tab-orders">02 // PEDIDOS TIENDA</button>
+      <button class="tab-btn" data-tab="tab-ui">03 // INTERFAZ &amp; TEXTOS</button>
     </div>
 
-    <!-- PESTAÑA 1: CATÁLOGO -->
-    <div id="tab-catalogo" class="tab-pane">
+    <!-- PESTAÑA 1: INVENTARIO + SUBIDA A DRIVE -->
+    <div id="tab-inv" class="tab-pane">
       <div class="panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px;">
-          <h3>Agregar servicio / paquete</h3>
-          <button type="button" id="btn-seed" class="btn btn-outline btn-sm">Cargar 5 ejemplos pro</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+          <h3 id="form-heading">Nuevo paquete / servicio</h3>
+          <div style="display:flex; gap:8px;">
+            <button type="button" id="btn-reset-edit" class="btn btn-ghost btn-sm" hidden>Cancelar edición</button>
+            <button type="button" id="btn-seed" class="btn btn-outline btn-sm">Cargar 5 ejemplos pro</button>
+          </div>
         </div>
+
         <form id="admin-form">
+          <input type="hidden" id="edit-id" />
           <div class="form-row">
             <div class="form-group"><label>Categoría *</label><input type="text" id="categoria" required placeholder="Sistemas Web, Automatización, Datos" /></div>
             <div class="form-group"><label>Precio (sin símbolo) *</label><input type="text" id="precio" required placeholder="2,400" /></div>
           </div>
-          <div class="form-group"><label>Nombre del paquete *</label><input type="text" id="nombre" required placeholder="Ej. Sistema de Cotizaciones + CRM" /></div>
+          <div class="form-group"><label>Nombre del paquete *</label><input type="text" id="nombre" required placeholder="Ej. Tienda Online + Panel Admin" /></div>
           <div class="form-group"><label>Descripción *</label><input type="text" id="descripcion" required /></div>
-          <div class="form-group"><label>Entregables (separados por | )</label><input type="text" id="entregables" placeholder="Panel admin|Conexión Sheets|Soporte 30 días" /></div>
-          <div class="form-group"><label>Link de Imagen (Drive), GIF o Video (.mp4)</label><input type="text" id="imagen_drive" placeholder="https://drive.google.com/..." /></div>
-          <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-            <input type="checkbox" id="destacado" style="width:auto;" /><label for="destacado" style="margin:0;">Marcar como recomendado (borde azul)</label>
+          <div class="form-group"><label>Entregables (separados por | )</label><input type="text" id="entregables" placeholder="Diseño responsive|Conexión Sheets|Soporte 30 días" /></div>
+
+          <!-- GESTOR MULTIMEDIA (SUBIR A DRIVE O PEGAR LINK) -->
+          <div class="form-group">
+            <label>Galería de Imágenes / GIFs / Videos (la primera será la miniatura principal)</label>
+            <div class="upload-zone">
+              <p class="mono-xs" style="margin-bottom:10px;">SUBIR DIRECTO A TU CARPETA PÚBLICA DE GOOGLE DRIVE (máx. 12 MB por archivo)</p>
+              <input type="file" id="file-uploader" accept="image/*,video/mp4,video/webm" multiple style="max-width:340px;" />
+              <div id="upload-status" class="mono-xs" style="margin-top:8px; color:var(--accent);"></div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="manual-link" placeholder="O pega un link de Google Drive / Unsplash / .mp4 y pulsa +" />
+              <button type="button" id="btn-add-link" class="btn btn-outline btn-sm">+ Agregar link</button>
+            </div>
+            <div id="media-preview-list" class="media-list"></div>
           </div>
-          <button type="submit" class="btn btn-primary btn-full" id="btn-save">Guardar en Google Sheets</button>
+
+          <div class="form-group" style="display:flex; gap:20px; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; gap:8px; margin:0; cursor:pointer;"><input type="checkbox" id="destacado" style="width:auto;" /> Destacado (borde azul)</label>
+            <label style="display:flex; align-items:center; gap:8px; margin:0; cursor:pointer;"><input type="checkbox" id="activo" checked style="width:auto;" /> Visible en la tienda</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="btn-save">Guardar en Inventario</button>
           <p id="admin-status" class="form-status"></p>
         </form>
       </div>
 
       <div class="panel">
-        <h3 style="margin-bottom:12px;">Servicios activos en tu web</h3>
-        <div id="admin-list" class="mono-xs">CARGANDO...</div>
+        <h3 style="margin-bottom:12px;">Inventario completo (Google Sheets)</h3>
+        <div id="admin-list" class="mono-xs" style="color:var(--text-muted);">Ingresa tu PIN arriba y pulsa "Desbloquear" para administrar todo el inventario.</div>
       </div>
     </div>
 
-    <!-- PESTAÑA 2: CONTROL DE INTERFAZ -->
-    <div id="tab-interfaz" class="tab-pane" hidden>
+    <!-- PESTAÑA 2: PEDIDOS -->
+    <div id="tab-orders" class="tab-pane" hidden>
       <div class="panel">
-        <h3 style="margin-bottom:18px;">Control visual y textos en vivo</h3>
+        <h3 style="margin-bottom:12px;">Pedidos recibidos desde la tienda</h3>
+        <div id="orders-list" class="mono-xs" style="color:var(--text-muted);">Desbloquea con tu PIN para ver los pedidos.</div>
+      </div>
+    </div>
+
+    <!-- PESTAÑA 3: INTERFAZ -->
+    <div id="tab-ui" class="tab-pane" hidden>
+      <div class="panel">
+        <h3 style="margin-bottom:16px;">Control de interfaz en vivo</h3>
         <form id="config-form">
-          <div class="form-group"><label>Título principal (Hero)</label><input type="text" id="cfg-titulo" placeholder="Construimos sistemas que trabajan por tu negocio" /></div>
-          <div class="form-group"><label>Subtítulo (Hero)</label><input type="text" id="cfg-subtitulo" placeholder="Desarrollo web, automatización y arquitectura digital..." /></div>
-          <div class="form-group"><label>Barra de aviso / promoción superior (dejar vacío para ocultar)</label><input type="text" id="cfg-promo" placeholder="Ej. Agenda abierta para proyectos de diciembre" /></div>
+          <div class="form-group"><label>Título principal (Hero)</label><input type="text" id="cfg-titulo" /></div>
+          <div class="form-group"><label>Subtítulo (Hero)</label><input type="text" id="cfg-subtitulo" /></div>
+          <div class="form-group"><label>Banner superior de aviso / promo (vacío = oculto)</label><input type="text" id="cfg-promo" /></div>
           <div class="form-row">
-            <div class="form-group">
-              <label>Tema por defecto</label>
-              <select id="cfg-tema">
-                <option value="dark">Modo Oscuro</option>
-                <option value="light">Modo Claro</option>
-              </select>
-            </div>
+            <div class="form-group"><label>Tema por defecto</label><select id="cfg-tema"><option value="dark">Modo Oscuro</option><option value="light">Modo Claro</option></select></div>
             <div class="form-group"><label>Color de acento (HEX)</label><input type="text" id="cfg-color" value="#007bff" /></div>
           </div>
           <div class="form-row">
             <div class="form-group"><label>WhatsApp (con código país)</label><input type="text" id="cfg-wa" placeholder="502XXXXXXXX" /></div>
-            <div class="form-group"><label>Correo del estudio</label><input type="email" id="cfg-correo" placeholder="hola@zendastudio.com" /></div>
+            <div class="form-group"><label>Correo del estudio</label><input type="email" id="cfg-correo" /></div>
           </div>
-          <div class="form-group">
-            <label>Mostrar sección "Cómo trabajamos"</label>
-            <select id="cfg-proceso"><option value="SI">Sí, mostrar</option><option value="NO">No, ocultar</option></select>
-          </div>
-          <button type="submit" class="btn btn-primary btn-full" id="btn-cfg">Guardar interfaz en Sheets</button>
+          <div class="form-group"><label>Mostrar sección Proceso</label><select id="cfg-proceso"><option value="SI">Sí</option><option value="NO">No</option></select></div>
+          <button type="submit" class="btn btn-primary btn-full" id="btn-cfg">Guardar interfaz</button>
           <p id="cfg-status" class="form-status"></p>
         </form>
       </div>
@@ -108,60 +138,182 @@
 
   <script>
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBQgX8U0CzNe_zH8slUUAgDPMlQG3o0TidWUQ8cX2I88tEGSa6-4zsZet6Y-bqqd12GQ/exec';
+    let currentMedia = []; // Array de { raw, preview, isVideo }
+    let fullCatalog = [];
+
     const getPin = () => document.getElementById('global-pin').value.trim();
 
     // Tema
-    const savedTheme = localStorage.getItem('zenda_theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.getElementById('theme-icon').textContent = savedTheme === 'dark' ? '☀' : '☾';
-    document.getElementById('theme-toggle').addEventListener('click', () => {
+    const t = localStorage.getItem('zenda_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('theme-icon').textContent = t === 'dark' ? '☀' : '☾';
+    document.getElementById('theme-toggle').onclick = () => {
       const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       localStorage.setItem('zenda_theme', next);
       document.documentElement.setAttribute('data-theme', next);
       document.getElementById('theme-icon').textContent = next === 'dark' ? '☀' : '☾';
-    });
+    };
 
     // Pestañas
     document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.onclick = () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-pane').forEach(p => p.hidden = true);
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).hidden = false;
-      });
+      };
     });
 
-    async function cargarTodo() {
-      const list = document.getElementById('admin-list');
-      try {
-        const res = await fetch(APPS_SCRIPT_URL);
-        const json = await res.json();
-        list.innerHTML = (json.data || []).map(item => `
-          <div class="admin-item">
-            <div><strong>${item.nombre}</strong> <span class="mono-val text-accent">Q${item.precio}</span><div class="mono-xs" style="color:var(--text-muted)">${item.categoria}</div></div>
-            <button class="btn btn-outline btn-sm" onclick="ocultarServicio('${item.id}')">Ocultar</button>
-          </div>`).join('') || '<p>No hay servicios activos.</p>';
-
-        if (json.config) {
-          const c = json.config;
-          if (c.hero_titulo) document.getElementById('cfg-titulo').value = c.hero_titulo;
-          if (c.hero_subtitulo) document.getElementById('cfg-subtitulo').value = c.hero_subtitulo;
-          if (c.banner_promo) document.getElementById('cfg-promo').value = c.banner_promo;
-          if (c.tema_default) document.getElementById('cfg-tema').value = c.tema_default;
-          if (c.color_acento) document.getElementById('cfg-color').value = c.color_acento;
-          if (c.whatsapp) document.getElementById('cfg-wa').value = c.whatsapp;
-          if (c.correo) document.getElementById('cfg-correo').value = c.correo;
-          if (c.mostrar_proceso) document.getElementById('cfg-proceso').value = c.mostrar_proceso;
-        }
-      } catch { list.textContent = 'Error al conectar con Google Sheets.'; }
+    function toPreview(url) {
+      const clean = String(url).replace('#video', '');
+      const m = clean.match(/[-\w]{25,}/);
+      if (clean.includes('drive.google.com') && m) return `https://drive.google.com/thumbnail?id=${m[0]}&sz=w400`;
+      return clean;
     }
 
-    window.ocultarServicio = async function(id) {
-      const pin = getPin() || prompt('Ingresa tu PIN:');
-      if (!pin) return;
-      await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'toggle_service', id, pin }) });
-      cargarTodo();
+    function renderMediaChips() {
+      const box = document.getElementById('media-preview-list');
+      box.innerHTML = currentMedia.map((m, idx) => `
+        <div class="media-chip" title="${idx === 0 ? 'Miniatura principal' : 'Galería #' + (idx+1)}">
+          ${m.isVideo ? '<span class="mono-xs">VIDEO</span>' : `<img src="${m.preview}" alt="" />`}
+          <button type="button" onclick="removeMedia(${idx})">&times;</button>
+        </div>`).join('');
+    }
+    window.removeMedia = (idx) => { currentMedia.splice(idx, 1); renderMediaChips(); };
+
+    // Agregar link manual
+    document.getElementById('btn-add-link').onclick = () => {
+      const input = document.getElementById('manual-link');
+      const val = input.value.trim();
+      if (!val) return;
+      const isVideo = val.includes('#video') || /\.(mp4|webm)(\?|$)/i.test(val);
+      currentMedia.push({ raw: val, preview: toPreview(val), isVideo });
+      input.value = '';
+      renderMediaChips();
     };
+
+    // Subir archivo(s) directo a Google Drive
+    document.getElementById('file-uploader').addEventListener('change', async (e) => {
+      const pin = getPin();
+      if (!pin) { alert('Ingresa tu PIN arriba antes de subir archivos a Drive.'); e.target.value = ''; return; }
+      const files = Array.from(e.target.files);
+      const st = document.getElementById('upload-status');
+
+      for (const file of files) {
+        if (file.size > 12 * 1024 * 1024) {
+          alert(`"${file.name}" pesa más de 12 MB. Súbelo directo a tu carpeta de Drive y pega el enlace abajo.`);
+          continue;
+        }
+        st.textContent = `Subiendo "${file.name}" a Google Drive...`;
+        const base64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result.split(',')[1]);
+          reader.readAsDataURL(file);
+        });
+        try {
+          const res = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'upload_file', pin, fileName: file.name, mimeType: file.type, base64 })
+          });
+          const json = await res.json();
+          if (json.status === 'ok') {
+            currentMedia.push({ raw: json.url, preview: json.previewUrl, isVideo: json.isVideo });
+            renderMediaChips();
+            st.textContent = `Subido a Drive: ${file.name}`;
+          } else {
+            st.textContent = `Error: ${json.message}`;
+          }
+        } catch {
+          st.textContent = 'Error de red al subir a Drive.';
+        }
+      }
+      e.target.value = '';
+    });
+
+    // Cargar todo el panel con PIN
+    async function cargarAdmin() {
+      const pin = getPin();
+      if (!pin) return alert('Ingresa tu PIN primero.');
+      document.getElementById('admin-list').textContent = 'CARGANDO INVENTARIO...';
+      const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'get_admin_data', pin }) });
+      const json = await res.json();
+      if (json.status !== 'ok') { document.getElementById('admin-list').textContent = 'ERROR: ' + json.message; return; }
+
+      fullCatalog = json.catalog || [];
+      document.getElementById('admin-list').innerHTML = fullCatalog.map(item => {
+        const on = String(item.activo).toUpperCase() === 'SI';
+        const fotos = (item.galeria || []).length;
+        return `
+          <div class="inv-row">
+            <div>
+              <strong>${item.nombre}</strong> <span class="mono-val text-accent">Q${item.precio}</span>
+              <span class="mono-xs ${on ? 'pill-on' : 'pill-off'}" style="margin-left:8px;">● ${on ? 'ACTIVO' : 'OCULTO'}</span>
+              <div class="mono-xs" style="color:var(--text-muted);">${item.categoria} &middot; ${fotos} archivo(s) multimedia</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-outline btn-sm" onclick="editarServicio('${item.id}')">Editar</button>
+              <button class="btn btn-ghost btn-sm" onclick="toggleServicio('${item.id}')">${on ? 'Ocultar' : 'Activar'}</button>
+              <button class="btn btn-ghost btn-sm" style="color:#ef4444;" onclick="eliminarServicio('${item.id}')">Borrar</button>
+            </div>
+          </div>`;
+      }).join('') || '<p>Sin servicios todavía.</p>';
+
+      // Pedidos
+      const orders = json.orders || [];
+      document.getElementById('orders-list').innerHTML = orders.map(o => `
+        <div class="inv-row">
+          <div>
+            <strong>${o.orden_id}</strong> — ${o.cliente} (<span class="text-accent">${o.total}</span>)
+            <div style="font-size:0.84rem; color:var(--text-muted);">${o.items}</div>
+            <div class="mono-xs" style="color:var(--text-muted);">${o.telefono} &middot; ${o.metodo_pago} &middot; Estado: ${o.estado}</div>
+          </div>
+          <select class="search-input" style="min-width:130px;" onchange="cambiarEstadoPedido('${o.orden_id}', this.value)">
+            ${['Nuevo','Pagado','En proceso','Entregado','Cancelado'].map(st => `<option ${o.estado===st?'selected':''}>${st}</option>`).join('')}
+          </select>
+        </div>`).join('') || '<p>Aún no hay pedidos registrados.</p>';
+
+      // Config
+      if (json.config) {
+        const c = json.config;
+        document.getElementById('cfg-titulo').value = c.hero_titulo || '';
+        document.getElementById('cfg-subtitulo').value = c.hero_subtitulo || '';
+        document.getElementById('cfg-promo').value = c.banner_promo || '';
+        document.getElementById('cfg-tema').value = c.tema_default || 'dark';
+        document.getElementById('cfg-color').value = c.color_acento || '#007bff';
+        document.getElementById('cfg-wa').value = c.whatsapp || '';
+        document.getElementById('cfg-correo').value = c.correo || '';
+        document.getElementById('cfg-proceso').value = c.mostrar_proceso || 'SI';
+      }
+    }
+
+    document.getElementById('btn-connect').onclick = cargarAdmin;
+
+    window.editarServicio = (id) => {
+      const item = fullCatalog.find(i => String(i.id) === String(id));
+      if (!item) return;
+      document.getElementById('edit-id').value = item.id;
+      document.getElementById('categoria').value = item.categoria;
+      document.getElementById('precio').value = item.precio;
+      document.getElementById('nombre').value = item.nombre;
+      document.getElementById('descripcion').value = item.descripcion;
+      document.getElementById('entregables').value = item.entregables;
+      document.getElementById('destacado').checked = String(item.destacado).toUpperCase() === 'SI';
+      document.getElementById('activo').checked = String(item.activo).toUpperCase() === 'SI';
+      currentMedia = (item.galeria || []).map(g => ({ raw: g.raw, preview: g.url, isVideo: g.type !== 'image' }));
+      renderMediaChips();
+      document.getElementById('form-heading').textContent = `Editando: ${item.nombre}`;
+      document.getElementById('btn-reset-edit').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    function resetForm() {
+      document.getElementById('admin-form').reset();
+      document.getElementById('edit-id').value = '';
+      currentMedia = []; renderMediaChips();
+      document.getElementById('form-heading').textContent = 'Nuevo paquete / servicio';
+      document.getElementById('btn-reset-edit').hidden = true;
+    }
+    document.getElementById('btn-reset-edit').onclick = resetForm;
 
     document.getElementById('admin-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -171,39 +323,48 @@
       const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({
-          action: 'add_service', pin,
+          action: 'save_service', pin,
+          id: document.getElementById('edit-id').value || null,
           categoria: document.getElementById('categoria').value.trim(),
           nombre: document.getElementById('nombre').value.trim(),
           precio: document.getElementById('precio').value.trim(),
           descripcion: document.getElementById('descripcion').value.trim(),
           entregables: document.getElementById('entregables').value.trim(),
-          imagen_drive: document.getElementById('imagen_drive').value.trim(),
-          destacado: document.getElementById('destacado').checked
+          imagen_drive: currentMedia.map(m => m.raw).join('|'),
+          destacado: document.getElementById('destacado').checked,
+          activo: document.getElementById('activo').checked
         })
       });
       const json = await res.json();
       st.textContent = json.status === 'ok' ? 'Guardado en Google Sheets.' : 'Error: ' + json.message;
-      btn.disabled = false; btn.textContent = 'Guardar en Google Sheets';
-      if (json.status === 'ok') { e.target.reset(); cargarTodo(); }
+      btn.disabled = false; btn.textContent = 'Guardar en Inventario';
+      if (json.status === 'ok') { resetForm(); cargarAdmin(); }
     });
 
-    document.getElementById('btn-seed').addEventListener('click', async () => {
+    window.toggleServicio = async (id) => {
+      await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'toggle_service', id, pin: getPin() }) });
+      cargarAdmin();
+    };
+    window.eliminarServicio = async (id) => {
+      if (!confirm('¿Eliminar permanentemente este paquete?')) return;
+      await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete_service', id, pin: getPin() }) });
+      cargarAdmin();
+    };
+    window.cambiarEstadoPedido = async (orden_id, estado) => {
+      await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'update_order_status', orden_id, estado, pin: getPin() }) });
+    };
+
+    document.getElementById('btn-seed').onclick = async () => {
       const pin = getPin(); if (!pin) return alert('Ingresa tu PIN arriba primero.');
-      if (!confirm('¿Agregar 5 paquetes de ejemplo de servicios de sistemas a tu Google Sheet?')) return;
-      const btn = document.getElementById('btn-seed');
-      btn.disabled = true; btn.textContent = 'Cargando...';
-      const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'seed_5_examples', pin }) });
-      const json = await res.json();
-      alert(json.status === 'ok' ? '¡5 servicios agregados!' : 'Error: ' + json.message);
-      btn.disabled = false; btn.textContent = 'Cargar 5 ejemplos pro';
-      cargarTodo();
-    });
+      if (!confirm('¿Cargar 5 paquetes de ejemplo con galerías múltiples?')) return;
+      await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'seed_5_examples', pin }) });
+      cargarAdmin();
+    };
 
     document.getElementById('config-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const pin = getPin(); if (!pin) return alert('Ingresa tu PIN arriba primero.');
-      const btn = document.getElementById('btn-cfg'); const st = document.getElementById('cfg-status');
-      btn.disabled = true; btn.textContent = 'Guardando...';
+      const pin = getPin(); if (!pin) return alert('Ingresa tu PIN primero.');
+      const st = document.getElementById('cfg-status');
       const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({
@@ -221,11 +382,8 @@
         })
       });
       const json = await res.json();
-      st.textContent = json.status === 'ok' ? 'Interfaz actualizada en vivo.' : 'Error: ' + json.message;
-      btn.disabled = false; btn.textContent = 'Guardar interfaz en Sheets';
+      st.textContent = json.status === 'ok' ? 'Interfaz guardada en vivo.' : 'Error: ' + json.message;
     });
-
-    cargarTodo();
   </script>
 </body>
 </html>
