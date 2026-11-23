@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /Zenda_Studio/admin.html
+
+Sitemap: https://cabreera07.github.io/Zenda_Studio/sitemap.xml
