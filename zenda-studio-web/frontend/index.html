@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zenda studio. | Soluciones Digitales y Servicios</title>
+  <meta name="description" content="Catálogo de servicios, paquetes y cotizaciones en línea de Zenda Studio." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="#" class="brand-logo" aria-label="zenda studio">
+        <span class="brand-text">zenda studio</span><span class="brand-dot"></span>
+      </a>
+      <nav class="nav-links">
+        <a href="#catalogo">Servicios</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#cotizar">Cotizar</a>
+        <a href="#" id="nav-whatsapp" class="btn btn-primary btn-sm" target="_blank" rel="noopener">WhatsApp</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-content">
+      <span class="badge">Estudio Digital &bull; Servicios a Medida</span>
+      <h1>Soluciones diseñadas para hacer crecer tu negocio<span class="text-accent">.</span></h1>
+      <p>Explora nuestros paquetes de servicios, conoce exactamente qué incluye cada entrega y solicita tu cotización en minutos.</p>
+      <div class="hero-actions">
+        <a href="#catalogo" class="btn btn-primary">Ver Catálogo</a>
+        <a href="#cotizar" class="btn btn-outline">Cotizar Proyecto</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="catalogo" class="section">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <h2>Catálogo de Servicios<span class="text-accent">.</span></h2>
+          <p class="subtitle">Selecciona un paquete para cotizarlo directamente o consultar por WhatsApp.</p>
+        </div>
+        <div id="filtros-categorias" class="filter-bar"></div>
+      </div>
+      <div id="catalogo-grid" class="catalog-grid">
+        <div class="loading-state">Cargando catálogo de servicios...</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="proceso" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Cómo trabajamos<span class="text-accent">.</span></h2>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">01</span>
+          <h3>Eliges tu paquete</h3>
+          <p>Selecciona un servicio del catálogo o cuéntanos tu requerimiento específico.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">02</span>
+          <h3>Propuesta clara</h3>
+          <p>Recibes alcance, tiempos de entrega y presupuesto sin costos ocultos.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">03</span>
+          <h3>Ejecución y entrega</h3>
+          <p>Desarrollamos tu proyecto con avances transparentes hasta la entrega final.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cotizar" class="section">
+    <div class="container quote-wrapper">
+      <div class="quote-info">
+        <h2>Solicita tu cotización<span class="text-accent">.</span></h2>
+        <p>Completa los datos y tu solicitud quedará registrada de inmediato. Si prefieres atención directa, escríbenos por WhatsApp.</p>
+        <div class="contact-details">
+          <a href="#" id="direct-whatsapp" class="btn btn-whatsapp" target="_blank" rel="noopener">Hablar por WhatsApp ahora</a>
+        </div>
+      </div>
+
+      <form id="quote-form" class="quote-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre">Nombre completo *</label>
+            <input type="text" id="nombre" required placeholder="Ej. Ana López" />
+          </div>
+          <div class="form-group">
+            <label for="telefono">WhatsApp / Teléfono *</label>
+            <input type="tel" id="telefono" required placeholder="+502 0000-0000" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="correo">Correo electrónico *</label>
+            <input type="email" id="correo" required placeholder="nombre@empresa.com" />
+          </div>
+          <div class="form-group">
+            <label for="paquete">Servicio / Paquete de interés</label>
+            <select id="paquete">
+              <option value="Proyecto a medida">Proyecto a medida</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="presupuesto">Presupuesto estimado</label>
+          <select id="presupuesto">
+            <option value="Por definir">Aún no definido</option>
+            <option value="Menos de Q1,500">Menos de Q1,500</option>
+            <option value="Q1,500 - Q3,500">Q1,500 - Q3,500</option>
+            <option value="Más de Q3,500">Más de Q3,500</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mensaje">Cuéntanos sobre tu proyecto *</label>
+          <textarea id="mensaje" rows="4" required placeholder="Describe brevemente qué necesitas y para cuándo lo buscas..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar Cotización</button>
+        </div>
+        <p id="form-status" class="form-status"></p>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="brand-logo"><span class="brand-text">zs</span><span class="brand-dot"></span></div>
+      <p>&copy; <span id="year"></span> zenda studio. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <a href="#" id="float-whatsapp" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">WhatsApp</a>
+  <script src="js/app.js"></script>
+</body>
+</html>
