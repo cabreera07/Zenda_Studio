@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>zenda studio. — Sistemas Web y Soluciones Digitales</title>
-  <meta name="description" content="Tienda de paquetes de desarrollo web, automatización, analítica y sistemas a medida por Zenda Studio." />
+  <title>zenda studio. — Sistemas Web y Automatización</title>
+  <meta name="description" content="Tienda de paquetes de desarrollo web, automatización, analítica y sistemas a medida en Guatemala por Zenda Studio." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -14,22 +14,28 @@
 
   <header class="navbar">
     <div class="container nav-inner">
-      <a href="#" class="brand-logo"><span>zenda studio</span><span class="brand-dot"></span></a>
+      <div class="nav-brand-group">
+        <a href="#" class="brand-logo"><span>zenda studio</span><span class="brand-dot"></span></a>
+        <button type="button" id="palette-chip" class="palette-chip" title="Cada visita carga un color distinto — clic para probar otro">
+          <span class="palette-swatch"></span>
+          <span id="palette-name">Edición única</span>
+        </button>
+      </div>
 
       <nav class="nav-center">
         <a href="#catalogo">Catálogo</a>
-        <a href="#proceso">Proceso</a>
-        <a href="#cotizar">Cotizar</a>
+        <a href="#ventajas">Por qué un sistema</a>
+        <a href="#cotizar">Contacto</a>
       </nav>
 
       <div class="nav-actions">
         <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener" class="icon-btn" title="Instagram @zenda.studio.gt" aria-label="Instagram">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
         </a>
-        <button id="theme-toggle" class="icon-btn" type="button" title="Cambiar tema" aria-label="Cambiar modo oscuro o claro"></button>
+        <button id="theme-toggle" class="icon-btn" type="button" title="Cambiar modo oscuro o claro" aria-label="Cambiar tema"></button>
         <button id="cart-open-btn" class="cart-trigger" type="button">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          <span>Bolsa</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          <span>Carrito</span>
           <span id="cart-count" class="cart-count">0</span>
         </button>
       </div>
@@ -37,58 +43,65 @@
   </header>
 
   <main>
+    <!-- HERO EDITORIAL CON SALUDO DINÁMICO -->
     <section class="hero">
       <div class="container">
-        <div class="hero-wrap reveal in-view">
-          <div class="hero-pill">
-            <span class="status-dot"></span>
-            <span>Agenda abierta &middot; Guatemala</span>
+        <div class="hero-greeting-bar">
+          <div class="greeting-line">
+            <span id="greeting-time" class="greeting-time">Hola</span>
+            <span class="greeting-sep">/</span>
+            <span id="greeting-phrase" class="greeting-phrase">Qué bueno verte por aquí.</span>
           </div>
-          <h1 id="hero-title">Sistemas digitales diseñados para vender y escalar<span class="text-accent">.</span></h1>
-          <p id="hero-subtitle">Elige un paquete listo para implementar o cotiza una solución a medida. Páginas web, tiendas, automatización y analítica conectadas a tu operación.</p>
-          <div class="hero-actions">
-            <a href="#catalogo" class="btn btn-primary btn-lg">Explorar catálogo</a>
-            <a href="#" id="hero-whatsapp" class="btn btn-secondary btn-lg" target="_blank" rel="noopener">WhatsApp</a>
-            <a href="https://www.instagram.com/zenda.studio.gt/" id="hero-instagram" class="btn btn-ghost btn-lg" target="_blank" rel="noopener">Instagram &nearr;</a>
-          </div>
+          <span id="hero-clock" class="mono hero-clock">GUATEMALA &middot; --:--</span>
         </div>
 
-        <div class="trust-bar reveal">
-          <div class="trust-item">
-            <strong>Entrega en 7 a 14 días</strong>
-            <span>Alcance claro y avances verificables desde el inicio.</span>
-          </div>
-          <div class="trust-item">
-            <strong>Sin rentas obligatorias</strong>
-            <span>Infraestructura en tus propias cuentas, 100% tuya.</span>
-          </div>
-          <div class="trust-item">
-            <strong>50% inicio · 50% entrega</strong>
-            <span>Pagos flexibles por transferencia o tarjeta.</span>
+        <h1 id="hero-title" class="hero-display">Sistemas que ordenan, automatizan y venden por ti<span class="text-accent">.</span></h1>
+
+        <div class="hero-bottom">
+          <p id="hero-subtitle" class="hero-sub">Construimos tiendas conectadas a tus hojas de cálculo, flujos automáticos y herramientas a medida. Sin rentas absurdas ni procesos eternos.</p>
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn btn-primary btn-lg">Ver paquetes &darr;</a>
+            <a href="#" id="hero-whatsapp" class="btn btn-secondary btn-lg" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="https://www.instagram.com/zenda.studio.gt/" class="btn btn-ghost btn-lg" target="_blank" rel="noopener">Instagram &nearr;</a>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- CINTA DE CAPACIDADES -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Tiendas y Catálogos en Vivo</span><span class="ticker-dot">&bull;</span>
+        <span>Automatización con WhatsApp &amp; Sheets</span><span class="ticker-dot">&bull;</span>
+        <span>Dashboards en Tiempo Real</span><span class="ticker-dot">&bull;</span>
+        <span>Entrega en 7 a 14 días</span><span class="ticker-dot">&bull;</span>
+        <span>100% en tus propias cuentas</span><span class="ticker-dot">&bull;</span>
+        <span>Tiendas y Catálogos en Vivo</span><span class="ticker-dot">&bull;</span>
+        <span>Automatización con WhatsApp &amp; Sheets</span><span class="ticker-dot">&bull;</span>
+        <span>Dashboards en Tiempo Real</span><span class="ticker-dot">&bull;</span>
+        <span>Entrega en 7 a 14 días</span><span class="ticker-dot">&bull;</span>
+        <span>100% en tus propias cuentas</span><span class="ticker-dot">&bull;</span>
+      </div>
+    </div>
+
+    <!-- CATÁLOGO / TIENDA -->
     <section id="catalogo" class="section">
       <div class="container">
         <div class="section-header reveal">
           <div>
-            <span class="section-kicker">Tienda de servicios</span>
-            <h2>Paquetes y soluciones</h2>
-            <p class="section-sub">Filtra por etiqueta, cambia la vista o haz clic en cualquier paquete para ver su galería completa.</p>
+            <span class="section-kicker">01 / Catálogo en línea</span>
+            <h2>Elige tu paquete y arma tu pedido</h2>
+            <p class="section-sub">Todos los paquetes se conectan directo a tu operación. Agrega al carrito o abre cualquier tarjeta para explorar su galería.</p>
           </div>
         </div>
 
         <div class="catalog-toolbar reveal">
           <div id="filtros-categorias" class="tag-bar"></div>
-
           <div class="toolbar-right">
             <div class="search-box">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               <input type="search" id="search-input" placeholder="Buscar paquete..." />
             </div>
-
             <div class="view-switch" role="group" aria-label="Tipo de vista">
               <button type="button" class="active" data-view="grid" title="Vista cuadrícula">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -106,60 +119,52 @@
       </div>
     </section>
 
-    <section id="proceso" class="section">
+    <!-- POR QUÉ UN SISTEMA (Editorial numerado, sin cajas genéricas) -->
+    <section id="ventajas" class="section">
       <div class="container">
         <div class="section-header reveal">
           <div>
-            <span class="section-kicker">Cómo trabajamos</span>
-            <h2>Simple, rápido y transparente</h2>
+            <span class="section-kicker">02 / Impacto real</span>
+            <h2>Por qué dar el salto a un sistema propio</h2>
           </div>
         </div>
 
-        <div class="steps-grid reveal">
-          <div class="step-card">
-            <span class="step-num">1</span>
-            <h3>Eliges o cotizas</h3>
-            <p>Agrega uno o varios paquetes a tu bolsa o escríbenos por WhatsApp o Instagram. Confirmamos fechas y entregables.</p>
+        <div class="impact-list reveal">
+          <div class="impact-row">
+            <span class="impact-num">01</span>
+            <h3 class="impact-title">Dejas de cotizar todo a mano</h3>
+            <p class="impact-desc">Tus clientes ven precios claros, galerías y entregables desde el enlace de tu Instagram, y te llegan pedidos ya ordenados directo a WhatsApp y Sheets.</p>
           </div>
-          <div class="step-card">
-            <span class="step-num">2</span>
-            <h3>Construimos con avances reales</h3>
-            <p>Te compartimos un enlace de pruebas en vivo para revisar diseño, flujos y ajustes antes de lanzar.</p>
+          <div class="impact-row">
+            <span class="impact-num">02</span>
+            <h3 class="impact-title">Cero alquileres mensuales escondidos</h3>
+            <p class="impact-desc">Construimos sobre infraestructura moderna en tus propias cuentas de Google y GitHub. Pagas por tu sistema una vez y es 100% tuyo.</p>
           </div>
-          <div class="step-card">
-            <span class="step-num">3</span>
-            <h3>Publicación y control total</h3>
-            <p>Dejamos todo conectado a tus cuentas y te capacitamos para gestionar tu catálogo y pedidos en minutos.</p>
+          <div class="impact-row">
+            <span class="impact-num">03</span>
+            <h3 class="impact-title">Actualizas en segundos desde el celular</h3>
+            <p class="impact-desc">Cambia precios, sube fotos o pausa servicios desde tu panel privado sin depender de un programador cada vez que haces una oferta.</p>
           </div>
-        </div>
-
-        <div class="faq-list reveal">
-          <details class="faq-item">
-            <summary>¿Cómo funciona el pago al comprar un paquete?</summary>
-            <p>Confirmas tu pedido en la bolsa, se genera tu orden y puedes iniciar con el 50% de anticipo (transferencia o link de pago) y el 50% restante contra entrega.</p>
-          </details>
-          <details class="faq-item">
-            <summary>¿Tengo que pagar servidores costosos cada mes?</summary>
-            <p>En nuestros paquetes estándar trabajamos con infraestructura cloud de costo cero de mantenimiento mensual, pagando solo tu dominio si deseas uno propio.</p>
-          </details>
-          <details class="faq-item">
-            <summary>¿Puedo agregar funciones nuevas después?</summary>
-            <p>Sí, todo queda modular para escalar con integraciones de CRM, WhatsApp, facturación o reportes cuando tu negocio lo necesite.</p>
-          </details>
+          <div class="impact-row">
+            <span class="impact-num">04</span>
+            <h3 class="impact-title">50% al iniciar, 50% al recibir funcionando</h3>
+            <p class="impact-desc">Ves avances reales en vivo en un enlace de pruebas desde la primera semana. Sin letras pequeñas ni promesas vacías.</p>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- COTIZACIÓN A MEDIDA -->
     <section id="cotizar" class="section">
       <div class="container quote-grid reveal">
         <div>
-          <span class="section-kicker">Contacto directo</span>
-          <h2>¿Necesitas algo distinto al catálogo?</h2>
-          <p class="section-sub">Cuéntanos qué proceso quieres mejorar o qué sistema necesitas. Te respondemos por WhatsApp o Instagram en menos de 24 horas.</p>
+          <span class="section-kicker">03 / A medida</span>
+          <h2>¿Tienes una idea distinta al catálogo?</h2>
+          <p class="section-sub">Cuéntanos qué proceso quieres automatizar o qué herramienta necesitas. Respondemos directo por WhatsApp o Instagram.</p>
 
           <div class="contact-card">
-            <a href="#" id="direct-whatsapp" class="btn btn-primary btn-full" target="_blank" rel="noopener">Escribir por WhatsApp (5879-8301)</a>
-            <a href="https://www.instagram.com/zenda.studio.gt/" id="direct-instagram" class="btn btn-secondary btn-full" target="_blank" rel="noopener">Enviar DM en Instagram (@zenda.studio.gt)</a>
+            <a href="#" id="direct-whatsapp" class="btn btn-primary btn-full" target="_blank" rel="noopener">WhatsApp directo (5879-8301)</a>
+            <a href="https://www.instagram.com/zenda.studio.gt/" class="btn btn-secondary btn-full" target="_blank" rel="noopener">DM en Instagram (@zenda.studio.gt)</a>
           </div>
         </div>
 
@@ -169,7 +174,7 @@
             <div class="field"><label for="telefono">WhatsApp *</label><input type="tel" id="telefono" required placeholder="+502 0000-0000" /></div>
           </div>
           <div class="form-row">
-            <div class="field"><label for="correo">Usuario de Instagram o correo *</label><input type="text" id="correo" required placeholder="@tunegocio o correo@empresa.com" /></div>
+            <div class="field"><label for="correo">Instagram o correo *</label><input type="text" id="correo" required placeholder="@tunegocio o correo@empresa.com" /></div>
             <div class="field"><label for="paquete">Paquete de interés</label><select id="paquete"><option value="Proyecto a medida">Proyecto a medida</option></select></div>
           </div>
           <div class="field">
@@ -182,8 +187,8 @@
               <option value="Más de Q7,000">Más de Q7,000</option>
             </select>
           </div>
-          <div class="field"><label for="mensaje">Cuéntanos sobre tu proyecto *</label><textarea id="mensaje" rows="4" required placeholder="Objetivos, tiempos o herramientas que usas hoy..."></textarea></div>
-          <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar solicitud y abrir WhatsApp</button>
+          <div class="field"><label for="mensaje">Cuéntanos sobre tu proyecto *</label><textarea id="mensaje" rows="4" required placeholder="Qué quieres lograr, tiempos o herramientas que usas hoy..."></textarea></div>
+          <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar y abrir WhatsApp &rarr;</button>
           <p id="form-status" class="status-msg"></p>
         </form>
       </div>
@@ -196,17 +201,17 @@
       <div class="footer-links">
         <a href="#" id="footer-whatsapp" target="_blank" rel="noopener">WhatsApp</a>
         <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener">Instagram</a>
-        <span>&copy; <span id="year"></span> zenda studio.</span>
+        <span>&copy; <span id="year"></span> zenda studio. Guatemala.</span>
       </div>
     </div>
   </footer>
 
-  <!-- Carrito deslizable -->
+  <!-- CARRITO DESLIZABLE -->
   <div id="cart-overlay" class="overlay" hidden>
-    <aside class="drawer" role="dialog" aria-label="Bolsa de compra">
+    <aside class="drawer" role="dialog" aria-label="Carrito de compra">
       <div class="drawer-header">
         <div>
-          <h3 style="font-size:1.15rem;">Tu bolsa</h3>
+          <h3 style="font-family:var(--font-display); font-size:1.25rem;">Tu carrito</h3>
           <span style="font-size:0.82rem; color:var(--text-muted);">Revisa tus paquetes y confirma tu orden</span>
         </div>
         <button id="cart-close-btn" class="icon-btn" type="button">&times;</button>
@@ -235,14 +240,14 @@
             </select>
           </div>
           <div class="field"><label>Notas adicionales (opcional)</label><input type="text" id="chk-notas" placeholder="Ej. Fecha ideal de entrega..." /></div>
-          <button type="submit" id="btn-checkout" class="btn btn-primary btn-full">Confirmar pedido</button>
+          <button type="submit" id="btn-checkout" class="btn btn-primary btn-full">Confirmar pedido &rarr;</button>
           <p id="chk-status" class="status-msg"></p>
         </form>
       </div>
     </aside>
   </div>
 
-  <!-- Modal Galería -->
+  <!-- MODAL DETALLE Y GALERÍA -->
   <div id="service-modal" class="modal-overlay" hidden>
     <div class="modal-card" role="dialog" aria-modal="true">
       <button type="button" id="modal-close" class="modal-close">&times;</button>
@@ -251,13 +256,13 @@
       <div class="modal-body">
         <span id="modal-cat" class="section-kicker"></span>
         <div class="card-head">
-          <h3 id="modal-title" style="font-size:1.45rem;"></h3>
-          <span id="modal-price" class="card-price" style="font-size:1.35rem;"></span>
+          <h3 id="modal-title" style="font-family:var(--font-display); font-size:1.5rem;"></h3>
+          <span id="modal-price" class="card-price" style="font-size:1.3rem;"></span>
         </div>
         <p id="modal-desc" class="card-desc"></p>
         <ul id="modal-features" class="feature-list"></ul>
         <div class="modal-actions">
-          <button type="button" id="modal-add-btn" class="btn btn-primary">Agregar a la bolsa</button>
+          <button type="button" id="modal-add-btn" class="btn btn-primary">Agregar al carrito</button>
           <a href="#" id="modal-wa-btn" target="_blank" rel="noopener" class="btn btn-secondary">WhatsApp</a>
           <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener" class="btn btn-ghost">Instagram &nearr;</a>
         </div>
@@ -265,27 +270,30 @@
     </div>
   </div>
 
-  <!-- CARITA ANIMADA (El punto azul de zenda studio.) -->
+  <!-- EL AMIGUITO INTERACTIVO DE ZENDA -->
   <div id="zenda-bot" class="zenda-bot" aria-live="polite">
     <div id="bot-bubble" class="bot-bubble">
       <div class="bot-bubble-head">
-        <span>zenda.</span>
-        <button type="button" id="bot-close" class="bot-close" aria-label="Ocultar mensaje">&times;</button>
+        <span id="bot-tag" class="bot-tag">CONSEJO ZENDA</span>
+        <button type="button" id="bot-close" class="bot-close" aria-label="Ocultar">&times;</button>
       </div>
-      <div id="bot-msg">Un buen sistema vende y organiza tu negocio incluso cuando duermes.</div>
-      <div id="bot-actions" class="bot-bubble-actions" hidden>
-        <a href="#" id="bot-wa" class="bot-chip primary" target="_blank" rel="noopener">WhatsApp</a>
-        <a href="https://www.instagram.com/zenda.studio.gt/" class="bot-chip" target="_blank" rel="noopener">Instagram</a>
+      <div id="bot-msg">Un buen sistema vende y ordena tu negocio incluso mientras duermes.</div>
+      <div class="bot-bubble-foot">
+        <button type="button" id="bot-next" class="bot-next-btn">Otro consejo &#8635;</button>
+        <div class="bot-links">
+          <a href="#" id="bot-wa" class="bot-chip primary" target="_blank" rel="noopener">WA</a>
+          <a href="https://www.instagram.com/zenda.studio.gt/" class="bot-chip" target="_blank" rel="noopener">IG</a>
+        </div>
       </div>
     </div>
 
-    <button type="button" id="bot-orb" class="bot-orb" aria-label="Asistente Zenda Studio">
+    <button type="button" id="bot-orb" class="bot-orb" aria-label="Amiguito Zenda Studio">
       <svg viewBox="0 0 36 36" fill="none">
         <g class="bot-eye-group">
-          <circle id="eye-l" cx="12.5" cy="15" r="2.7" fill="#ffffff" />
-          <circle id="eye-r" cx="23.5" cy="15" r="2.7" fill="#ffffff" />
+          <circle id="eye-l" cx="12.5" cy="14.5" r="2.7" fill="#ffffff" />
+          <circle id="eye-r" cx="23.5" cy="14.5" r="2.7" fill="#ffffff" />
         </g>
-        <path id="bot-mouth" d="M13 22.5 Q18 26.5 23 22.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none" />
+        <path id="bot-mouth" d="M12.5 22.5 Q18 26.8 23.5 22.5" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" fill="none" />
       </svg>
     </button>
   </div>
