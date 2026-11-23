@@ -231,3 +231,45 @@ input[type=color]{border:1px solid var(--border-strong);border-radius:var(--radi
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+/* ===== v3: una página, 4 paquetes ===== */
+section[id]{scroll-margin-top:76px}
+.nav-link.active{background:transparent}
+.hero{padding:104px 0 80px;text-align:left;background:linear-gradient(180deg,var(--accent-wash),transparent 70%)}
+.hero-inner{max-width:880px;margin:0}
+.hero h1{font-size:clamp(2.5rem,7vw,4.8rem);line-height:1.02;letter-spacing:-.05em;margin-bottom:22px}
+.hero-sub{font-size:1.12rem;max-width:600px;margin:0 0 34px}
+.hero-actions{justify-content:flex-start}
+.trust-strip{justify-content:flex-start}
+.greeting-pill{justify-content:flex-start}
+
+.section-head h2{font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.04em}
+.section-head{max-width:640px}
+
+.plans-grid{gap:16px}
+.plan-card{padding:28px 24px;border-radius:20px;gap:0}
+.plan-card:hover{transform:translateY(-4px)}
+.plan-top{margin-bottom:18px}
+.plan-num{font-size:2.2rem;font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--accent)}
+.plan-team{align-self:flex-start;margin-bottom:12px}
+.plan-card h3{font-size:1.3rem;margin-bottom:6px}
+.plan-for{min-height:0;margin-bottom:20px;font-size:.88rem}
+.plan-includes{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);padding-top:16px;margin-bottom:12px;border-top:1px solid var(--border)}
+.feature-list{gap:11px;margin-bottom:26px}
+.feature-list li{font-size:.87rem}
+.plan-card.popular{background:var(--text);color:var(--bg);border-color:var(--text)}
+.plan-card.popular h3{color:var(--bg)}
+.plan-card.popular .plan-for,.plan-card.popular .feature-list li{color:var(--bg);opacity:.82}
+.plan-card.popular .plan-team{background:rgba(127,127,127,.28);color:var(--bg)}
+.plan-card.popular .plan-includes{border-top-color:rgba(127,127,127,.35);color:var(--bg);opacity:.7}
+.plan-card.popular .plan-num,.plan-card.popular .plan-popular-tag{color:var(--c2)}
+.plan-card.popular .feature-list svg{color:var(--c2)}
+
+.step-num{font-size:2rem;font-weight:800;letter-spacing:-.05em}
+.nav-hide-sm{display:inline-block}
+
+@media (max-width:1100px){.plans-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:760px){.nav-hide-sm{display:none}}
+@media (max-width:640px){
+  .hero{padding:56px 0 48px}
+  .plans-grid{grid-template-columns:1fr}
+}
