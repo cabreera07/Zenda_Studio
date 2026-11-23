@@ -1,7 +1,7 @@
 const CONFIG = {
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzBQgX8U0CzNe_zH8slUUAgDPMlQG3o0TidWUQ8cX2I88tEGSa6-4zsZet6Y-bqqd12GQ/exec',
-  WHATSAPP_NUMBER: '50200000000',
-  STUDIO_EMAIL: 'hola@zendastudio.com',
+  WHATSAPP_NUMBER: '50258798301',
+  INSTAGRAM_URL: 'https://www.instagram.com/zenda.studio.gt/',
   MONEDA: 'Q'
 };
 
@@ -34,6 +34,14 @@ function renderMediaHTML(m, alt) {
   return `<img src="${m.url}" alt="${esc(alt)}" loading="lazy" />`;
 }
 
+function updateContactLinks() {
+  const waMsg = linkWhatsApp('Hola Zenda Studio, me interesa conocer sus paquetes y soluciones digitales.');
+  ['hero-whatsapp', 'direct-whatsapp', 'footer-whatsapp', 'bot-wa'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.href = waMsg;
+  });
+}
+
 // Tema Oscuro / Claro
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
@@ -52,8 +60,8 @@ function initTheme(def = 'light') {
 
 function aplicarConfigRemota(cfg) {
   if (!cfg) return;
-  if (cfg.whatsapp) CONFIG.WHATSAPP_NUMBER = String(cfg.whatsapp).replace(/\D/g, '');
-  if (cfg.correo) CONFIG.STUDIO_EMAIL = cfg.correo;
+  const cleanWa = String(cfg.whatsapp || '').replace(/\D/g, '');
+  if (cleanWa && cleanWa !== '50200000000') CONFIG.WHATSAPP_NUMBER = cleanWa;
   if (cfg.color_acento) document.documentElement.style.setProperty('--accent', cfg.color_acento);
   if (cfg.hero_titulo) document.getElementById('hero-title').innerHTML = `${esc(cfg.hero_titulo)}<span class="text-accent">.</span>`;
   if (cfg.hero_subtitulo) document.getElementById('hero-subtitle').textContent = cfg.hero_subtitulo;
@@ -64,12 +72,126 @@ function aplicarConfigRemota(cfg) {
   }
   if (String(cfg.mostrar_proceso).toUpperCase() === 'NO') document.getElementById('proceso').hidden = true;
   if (cfg.tema_default && !localStorage.getItem('zenda_theme')) applyTheme(cfg.tema_default === 'dark' ? 'dark' : 'light');
-  const waMsg = linkWhatsApp('Hola Zenda Studio, me interesa conversar sobre un proyecto.');
-  document.getElementById('hero-whatsapp').href = waMsg;
-  document.getElementById('direct-whatsapp').href = waMsg;
+  updateContactLinks();
 }
 
-// Catálogo
+// Animación sutil al hacer scroll
+function initReveal() {
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+}
+
+// ================= CARITA INTERACTIVA (PUNTO VIVO DE ZENDA) =================
+function initZendaBot() {
+  const bot = document.getElementById('zenda-bot');
+  const orb = document.getElementById('bot-orb');
+  const bubble = document.getElementById('bot-bubble');
+  const msgEl = document.getElementById('bot-msg');
+  const actionsEl = document.getElementById('bot-actions');
+  const closeBtn = document.getElementById('bot-close');
+  const eyeL = document.getElementById('eye-l');
+  const eyeR = document.getElementById('eye-r');
+  const mouth = document.getElementById('bot-mouth');
+  if (!bot || !orb) return;
+
+  const pitchLines = [
+    'Un buen sistema vende y ordena tu negocio incluso mientras duermes.',
+    '¿Sigues respondiendo los mismos precios a mano? Automatízalo.',
+    'Tu marca merece verse tan profesional como el servicio que entregas.',
+    'Sin rentas mensuales ocultas: tu web y tu base de datos son 100% tuyas.',
+    'Desde catálogo en vivo hasta reportes automáticos. Todo en un solo lugar.',
+    'Tus clientes te buscan desde Instagram. Dales un sitio rápido que cierre ventas.',
+    '¿Tienes una idea en mente? Escríbenos por WhatsApp o Instagram.'
+  ];
+
+  const dodgeLines = [
+    '¡Casi! Así de rápida responde tu futura web.',
+    '¡Uy! No me atrapes a mí, atrapa más clientes.',
+    'Ok, ganaste. Dale clic y platiquemos de tu proyecto.'
+  ];
+
+  let pitchIdx = 0;
+  let dodgeCount = 0;
+  let bubbleDismissed = false;
+  let lastDodgeTime = 0;
+
+  // Rotación de frases persuasivas cada 8 segundos
+  setInterval(() => {
+    if (bubbleDismissed || !actionsEl.hidden) return;
+    pitchIdx = (pitchIdx + 1) % pitchLines.length;
+    msgEl.textContent = pitchLines[pitchIdx];
+  }, 8000);
+
+  // Los ojitos siguen suavemente el cursor
+  document.addEventListener('mousemove', (e) => {
+    const r = orb.getBoundingClientRect();
+    const dx = e.clientX - (r.left + r.width / 2);
+    const dy = e.clientY - (r.top + r.height / 2);
+    const angle = Math.atan2(dy, dx);
+    const dist = Math.min(2.2, Math.hypot(dx, dy) / 90);
+    const ox = Math.cos(angle) * dist;
+    const oy = Math.sin(angle) * dist;
+    eyeL.setAttribute('cx', (12.5 + ox).toFixed(2));
+    eyeL.setAttribute('cy', (15 + oy).toFixed(2));
+    eyeR.setAttribute('cx', (23.5 + ox).toFixed(2));
+    eyeR.setAttribute('cy', (15 + oy).toFixed(2));
+  });
+
+  // Esquive juguetón en escritorio (3 veces antes de dejarse atrapar)
+  const dodgeOffsets = [
+    { x: -110, y: -36 },
+    { x: -35, y: -125 },
+    { x: 0, y: 0 }
+  ];
+
+  orb.addEventListener('mouseenter', () => {
+    if (window.innerWidth < 768) return; // En celular responde directo al toque
+    const now = Date.now();
+    if (dodgeCount < 3 && now - lastDodgeTime > 380) {
+      lastDodgeTime = now;
+      const pos = dodgeOffsets[dodgeCount];
+      bot.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+      bubble.hidden = false;
+      bubbleDismissed = false;
+      msgEl.textContent = dodgeLines[dodgeCount];
+
+      // Expresión sorprendida breve al esquivar
+      mouth.setAttribute('d', 'M15.5 23 Q18 25.5 20.5 23');
+      setTimeout(() => { mouth.setAttribute('d', 'M13 22.5 Q18 26.5 23 22.5'); }, 650);
+
+      dodgeCount++;
+      if (dodgeCount === 3) {
+        actionsEl.hidden = false;
+      }
+    }
+  });
+
+  // Clic en la carita: muestra menú rápido de WhatsApp + Instagram
+  orb.addEventListener('click', () => {
+    bot.style.transform = 'translate(0, 0)';
+    bubble.hidden = false;
+    bubbleDismissed = false;
+    actionsEl.hidden = false;
+    msgEl.textContent = '¡Me atrapaste! ¿Por dónde prefieres platicar de tu sistema?';
+    mouth.setAttribute('d', 'M12 21.5 Q18 28 24 21.5');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    bubble.hidden = true;
+    actionsEl.hidden = true;
+    bubbleDismissed = true;
+    bot.style.transform = 'translate(0, 0)';
+    dodgeCount = 0;
+  });
+}
+
+// ================= CATÁLOGO =================
 async function cargarCatalogo() {
   const grid = document.getElementById('catalogo-grid');
   try {
@@ -164,11 +286,9 @@ function renderCatalogo(items) {
       </article>`;
   }).join('');
 
-  // Delegación limpia de eventos
   grid.querySelectorAll('[data-action="add"]').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.id)));
   grid.querySelectorAll('[data-action="modal"]').forEach(b => b.addEventListener('click', () => abrirModal(b.dataset.id)));
 
-  // Rotación automática de imágenes múltiples
   cardRotatorTimer = setInterval(() => {
     grid.querySelectorAll('.product-card').forEach(card => {
       const item = catalogoGlobal.find(i => String(i.id) === String(card.dataset.id));
@@ -183,11 +303,8 @@ function renderCatalogo(items) {
   }, 4500);
 }
 
-// Carrito
-function saveCart() {
-  localStorage.setItem('zenda_cart', JSON.stringify(cart));
-  renderCart();
-}
+// ================= CARRITO =================
+function saveCart() { localStorage.setItem('zenda_cart', JSON.stringify(cart)); renderCart(); }
 
 function addToCart(id) {
   const item = catalogoGlobal.find(i => String(i.id) === String(id));
@@ -212,7 +329,6 @@ function renderCart() {
   document.getElementById('cart-count').textContent = cart.reduce((s, i) => s + i.qty, 0);
   const list = document.getElementById('cart-items');
   const area = document.getElementById('cart-checkout-area');
-
   if (!cart.length) {
     list.innerHTML = '<div class="empty-state" style="padding:32px 16px;">Tu bolsa está vacía.</div>';
     area.hidden = true;
@@ -270,11 +386,11 @@ function initCart() {
       const json = await res.json();
       const orderId = json.orderId || 'ZS-OK';
       const wa = linkWhatsApp(`Hola Zenda Studio, confirmé mi pedido *${orderId}*:\n• Cliente: ${payload.cliente}\n• Paquetes: ${resumen}\n• Total: ${payload.total}\n• Pago: ${payload.metodo_pago}`);
-      st.innerHTML = `Orden <strong>${esc(orderId)}</strong> registrada. <a href="${wa}" target="_blank" style="color:var(--accent)">Coordinar pago por WhatsApp &rarr;</a>`;
+      st.innerHTML = `Orden <strong>${esc(orderId)}</strong> registrada. <a href="${wa}" target="_blank" style="color:var(--accent)">Enviar por WhatsApp &rarr;</a> · <a href="${CONFIG.INSTAGRAM_URL}" target="_blank" style="color:var(--accent)">Instagram &nearr;</a>`;
       cart = []; saveCart(); e.target.reset();
       showToast(`Pedido ${orderId} confirmado`);
     } catch {
-      st.textContent = 'Error de conexión. Escríbenos por WhatsApp.';
+      st.textContent = 'Error de conexión. Escríbenos por WhatsApp o Instagram.';
     } finally {
       btn.disabled = false; btn.textContent = 'Confirmar pedido';
     }
@@ -282,7 +398,7 @@ function initCart() {
   renderCart();
 }
 
-// Modal detalle
+// ================= MODAL =================
 function abrirModal(id) {
   const item = catalogoGlobal.find(i => String(i.id) === String(id));
   if (!item) return;
@@ -320,13 +436,6 @@ function initModal() {
   document.getElementById('modal-close').addEventListener('click', close);
   modal.addEventListener('click', e => { if (e.target === modal) close(); });
   document.getElementById('modal-add-btn').addEventListener('click', () => { if (activeModalItem) { close(); addToCart(activeModalItem.id); } });
-  document.getElementById('modal-quote-btn').addEventListener('click', () => {
-    close();
-    if (!activeModalItem) return;
-    const sel = document.getElementById('paquete');
-    for (let opt of sel.options) { if (opt.value.startsWith(activeModalItem.nombre)) { sel.value = opt.value; break; } }
-    document.getElementById('cotizar').scrollIntoView({ behavior: 'smooth' });
-  });
 }
 
 function poblarSelectPaquetes(items) {
@@ -358,19 +467,16 @@ function initQuoteForm() {
     };
     try {
       await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-      const wa = linkWhatsApp(`Hola Zenda Studio, envié una cotización:\n• Nombre: ${payload.nombre}\n• Servicio: ${payload.paquete}\n• Detalle: ${payload.mensaje}`);
-      st.innerHTML = `Solicitud enviada. <a href="${wa}" target="_blank" style="color:var(--accent)">Agilizar por WhatsApp &rarr;</a>`;
+      const wa = linkWhatsApp(`Hola Zenda Studio, envié una cotización:\n• Nombre: ${payload.nombre}\n• Servicio: ${payload.paquete}\n• Presupuesto: ${payload.presupuesto}\n• Detalle: ${payload.mensaje}`);
+      st.innerHTML = `Solicitud registrada. <a href="${wa}" target="_blank" style="color:var(--accent)">Abrir WhatsApp &rarr;</a> · <a href="${CONFIG.INSTAGRAM_URL}" target="_blank" style="color:var(--accent)">Instagram &nearr;</a>`;
       form.reset(); showToast('Solicitud enviada');
-    } catch { st.textContent = 'Error al enviar. Escríbenos por WhatsApp.'; }
-    finally { btn.disabled = false; btn.textContent = 'Enviar solicitud'; }
+      window.open(wa, '_blank', 'noopener');
+    } catch { st.textContent = 'Error al enviar. Escríbenos directo por WhatsApp o Instagram.'; }
+    finally { btn.disabled = false; btn.textContent = 'Enviar solicitud y abrir WhatsApp'; }
   });
 }
 
-function initGestures() {
-  document.getElementById('copy-email-btn')?.addEventListener('click', () => {
-    navigator.clipboard?.writeText(CONFIG.STUDIO_EMAIL);
-    showToast(`Correo copiado: ${CONFIG.STUDIO_EMAIL}`);
-  });
+function initSecretAccess() {
   let clicks = 0, timer;
   document.getElementById('secret-dot')?.addEventListener('click', () => {
     clicks++; clearTimeout(timer); timer = setTimeout(() => { clicks = 0; }, 2200);
@@ -381,5 +487,13 @@ function initGestures() {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('year').textContent = new Date().getFullYear();
-  initTheme('light'); initCart(); initModal(); initQuoteForm(); initGestures(); cargarCatalogo();
+  initTheme('light');
+  updateContactLinks();
+  initReveal();
+  initZendaBot();
+  initCart();
+  initModal();
+  initQuoteForm();
+  initSecretAccess();
+  cargarCatalogo();
 });

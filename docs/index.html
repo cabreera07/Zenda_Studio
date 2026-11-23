@@ -23,6 +23,9 @@
       </nav>
 
       <div class="nav-actions">
+        <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener" class="icon-btn" title="Instagram @zenda.studio.gt" aria-label="Instagram">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        </a>
         <button id="theme-toggle" class="icon-btn" type="button" title="Cambiar tema" aria-label="Cambiar modo oscuro o claro"></button>
         <button id="cart-open-btn" class="cart-trigger" type="button">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -36,7 +39,7 @@
   <main>
     <section class="hero">
       <div class="container">
-        <div class="hero-wrap">
+        <div class="hero-wrap reveal in-view">
           <div class="hero-pill">
             <span class="status-dot"></span>
             <span>Agenda abierta &middot; Guatemala</span>
@@ -45,11 +48,12 @@
           <p id="hero-subtitle">Elige un paquete listo para implementar o cotiza una solución a medida. Páginas web, tiendas, automatización y analítica conectadas a tu operación.</p>
           <div class="hero-actions">
             <a href="#catalogo" class="btn btn-primary btn-lg">Explorar catálogo</a>
-            <a href="#" id="hero-whatsapp" class="btn btn-secondary btn-lg" target="_blank" rel="noopener">Hablar por WhatsApp</a>
+            <a href="#" id="hero-whatsapp" class="btn btn-secondary btn-lg" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="https://www.instagram.com/zenda.studio.gt/" id="hero-instagram" class="btn btn-ghost btn-lg" target="_blank" rel="noopener">Instagram &nearr;</a>
           </div>
         </div>
 
-        <div class="trust-bar">
+        <div class="trust-bar reveal">
           <div class="trust-item">
             <strong>Entrega en 7 a 14 días</strong>
             <span>Alcance claro y avances verificables desde el inicio.</span>
@@ -68,7 +72,7 @@
 
     <section id="catalogo" class="section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
           <div>
             <span class="section-kicker">Tienda de servicios</span>
             <h2>Paquetes y soluciones</h2>
@@ -76,7 +80,7 @@
           </div>
         </div>
 
-        <div class="catalog-toolbar">
+        <div class="catalog-toolbar reveal">
           <div id="filtros-categorias" class="tag-bar"></div>
 
           <div class="toolbar-right">
@@ -104,18 +108,18 @@
 
     <section id="proceso" class="section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
           <div>
             <span class="section-kicker">Cómo trabajamos</span>
             <h2>Simple, rápido y transparente</h2>
           </div>
         </div>
 
-        <div class="steps-grid">
+        <div class="steps-grid reveal">
           <div class="step-card">
             <span class="step-num">1</span>
             <h3>Eliges o cotizas</h3>
-            <p>Agrega uno o varios paquetes a tu bolsa o envíanos tu necesidad específica. Confirmamos fechas y entregables.</p>
+            <p>Agrega uno o varios paquetes a tu bolsa o escríbenos por WhatsApp o Instagram. Confirmamos fechas y entregables.</p>
           </div>
           <div class="step-card">
             <span class="step-num">2</span>
@@ -129,7 +133,7 @@
           </div>
         </div>
 
-        <div class="faq-list">
+        <div class="faq-list reveal">
           <details class="faq-item">
             <summary>¿Cómo funciona el pago al comprar un paquete?</summary>
             <p>Confirmas tu pedido en la bolsa, se genera tu orden y puedes iniciar con el 50% de anticipo (transferencia o link de pago) y el 50% restante contra entrega.</p>
@@ -147,15 +151,15 @@
     </section>
 
     <section id="cotizar" class="section">
-      <div class="container quote-grid">
+      <div class="container quote-grid reveal">
         <div>
-          <span class="section-kicker">A medida</span>
+          <span class="section-kicker">Contacto directo</span>
           <h2>¿Necesitas algo distinto al catálogo?</h2>
-          <p class="section-sub">Cuéntanos qué proceso quieres mejorar o qué sistema necesitas. Te respondemos en menos de 24 horas hábiles.</p>
+          <p class="section-sub">Cuéntanos qué proceso quieres mejorar o qué sistema necesitas. Te respondemos por WhatsApp o Instagram en menos de 24 horas.</p>
 
           <div class="contact-card">
-            <a href="#" id="direct-whatsapp" class="btn btn-primary btn-full" target="_blank" rel="noopener">Escribir por WhatsApp</a>
-            <button type="button" id="copy-email-btn" class="btn btn-secondary btn-full">Copiar correo del estudio</button>
+            <a href="#" id="direct-whatsapp" class="btn btn-primary btn-full" target="_blank" rel="noopener">Escribir por WhatsApp (5879-8301)</a>
+            <a href="https://www.instagram.com/zenda.studio.gt/" id="direct-instagram" class="btn btn-secondary btn-full" target="_blank" rel="noopener">Enviar DM en Instagram (@zenda.studio.gt)</a>
           </div>
         </div>
 
@@ -165,7 +169,7 @@
             <div class="field"><label for="telefono">WhatsApp *</label><input type="tel" id="telefono" required placeholder="+502 0000-0000" /></div>
           </div>
           <div class="form-row">
-            <div class="field"><label for="correo">Correo electrónico *</label><input type="email" id="correo" required placeholder="nombre@empresa.com" /></div>
+            <div class="field"><label for="correo">Usuario de Instagram o correo *</label><input type="text" id="correo" required placeholder="@tunegocio o correo@empresa.com" /></div>
             <div class="field"><label for="paquete">Paquete de interés</label><select id="paquete"><option value="Proyecto a medida">Proyecto a medida</option></select></div>
           </div>
           <div class="field">
@@ -179,7 +183,7 @@
             </select>
           </div>
           <div class="field"><label for="mensaje">Cuéntanos sobre tu proyecto *</label><textarea id="mensaje" rows="4" required placeholder="Objetivos, tiempos o herramientas que usas hoy..."></textarea></div>
-          <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar solicitud</button>
+          <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar solicitud y abrir WhatsApp</button>
           <p id="form-status" class="status-msg"></p>
         </form>
       </div>
@@ -189,7 +193,11 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="brand-logo"><span>zs</span><span id="secret-dot" class="brand-dot" title="zenda studio"></span></div>
-      <span>&copy; <span id="year"></span> zenda studio. Guatemala.</span>
+      <div class="footer-links">
+        <a href="#" id="footer-whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener">Instagram</a>
+        <span>&copy; <span id="year"></span> zenda studio.</span>
+      </div>
     </div>
   </footer>
 
@@ -216,7 +224,7 @@
           <div class="field"><label>Nombre o empresa *</label><input type="text" id="chk-nombre" required placeholder="Ej. María Gómez" /></div>
           <div class="form-row">
             <div class="field"><label>WhatsApp *</label><input type="tel" id="chk-tel" required placeholder="+502 0000-0000" /></div>
-            <div class="field"><label>Correo *</label><input type="email" id="chk-correo" required placeholder="tu@correo.com" /></div>
+            <div class="field"><label>Instagram o correo *</label><input type="text" id="chk-correo" required placeholder="@tunegocio o correo" /></div>
           </div>
           <div class="field">
             <label>Forma de pago</label>
@@ -250,11 +258,36 @@
         <ul id="modal-features" class="feature-list"></ul>
         <div class="modal-actions">
           <button type="button" id="modal-add-btn" class="btn btn-primary">Agregar a la bolsa</button>
-          <button type="button" id="modal-quote-btn" class="btn btn-secondary">Cotizar variante</button>
-          <a href="#" id="modal-wa-btn" target="_blank" rel="noopener" class="btn btn-ghost">Consultar por WhatsApp</a>
+          <a href="#" id="modal-wa-btn" target="_blank" rel="noopener" class="btn btn-secondary">WhatsApp</a>
+          <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener" class="btn btn-ghost">Instagram &nearr;</a>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- CARITA ANIMADA (El punto azul de zenda studio.) -->
+  <div id="zenda-bot" class="zenda-bot" aria-live="polite">
+    <div id="bot-bubble" class="bot-bubble">
+      <div class="bot-bubble-head">
+        <span>zenda.</span>
+        <button type="button" id="bot-close" class="bot-close" aria-label="Ocultar mensaje">&times;</button>
+      </div>
+      <div id="bot-msg">Un buen sistema vende y organiza tu negocio incluso cuando duermes.</div>
+      <div id="bot-actions" class="bot-bubble-actions" hidden>
+        <a href="#" id="bot-wa" class="bot-chip primary" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/zenda.studio.gt/" class="bot-chip" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+
+    <button type="button" id="bot-orb" class="bot-orb" aria-label="Asistente Zenda Studio">
+      <svg viewBox="0 0 36 36" fill="none">
+        <g class="bot-eye-group">
+          <circle id="eye-l" cx="12.5" cy="15" r="2.7" fill="#ffffff" />
+          <circle id="eye-r" cx="23.5" cy="15" r="2.7" fill="#ffffff" />
+        </g>
+        <path id="bot-mouth" d="M13 22.5 Q18 26.5 23 22.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none" />
+      </svg>
+    </button>
   </div>
 
   <div id="toast" class="toast" hidden></div>
