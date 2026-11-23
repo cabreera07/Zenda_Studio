@@ -4,14 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>zenda studio. — Páginas web y sistemas para emprendedores en Guatemala</title>
-  <meta name="description" content="4 paquetes de páginas web y sistemas conectados a tu WhatsApp, para 1 persona hasta empresas. Sin mensualidades. Guatemala." />
+  <meta name="description" content="4 paquetes de páginas web y sistemas conectados a tu WhatsApp, para 1 persona hasta empresas. Guatemala." />
   <link rel="canonical" href="https://cabreera07.github.io/Zenda_Studio/" />
   <meta name="theme-color" content="#0066ff" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_GT" />
   <meta property="og:site_name" content="zenda studio." />
   <meta property="og:title" content="zenda studio. — Sistemas web que convierten visitas en ventas" />
-  <meta property="og:description" content="4 paquetes conectados a tu WhatsApp. Sin mensualidades." />
+  <meta property="og:description" content="4 paquetes conectados a tu WhatsApp, a la medida de tu equipo." />
   <meta property="og:url" content="https://cabreera07.github.io/Zenda_Studio/" />
   <meta name="twitter:card" content="summary" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -19,6 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__zendaReady)document.documentElement.classList.remove('js')},4000);</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"ProfessionalService","name":"zenda studio.","url":"https://cabreera07.github.io/Zenda_Studio/","telephone":"+50258798301","areaServed":"GT","description":"Páginas web y sistemas conectados a WhatsApp para negocios en Guatemala.","sameAs":["https://www.instagram.com/zenda.studio.gt/"]}
   </script>
@@ -32,6 +33,7 @@
       <a href="#inicio" class="brand-logo" aria-label="zenda studio, inicio"><span>zenda studio</span><span class="brand-dot"></span></a>
       <nav class="nav-right" aria-label="Navegación principal">
         <a href="#planes" class="nav-link nav-hide-sm">Paquetes</a>
+        <a href="#catalogo" id="nav-catalogo" class="nav-link nav-hide-sm" hidden>Catálogo</a>
         <a href="#proceso" class="nav-link nav-hide-sm">Cómo trabajamos</a>
         <a href="#faq" class="nav-link nav-hide-sm">Preguntas</a>
         <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener" class="icon-btn" title="Instagram @zenda.studio.gt" aria-label="Instagram">
@@ -57,14 +59,14 @@
             <span id="greeting-phrase">Haz que tu negocio venda en automático.</span>
           </div>
           <h1>Tu negocio vende por redes. Hagamos que también venda solo<span class="text-accent">.</span></h1>
-          <p class="hero-sub">Páginas web y sistemas conectados a tu WhatsApp, hechos a la medida de tu equipo. Sin mensualidades y todo queda en tus cuentas.</p>
+          <p class="hero-sub">Páginas web y sistemas conectados a tu WhatsApp, hechos a la medida de tu equipo. Todo queda en tus propias cuentas.</p>
           <div class="hero-actions">
-            <a href="#planes" class="btn btn-primary btn-lg">Ver los 4 paquetes</a>
-            <a href="#" class="btn btn-secondary btn-lg js-wa-general" target="_blank" rel="noopener">Hablar por WhatsApp &rarr;</a>
+            <a href="#planes" class="btn btn-primary btn-lg"><span>Ver los 4 paquetes</span><span class="arr" aria-hidden="true">&darr;</span></a>
+            <a href="#" class="btn btn-secondary btn-lg js-wa-general" target="_blank" rel="noopener"><span>Hablar por WhatsApp</span><span class="arr" aria-hidden="true">&rarr;</span></a>
           </div>
           <ul class="trust-strip">
-            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Sin rentas mensuales</li>
-            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Listo en 7 a 14 días</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Sin mensualidades por nuestro servicio</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Entrega estimada de 7 a 14 días</li>
             <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Hecho en Guatemala</li>
           </ul>
         </div>
@@ -73,7 +75,7 @@
 
     <section id="planes" class="section section-subtle">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <span class="kicker">Paquetes</span>
           <h2>Elige según cuántos son en tu equipo</h2>
           <p>Cada paquete incluye todo lo del anterior. Toca el tuyo y te respondemos por WhatsApp con el costo.</p>
@@ -84,39 +86,51 @@
       </div>
     </section>
 
-    <section id="proceso" class="section">
+    <section id="catalogo" class="section" hidden>
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
+          <span class="kicker">Catálogo</span>
+          <h2>Servicios individuales</h2>
+          <p>¿Necesitas algo puntual? Elige un servicio y te atendemos por WhatsApp.</p>
+        </div>
+        <div id="filtros-categorias" class="tag-bar" role="group" aria-label="Filtrar por categoría" style="margin-bottom:24px;"></div>
+        <div id="catalogo-grid" class="catalog-grid"></div>
+      </div>
+    </section>
+
+    <section id="proceso" class="section section-subtle">
+      <div class="container">
+        <div class="section-head reveal">
           <span class="kicker">Cómo trabajamos</span>
           <h2>De tu idea a tu negocio en línea</h2>
         </div>
         <div class="steps-row">
-          <div class="step-item"><span class="step-num">01</span><h3>Eliges tu paquete</h3><p>Nos escribes por WhatsApp, confirmamos qué necesitas y te damos el costo.</p></div>
-          <div class="step-item"><span class="step-num">02</span><h3>Revisas avances reales</h3><p>Te damos un enlace privado para probar desde tu celular y pedir cambios.</p></div>
-          <div class="step-item"><span class="step-num">03</span><h3>Queda en tus cuentas</h3><p>Todo se publica a tu nombre. Tú lo controlas y no pagas renta de servidor.</p></div>
+          <div class="step-item reveal" style="--d:0ms"><span class="step-num">01</span><h3>Eliges tu paquete</h3><p>Nos escribes por WhatsApp, confirmamos qué necesitas y te damos el costo.</p></div>
+          <div class="step-item reveal" style="--d:90ms"><span class="step-num">02</span><h3>Revisas avances reales</h3><p>Te damos un enlace privado para probar desde tu celular y pedir cambios.</p></div>
+          <div class="step-item reveal" style="--d:180ms"><span class="step-num">03</span><h3>Queda en tus cuentas</h3><p>Todo se publica a tu nombre, para que tú lo controles.</p></div>
         </div>
       </div>
     </section>
 
-    <section id="faq" class="section section-subtle">
+    <section id="faq" class="section">
       <div class="container">
-        <div class="section-head centered"><span class="kicker">Preguntas frecuentes</span><h2>Lo que más nos preguntan</h2></div>
-        <div class="faq">
-          <details><summary>¿Cuánto cuesta?</summary><p>Depende del paquete y de lo que necesites. Escríbenos por WhatsApp y te cotizamos el mismo día.</p></details>
-          <details><summary>¿Hay mensualidades?</summary><p>No. Pagas una sola vez y el sistema vive en tus cuentas de Google y GitHub, sin renta de servidor.</p></details>
-          <details><summary>¿Cuánto tarda?</summary><p>Entre 7 y 14 días, según el paquete y qué tan rápido nos pases fotos y textos.</p></details>
-          <details><summary>¿Puedo cambiar precios y fotos yo mismo?</summary><p>Sí, desde tu celular o directo en tu hoja de Google, sin tocar código.</p></details>
+        <div class="section-head centered reveal"><span class="kicker">Preguntas frecuentes</span><h2>Lo que más nos preguntan</h2></div>
+        <div class="faq reveal">
+          <details><summary>¿Cuánto cuesta?</summary><p>Depende del paquete y de lo que necesites. Escríbenos por WhatsApp y te cotizamos.</p></details>
+          <details><summary>¿Hay mensualidades?</summary><p>Nuestro servicio se paga una sola vez. Tu sitio puede usar servicios de terceros, cada uno con sus propias condiciones; te explicamos cuáles antes de empezar.</p></details>
+          <details><summary>¿Cuánto tarda?</summary><p>Estimamos entre 7 y 14 días, según el alcance y qué tan rápido nos envíes fotos y textos.</p></details>
+          <details><summary>¿Puedo cambiar precios y fotos yo mismo?</summary><p>Sí, según el paquete: desde un panel privado o una hoja de cálculo, sin tocar código.</p></details>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section section-subtle">
       <div class="container">
-        <div class="cta-card">
+        <div class="cta-card reveal">
           <h2>¿No sabes cuál te conviene?</h2>
           <p>Cuéntanos qué vendes y cuántos son en tu equipo. Te recomendamos el paquete en minutos.</p>
           <div class="cta-actions">
-            <a href="#" class="btn btn-primary btn-lg js-wa-general" target="_blank" rel="noopener">Escribir por WhatsApp &rarr;</a>
+            <a href="#" class="btn btn-primary btn-lg js-wa-general" target="_blank" rel="noopener"><span>Escribir por WhatsApp</span><span class="arr" aria-hidden="true">&rarr;</span></a>
             <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">Ver Instagram</a>
           </div>
         </div>
@@ -124,14 +138,40 @@
     </section>
   </main>
 
+  <div id="service-modal" class="modal-overlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button type="button" id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
+      <div id="modal-media" class="modal-media"></div>
+      <div id="modal-thumbs" class="modal-thumbs"></div>
+      <div class="modal-body">
+        <span id="modal-cat" class="kicker"></span>
+        <div class="card-head">
+          <h2 id="modal-title" style="font-size:1.35rem;"></h2>
+          <span id="modal-price" class="card-price" style="font-size:1.2rem;"></span>
+        </div>
+        <p id="modal-desc" class="card-desc"></p>
+        <ul id="modal-features" class="feature-list"></ul>
+        <div class="modal-actions">
+          <a href="#" id="modal-wa-btn" data-svc="" target="_blank" rel="noopener" class="btn btn-primary"><span>Pedir por WhatsApp</span><span class="arr" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">
-    <div class="container footer-inner">
-      <div class="brand-logo" style="font-size:1.05rem;cursor:default;"><span>zs</span><span id="secret-dot" class="brand-dot"></span></div>
-      <div class="footer-links">
-        <a href="#planes">Paquetes</a>
-        <a href="#" class="js-wa-general" target="_blank" rel="noopener">WhatsApp</a>
-        <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener">Instagram</a>
-        <span>&copy; <span id="year"></span> zenda studio.</span>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="brand-logo" style="font-size:1.05rem;cursor:default;"><span>zs</span><span id="secret-dot" class="brand-dot"></span></div>
+        <div class="footer-links">
+          <a href="#planes">Paquetes</a>
+          <a href="#" class="js-wa-general" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="https://www.instagram.com/zenda.studio.gt/" target="_blank" rel="noopener">Instagram</a>
+          <span>&copy; <span id="year"></span> zenda studio.</span>
+        </div>
+      </div>
+      <div class="legal">
+        <p><strong>Marcas.</strong> Los nombres y marcas mencionados o enlazados en este sitio (WhatsApp, Instagram, TikTok y otros) pertenecen a sus respectivos titulares. zenda studio. es un estudio independiente y no está afiliado, patrocinado ni respaldado por ellos.</p>
+        <p><strong>Privacidad.</strong> Este sitio no tiene formularios ni cookies de seguimiento y solo guarda en tu navegador tu preferencia de tema y color. Para mostrar tipografías y contenido se conecta a servicios de terceros (por ejemplo, Google Fonts) que pueden recibir tu dirección IP. Si nos escribes por WhatsApp aplican las políticas de esa plataforma. Los alcances, plazos y costos de cada proyecto se acuerdan por escrito antes de iniciar.</p>
       </div>
     </div>
   </footer>
