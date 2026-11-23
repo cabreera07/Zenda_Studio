@@ -1,59 +1,52 @@
-﻿const CONFIG = {
+const CONFIG = {
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzBQgX8U0CzNe_zH8slUUAgDPMlQG3o0TidWUQ8cX2I88tEGSa6-4zsZet6Y-bqqd12GQ/exec',
   WHATSAPP_NUMBER: '50200000000',
   STUDIO_EMAIL: 'hola@zendastudio.com',
   MONEDA: 'Q'
 };
 
+const ICON_SUN = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>';
+const ICON_MOON = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+const ICON_CHECK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+
 let catalogoGlobal = [];
 let cart = JSON.parse(localStorage.getItem('zenda_cart') || '[]');
 let activeModalItem = null;
-let showcaseSlides = [];
-let showcaseIdx = 0;
-let showcaseTimer = null;
+let currentView = 'grid';
 let cardRotatorTimer = null;
 
 const linkWhatsApp = (msg) => `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 const parsePrice = (val) => parseFloat(String(val || '0').replace(/,/g, '').replace(/[^\d.]/g, '')) || 0;
 const formatMoney = (num) => `${CONFIG.MONEDA}${Number(num || 0).toLocaleString('en-US')}`;
+const esc = (s) => String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.hidden = false;
   clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+  window._toastTimer = setTimeout(() => { t.hidden = true; }, 2500);
 }
 
-function renderMediaObject(mediaObj, alt) {
-  if (!mediaObj || !mediaObj.url) return `<div class="loading-state mono-xs">SIN VISTA PREVIA</div>`;
-  if (mediaObj.type === 'video') return `<video src="${mediaObj.url}" autoplay loop muted playsinline></video>`;
-  if (mediaObj.type === 'drive_video') return `<iframe src="${mediaObj.url}" allow="autoplay"></iframe>`;
-  return `<img src="${mediaObj.url}" alt="${alt || 'Zenda Studio'}" loading="lazy" />`;
+function renderMediaHTML(m, alt) {
+  if (!m || !m.url) return '<div style="height:100%;display:grid;place-items:center;color:var(--text-muted);font-size:0.85rem;">Sin imagen</div>';
+  if (m.type === 'video') return `<video src="${m.url}" autoplay loop muted playsinline></video>`;
+  if (m.type === 'drive_video') return `<iframe src="${m.url}" allow="autoplay"></iframe>`;
+  return `<img src="${m.url}" alt="${esc(alt)}" loading="lazy" />`;
 }
 
-// Reloj Guatemala + Tema
-function startLiveClock() {
-  const el = document.getElementById('live-clock');
-  const update = () => {
-    try { el.textContent = 'GUA ' + new Intl.DateTimeFormat('es-GT', { timeZone: 'America/Guatemala', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date()); }
-    catch { el.textContent = 'ONLINE'; }
-  };
-  update(); setInterval(update, 15000);
-}
-
+// Tema Oscuro / Claro
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  const icon = document.getElementById('theme-icon');
-  if (icon) icon.textContent = theme === 'dark' ? '☀' : '☾';
+  const btn = document.getElementById('theme-toggle');
+  if (btn) btn.innerHTML = theme === 'dark' ? ICON_SUN : ICON_MOON;
 }
 
-function initTheme(def = 'dark') {
+function initTheme(def = 'light') {
   applyTheme(localStorage.getItem('zenda_theme') || def);
   document.getElementById('theme-toggle')?.addEventListener('click', () => {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     localStorage.setItem('zenda_theme', next);
     applyTheme(next);
-    showToast(next === 'dark' ? 'Modo oscuro' : 'Modo claro');
   });
 }
 
@@ -62,63 +55,21 @@ function aplicarConfigRemota(cfg) {
   if (cfg.whatsapp) CONFIG.WHATSAPP_NUMBER = String(cfg.whatsapp).replace(/\D/g, '');
   if (cfg.correo) CONFIG.STUDIO_EMAIL = cfg.correo;
   if (cfg.color_acento) document.documentElement.style.setProperty('--accent', cfg.color_acento);
-  if (cfg.hero_titulo) document.getElementById('hero-title').innerHTML = `${cfg.hero_titulo}<span class="text-accent">.</span>`;
+  if (cfg.hero_titulo) document.getElementById('hero-title').innerHTML = `${esc(cfg.hero_titulo)}<span class="text-accent">.</span>`;
   if (cfg.hero_subtitulo) document.getElementById('hero-subtitle').textContent = cfg.hero_subtitulo;
   if (cfg.banner_promo && cfg.banner_promo.trim()) {
-    document.getElementById('promo-text').textContent = cfg.banner_promo;
-    document.getElementById('promo-bar').hidden = false;
+    const bar = document.getElementById('promo-bar');
+    bar.textContent = cfg.banner_promo;
+    bar.hidden = false;
   }
-  if (String(cfg.mostrar_proceso).toUpperCase() === 'NO') document.getElementById('proceso').style.display = 'none';
-  if (cfg.tema_default && !localStorage.getItem('zenda_theme')) applyTheme(cfg.tema_default === 'light' ? 'light' : 'dark');
-  document.getElementById('direct-whatsapp').href = linkWhatsApp('Hola Zenda Studio, me gustaría cotizar un proyecto.');
+  if (String(cfg.mostrar_proceso).toUpperCase() === 'NO') document.getElementById('proceso').hidden = true;
+  if (cfg.tema_default && !localStorage.getItem('zenda_theme')) applyTheme(cfg.tema_default === 'dark' ? 'dark' : 'light');
+  const waMsg = linkWhatsApp('Hola Zenda Studio, me interesa conversar sobre un proyecto.');
+  document.getElementById('hero-whatsapp').href = waMsg;
+  document.getElementById('direct-whatsapp').href = waMsg;
 }
 
-// ================= VITRINA TRANSLÚCIDA ROTATIVA (DEMOS) =================
-function initShowcase(items) {
-  showcaseSlides = [];
-  items.forEach(item => {
-    const gal = item.galeria && item.galeria.length ? item.galeria : [{ type: 'image', url: item.imagen_url }];
-    gal.forEach(m => showcaseSlides.push({ item, media: m }));
-  });
-  if (!showcaseSlides.length) return;
-  showcaseIdx = 0;
-  renderShowcaseSlide();
-  startShowcaseTimer();
-
-  document.getElementById('showcase-prev').onclick = () => { showcaseIdx = (showcaseIdx - 1 + showcaseSlides.length) % showcaseSlides.length; renderShowcaseSlide(); startShowcaseTimer(); };
-  document.getElementById('showcase-next').onclick = () => { showcaseIdx = (showcaseIdx + 1) % showcaseSlides.length; renderShowcaseSlide(); startShowcaseTimer(); };
-}
-
-function renderShowcaseSlide() {
-  const s = showcaseSlides[showcaseIdx];
-  if (!s) return;
-  document.getElementById('showcase-counter').textContent = `${String(showcaseIdx + 1).padStart(2, '0')} / ${String(showcaseSlides.length).padStart(2, '0')}`;
-  document.getElementById('showcase-media').innerHTML = renderMediaObject(s.media, s.item.nombre);
-  if (s.media.type === 'image') document.getElementById('showcase-bg').style.backgroundImage = `url('${s.media.url}')`;
-  document.getElementById('showcase-cat').textContent = `// ${s.item.categoria || 'DEMO'}`;
-  document.getElementById('showcase-title').textContent = s.item.nombre;
-  document.getElementById('showcase-desc').textContent = s.item.descripcion;
-  document.getElementById('showcase-price').textContent = `${CONFIG.MONEDA}${s.item.precio}`;
-  document.getElementById('showcase-add-btn').onclick = () => addToCart(s.item.id);
-  document.getElementById('showcase-detail-btn').onclick = () => abrirModal(s.item.id);
-}
-
-function startShowcaseTimer() {
-  clearInterval(showcaseTimer);
-  const bar = document.getElementById('showcase-bar');
-  let pct = 0;
-  showcaseTimer = setInterval(() => {
-    pct += 2;
-    bar.style.width = pct + '%';
-    if (pct >= 100) {
-      pct = 0;
-      showcaseIdx = (showcaseIdx + 1) % showcaseSlides.length;
-      renderShowcaseSlide();
-    }
-  }, 100); // Rota cada 5 segundos
-}
-
-// ================= CATÁLOGO / TIENDA =================
+// Catálogo
 async function cargarCatalogo() {
   const grid = document.getElementById('catalogo-grid');
   try {
@@ -126,12 +77,11 @@ async function cargarCatalogo() {
     const json = await res.json();
     if (json.config) aplicarConfigRemota(json.config);
     catalogoGlobal = json.data || [];
-    initShowcase(catalogoGlobal);
     renderFiltros(catalogoGlobal);
     renderCatalogo(catalogoGlobal);
     poblarSelectPaquetes(catalogoGlobal);
   } catch (err) {
-    grid.innerHTML = '<div class="loading-state mono-xs">ERROR AL CONECTAR CON SHEETS</div>';
+    grid.innerHTML = '<div class="empty-state">No se pudo conectar con el catálogo. Recarga la página.</div>';
     console.error(err);
   }
 }
@@ -139,105 +89,116 @@ async function cargarCatalogo() {
 function renderFiltros(items) {
   const container = document.getElementById('filtros-categorias');
   const cats = ['Todos', ...new Set(items.map(i => i.categoria).filter(Boolean))];
-  container.innerHTML = cats.map((c, idx) => `<button class="filter-btn ${idx === 0 ? 'active' : ''}" data-cat="${c}">${c}</button>`).join('');
+  container.innerHTML = cats.map((c, idx) => `<button type="button" class="tag-pill ${idx === 0 ? 'active' : ''}" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
 
-  const applyFilter = () => {
-    const activeCat = container.querySelector('.filter-btn.active')?.dataset.cat || 'Todos';
+  const filtrar = () => {
+    const activeCat = container.querySelector('.tag-pill.active')?.dataset.cat || 'Todos';
     const q = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
-    const filtrados = catalogoGlobal.filter(i => {
-      const matchCat = activeCat === 'Todos' || i.categoria === activeCat;
-      const matchQ = !q || `${i.nombre} ${i.descripcion} ${i.categoria}`.toLowerCase().includes(q);
-      return matchCat && matchQ;
+    const res = catalogoGlobal.filter(i => {
+      const okCat = activeCat === 'Todos' || i.categoria === activeCat;
+      const okQ = !q || `${i.nombre} ${i.descripcion} ${i.categoria} ${i.entregables}`.toLowerCase().includes(q);
+      return okCat && okQ;
     });
-    renderCatalogo(filtrados);
+    renderCatalogo(res);
   };
 
-  container.querySelectorAll('.filter-btn').forEach(btn => {
+  container.querySelectorAll('.tag-pill').forEach(btn => {
     btn.addEventListener('click', () => {
-      container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      container.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      applyFilter();
+      filtrar();
     });
   });
-  document.getElementById('search-input')?.addEventListener('input', applyFilter);
+  document.getElementById('search-input')?.addEventListener('input', filtrar);
+
+  document.querySelectorAll('.view-switch button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.view-switch button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentView = btn.dataset.view;
+      document.getElementById('catalogo-grid').classList.toggle('view-list', currentView === 'list');
+    });
+  });
 }
 
 function renderCatalogo(items) {
   const grid = document.getElementById('catalogo-grid');
+  grid.classList.toggle('view-list', currentView === 'list');
   clearInterval(cardRotatorTimer);
-  if (!items.length) { grid.innerHTML = '<div class="loading-state mono-xs">NO SE ENCONTRARON SERVICIOS</div>'; return; }
 
-  const useWideLead = items.length >= 3 && items.length % 2 === 1;
+  if (!items.length) {
+    grid.innerHTML = '<div class="empty-state">No hay paquetes que coincidan con tu búsqueda.</div>';
+    return;
+  }
 
-  grid.innerHTML = items.map((item, idx) => {
-    const entregables = String(item.entregables || '').split('|').filter(Boolean);
-    const esDestacado = String(item.destacado).toUpperCase() === 'SI';
-    const isWide = useWideLead && idx === 0;
+  grid.innerHTML = items.map(item => {
     const gal = item.galeria && item.galeria.length ? item.galeria : [{ type: 'image', url: item.imagen_url }];
-    const dotsHTML = gal.length > 1 ? `<div class="media-dots">${gal.map((_, i) => `<span class="media-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}</div>` : '';
+    const feats = String(item.entregables || '').split('|').filter(Boolean);
+    const featured = String(item.destacado).toUpperCase() === 'SI';
+    const dots = gal.length > 1 ? `<div class="media-dots">${gal.map((_, i) => `<span class="media-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}</div>` : '';
 
     return `
-      <article class="bento-card ${esDestacado ? 'card-featured' : ''} ${isWide ? 'card-wide' : ''}" data-id="${item.id}" data-slide="0">
-        <div class="card-media" onclick="abrirModal('${String(item.id).replace(/'/g, "\\'")}')">
-          <div class="card-media-slot" style="width:100%;height:100%;">${renderMediaObject(gal[0], item.nombre)}</div>
-          <span class="card-cat-badge mono-xs">${item.categoria || 'Sistema'}</span>
-          ${esDestacado ? '<span class="card-star mono-xs">RECOMENDADO</span>' : ''}
-          ${dotsHTML}
-        </div>
-        <div class="card-body">
-          <div class="card-top">
-            <h3 class="card-title">${item.nombre}</h3>
-            <span class="card-price">${CONFIG.MONEDA}${item.precio}</span>
+      <article class="product-card ${featured ? 'featured' : ''}" data-id="${esc(item.id)}" data-slide="0">
+        <div class="card-media" data-action="modal" data-id="${esc(item.id)}">
+          <div class="media-slot" style="width:100%;height:100%;">${renderMediaHTML(gal[0], item.nombre)}</div>
+          <div class="card-badges">
+            <span class="badge-cat">${esc(item.categoria || 'Servicio')}</span>
+            ${featured ? '<span class="badge-star">Destacado</span>' : ''}
           </div>
-          <p class="card-desc">${item.descripcion || ''}</p>
-          <ul class="card-features">${entregables.slice(0, 4).map(e => `<li>${e.trim()}</li>`).join('')}</ul>
-          <div class="card-actions">
-            <button class="btn btn-primary btn-sm" onclick="addToCart('${String(item.id).replace(/'/g, "\\'")}')">+ Agregar a bolsa</button>
-            <button class="btn btn-ghost btn-sm" onclick="abrirModal('${String(item.id).replace(/'/g, "\\'")}')">Galería (${gal.length})</button>
+          ${dots}
+        </div>
+        <div class="card-content">
+          <div class="card-head">
+            <h3 class="card-title">${esc(item.nombre)}</h3>
+            <span class="card-price">${CONFIG.MONEDA}${esc(item.precio)}</span>
+          </div>
+          <p class="card-desc">${esc(item.descripcion)}</p>
+          <ul class="feature-list">
+            ${feats.slice(0, 4).map(f => `<li>${ICON_CHECK}<span>${esc(f.trim())}</span></li>`).join('')}
+          </ul>
+          <div class="card-footer">
+            <button type="button" class="btn btn-primary btn-sm" data-action="add" data-id="${esc(item.id)}">Agregar a bolsa</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-action="modal" data-id="${esc(item.id)}">Ver detalle</button>
           </div>
         </div>
       </article>`;
   }).join('');
 
-  // Spotlight del cursor + Rotación automática de tarjetas con varias imágenes
-  grid.querySelectorAll('.bento-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      card.style.setProperty('--my', `${e.clientY - r.top}px`);
-    });
-  });
+  // Delegación limpia de eventos
+  grid.querySelectorAll('[data-action="add"]').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.id)));
+  grid.querySelectorAll('[data-action="modal"]').forEach(b => b.addEventListener('click', () => abrirModal(b.dataset.id)));
 
+  // Rotación automática de imágenes múltiples
   cardRotatorTimer = setInterval(() => {
-    grid.querySelectorAll('.bento-card').forEach(card => {
+    grid.querySelectorAll('.product-card').forEach(card => {
       const item = catalogoGlobal.find(i => String(i.id) === String(card.dataset.id));
       if (!item || !item.galeria || item.galeria.length <= 1) return;
-      const nextIdx = (Number(card.dataset.slide || 0) + 1) % item.galeria.length;
-      if (item.galeria[nextIdx].type === 'drive_video') return; // No interrumpir iframes de video
-      card.dataset.slide = nextIdx;
-      const slot = card.querySelector('.card-media-slot');
-      if (slot) slot.innerHTML = renderMediaObject(item.galeria[nextIdx], item.nombre);
-      card.querySelectorAll('.media-dot').forEach((d, i) => d.classList.toggle('active', i === nextIdx));
+      const next = (Number(card.dataset.slide || 0) + 1) % item.galeria.length;
+      if (item.galeria[next].type === 'drive_video') return;
+      card.dataset.slide = next;
+      const slot = card.querySelector('.media-slot');
+      if (slot) slot.innerHTML = renderMediaHTML(item.galeria[next], item.nombre);
+      card.querySelectorAll('.media-dot').forEach((d, i) => d.classList.toggle('active', i === next));
     });
   }, 4500);
 }
 
-// ================= CARRITO DE COMPRAS =================
+// Carrito
 function saveCart() {
   localStorage.setItem('zenda_cart', JSON.stringify(cart));
   renderCart();
 }
 
-window.addToCart = function(id) {
+function addToCart(id) {
   const item = catalogoGlobal.find(i => String(i.id) === String(id));
   if (!item) return;
-  const existing = cart.find(c => String(c.id) === String(id));
-  if (existing) existing.qty += 1;
-  else cart.push({ id: item.id, nombre: item.nombre, precio: parsePrice(item.precio), precioLabel: item.precio, qty: 1 });
+  const ex = cart.find(c => String(c.id) === String(id));
+  if (ex) ex.qty += 1;
+  else cart.push({ id: item.id, nombre: item.nombre, precio: parsePrice(item.precio), qty: 1 });
   saveCart();
   showToast(`Agregado: ${item.nombre}`);
   openCart();
-};
+}
 
 window.changeQty = function(id, delta) {
   const idx = cart.findIndex(c => String(c.id) === String(id));
@@ -248,51 +209,49 @@ window.changeQty = function(id, delta) {
 };
 
 function renderCart() {
-  const count = cart.reduce((s, i) => s + i.qty, 0);
-  document.getElementById('cart-count').textContent = count;
+  document.getElementById('cart-count').textContent = cart.reduce((s, i) => s + i.qty, 0);
   const list = document.getElementById('cart-items');
-  const checkoutArea = document.getElementById('cart-checkout-area');
+  const area = document.getElementById('cart-checkout-area');
 
   if (!cart.length) {
-    list.innerHTML = '<p style="color:var(--text-muted); padding:24px 0; text-align:center;">Tu bolsa está vacía. Selecciona algún paquete de la tienda.</p>';
-    checkoutArea.hidden = true;
+    list.innerHTML = '<div class="empty-state" style="padding:32px 16px;">Tu bolsa está vacía.</div>';
+    area.hidden = true;
     return;
   }
-
-  checkoutArea.hidden = false;
+  area.hidden = false;
   let total = 0;
   list.innerHTML = cart.map(c => {
     total += c.precio * c.qty;
     return `
-      <div class="cart-item">
+      <div class="cart-row">
         <div>
-          <strong style="font-size:0.93rem;">${c.nombre}</strong>
-          <div class="mono-xs text-accent">${formatMoney(c.precio)} c/u</div>
+          <strong style="font-size:0.92rem; display:block;">${esc(c.nombre)}</strong>
+          <span style="font-size:0.82rem; color:var(--accent); font-weight:600;">${formatMoney(c.precio)}</span>
         </div>
-        <div class="cart-qty">
-          <button class="qty-btn" onclick="changeQty('${c.id}', -1)">-</button>
-          <span class="mono-val">${c.qty}</span>
-          <button class="qty-btn" onclick="changeQty('${c.id}', 1)">+</button>
+        <div class="qty-control">
+          <button type="button" class="qty-btn" onclick="changeQty('${esc(c.id)}', -1)">-</button>
+          <span style="font-weight:600; min-width:18px; text-align:center;">${c.qty}</span>
+          <button type="button" class="qty-btn" onclick="changeQty('${esc(c.id)}', 1)">+</button>
         </div>
       </div>`;
   }).join('');
   document.getElementById('cart-total').textContent = formatMoney(total);
 }
 
-function openCart() { document.getElementById('cart-drawer-backdrop').hidden = false; renderCart(); }
-function closeCart() { document.getElementById('cart-drawer-backdrop').hidden = true; }
+function openCart() { document.getElementById('cart-overlay').hidden = false; renderCart(); }
+function closeCart() { document.getElementById('cart-overlay').hidden = true; }
 
-function initCartDrawer() {
+function initCart() {
   document.getElementById('cart-open-btn').addEventListener('click', openCart);
   document.getElementById('cart-close-btn').addEventListener('click', closeCart);
-  document.getElementById('cart-drawer-backdrop').addEventListener('click', e => { if (e.target.id === 'cart-drawer-backdrop') closeCart(); });
+  document.getElementById('cart-overlay').addEventListener('click', e => { if (e.target.id === 'cart-overlay') closeCart(); });
 
   document.getElementById('checkout-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!cart.length) return;
     const btn = document.getElementById('btn-checkout');
     const st = document.getElementById('chk-status');
-    btn.disabled = true; btn.textContent = 'Procesando orden...'; st.textContent = '';
+    btn.disabled = true; btn.textContent = 'Confirmando orden...'; st.textContent = '';
 
     const totalNum = cart.reduce((s, c) => s + c.precio * c.qty, 0);
     const resumen = cart.map(c => `${c.qty}x ${c.nombre} (${formatMoney(c.precio * c.qty)})`).join(' | ');
@@ -306,33 +265,32 @@ function initCartDrawer() {
       items_resumen: resumen,
       total: formatMoney(totalNum)
     };
-
     try {
       const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
       const json = await res.json();
       const orderId = json.orderId || 'ZS-OK';
       const wa = linkWhatsApp(`Hola Zenda Studio, confirmé mi pedido *${orderId}*:\n• Cliente: ${payload.cliente}\n• Paquetes: ${resumen}\n• Total: ${payload.total}\n• Pago: ${payload.metodo_pago}`);
-      st.innerHTML = `Pedido <strong>${orderId}</strong> confirmado. <a href="${wa}" target="_blank" style="color:var(--accent)">Coordinar pago por WhatsApp &nearr;</a>`;
+      st.innerHTML = `Orden <strong>${esc(orderId)}</strong> registrada. <a href="${wa}" target="_blank" style="color:var(--accent)">Coordinar pago por WhatsApp &rarr;</a>`;
       cart = []; saveCart(); e.target.reset();
-      showToast(`Pedido ${orderId} registrado`);
+      showToast(`Pedido ${orderId} confirmado`);
     } catch {
-      st.textContent = 'Error al registrar pedido. Escríbenos directo por WhatsApp.';
+      st.textContent = 'Error de conexión. Escríbenos por WhatsApp.';
     } finally {
-      btn.disabled = false; btn.textContent = 'Confirmar pedido →';
+      btn.disabled = false; btn.textContent = 'Confirmar pedido';
     }
   });
   renderCart();
 }
 
-// ================= MODAL GALERÍA =================
-window.abrirModal = function(id) {
+// Modal detalle
+function abrirModal(id) {
   const item = catalogoGlobal.find(i => String(i.id) === String(id));
   if (!item) return;
   activeModalItem = item;
   const gal = item.galeria && item.galeria.length ? item.galeria : [{ type: 'image', url: item.imagen_url }];
 
   const setMain = (idx) => {
-    document.getElementById('modal-media').innerHTML = renderMediaObject(gal[idx], item.nombre);
+    document.getElementById('modal-media').innerHTML = renderMediaHTML(gal[idx], item.nombre);
     document.querySelectorAll('.modal-thumb').forEach((t, i) => t.classList.toggle('active', i === idx));
   };
 
@@ -340,20 +298,21 @@ window.abrirModal = function(id) {
   if (gal.length > 1) {
     thumbs.innerHTML = gal.map((m, i) => `
       <button type="button" class="modal-thumb ${i === 0 ? 'active' : ''}" data-i="${i}">
-        ${m.type === 'image' ? `<img src="${m.url}" alt="" />` : '<span class="mono-xs">VIDEO</span>'}
+        ${m.type === 'image' ? `<img src="${m.url}" alt="" />` : 'VIDEO'}
       </button>`).join('');
     thumbs.querySelectorAll('.modal-thumb').forEach(b => b.addEventListener('click', () => setMain(Number(b.dataset.i))));
-  } else { thumbs.innerHTML = ''; }
+  } else thumbs.innerHTML = '';
 
   setMain(0);
-  document.getElementById('modal-cat').textContent = `// ${item.categoria || 'PAQUETE'}`;
+  document.getElementById('modal-cat').textContent = item.categoria || 'Paquete';
   document.getElementById('modal-title').textContent = item.nombre;
   document.getElementById('modal-price').textContent = `${CONFIG.MONEDA}${item.precio}`;
   document.getElementById('modal-desc').textContent = item.descripcion || '';
-  document.getElementById('modal-features').innerHTML = String(item.entregables || '').split('|').filter(Boolean).map(e => `<li>${e.trim()}</li>`).join('');
+  document.getElementById('modal-features').innerHTML = String(item.entregables || '').split('|').filter(Boolean)
+    .map(f => `<li>${ICON_CHECK}<span>${esc(f.trim())}</span></li>`).join('');
   document.getElementById('modal-wa-btn').href = linkWhatsApp(`Hola Zenda Studio, quiero consultar sobre "${item.nombre}" (${CONFIG.MONEDA}${item.precio}).`);
   document.getElementById('service-modal').hidden = false;
-};
+}
 
 function initModal() {
   const modal = document.getElementById('service-modal');
@@ -364,20 +323,20 @@ function initModal() {
   document.getElementById('modal-quote-btn').addEventListener('click', () => {
     close();
     if (!activeModalItem) return;
-    const select = document.getElementById('paquete');
-    for (let opt of select.options) { if (opt.value.startsWith(activeModalItem.nombre)) { select.value = opt.value; break; } }
+    const sel = document.getElementById('paquete');
+    for (let opt of sel.options) { if (opt.value.startsWith(activeModalItem.nombre)) { sel.value = opt.value; break; } }
     document.getElementById('cotizar').scrollIntoView({ behavior: 'smooth' });
   });
 }
 
 function poblarSelectPaquetes(items) {
-  const select = document.getElementById('paquete');
-  select.innerHTML = '<option value="Sistema a medida">Sistema a medida</option>';
+  const sel = document.getElementById('paquete');
+  sel.innerHTML = '<option value="Proyecto a medida">Proyecto a medida</option>';
   items.forEach(item => {
     const opt = document.createElement('option');
     opt.value = `${item.nombre} (${CONFIG.MONEDA}${item.precio})`;
     opt.textContent = `${item.nombre} — ${CONFIG.MONEDA}${item.precio}`;
-    select.appendChild(opt);
+    sel.appendChild(opt);
   });
 }
 
@@ -399,18 +358,18 @@ function initQuoteForm() {
     };
     try {
       await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-      const wa = linkWhatsApp(`Hola Zenda Studio, envié una cotización:\n• Nombre: ${payload.nombre}\n• Solución: ${payload.paquete}\n• Detalle: ${payload.mensaje}`);
-      st.innerHTML = `Solicitud registrada. <a href="${wa}" target="_blank" style="color:var(--accent)">Agilizar por WhatsApp &nearr;</a>`;
-      form.reset(); showToast('Cotización enviada');
-    } catch { st.textContent = 'Error al enviar. Contáctanos por WhatsApp.'; }
-    finally { btn.disabled = false; btn.textContent = 'Enviar solicitud →'; }
+      const wa = linkWhatsApp(`Hola Zenda Studio, envié una cotización:\n• Nombre: ${payload.nombre}\n• Servicio: ${payload.paquete}\n• Detalle: ${payload.mensaje}`);
+      st.innerHTML = `Solicitud enviada. <a href="${wa}" target="_blank" style="color:var(--accent)">Agilizar por WhatsApp &rarr;</a>`;
+      form.reset(); showToast('Solicitud enviada');
+    } catch { st.textContent = 'Error al enviar. Escríbenos por WhatsApp.'; }
+    finally { btn.disabled = false; btn.textContent = 'Enviar solicitud'; }
   });
 }
 
 function initGestures() {
   document.getElementById('copy-email-btn')?.addEventListener('click', () => {
     navigator.clipboard?.writeText(CONFIG.STUDIO_EMAIL);
-    showToast(`Copiado: ${CONFIG.STUDIO_EMAIL}`);
+    showToast(`Correo copiado: ${CONFIG.STUDIO_EMAIL}`);
   });
   let clicks = 0, timer;
   document.getElementById('secret-dot')?.addEventListener('click', () => {
@@ -422,5 +381,5 @@ function initGestures() {
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('year').textContent = new Date().getFullYear();
-  initTheme('dark'); startLiveClock(); initCartDrawer(); initModal(); initQuoteForm(); initGestures(); cargarCatalogo();
+  initTheme('light'); initCart(); initModal(); initQuoteForm(); initGestures(); cargarCatalogo();
 });

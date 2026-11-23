@@ -1,291 +1,263 @@
-﻿<!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>zenda studio. | Ingeniería Digital & Tienda de Sistemas</title>
-  <meta name="description" content="Compra paquetes de desarrollo web, automatización, analítica y sistemas a medida en Zenda Studio." />
+  <title>zenda studio. — Sistemas Web y Soluciones Digitales</title>
+  <meta name="description" content="Tienda de paquetes de desarrollo web, automatización, analítica y sistemas a medida por Zenda Studio." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="grid-backdrop" aria-hidden="true"></div>
+  <div id="promo-bar" class="promo-bar" hidden></div>
 
-  <div id="promo-bar" class="promo-bar" hidden>
-    <span class="mono-tag">AVISO</span>
-    <span id="promo-text"></span>
-  </div>
-
-  <!-- Navegación -->
   <header class="navbar">
     <div class="container nav-inner">
-      <div class="nav-left">
-        <a href="#" class="brand-logo"><span>zenda studio</span><span class="brand-dot"></span></a>
-        <div class="live-pill">
-          <span class="pulse-dot"></span>
-          <span class="mono-xs">DISPONIBLE &middot; <span id="live-clock">GUA --:--</span></span>
-        </div>
-      </div>
+      <a href="#" class="brand-logo"><span>zenda studio</span><span class="brand-dot"></span></a>
 
-      <nav class="nav-links">
-        <a href="#demos"><span class="mono-num">01</span> Demos</a>
-        <a href="#catalogo"><span class="mono-num">02</span> Tienda</a>
-        <a href="#proceso"><span class="mono-num">03</span> Proceso</a>
-        <a href="#cotizar"><span class="mono-num">04</span> Cotizar</a>
-        <button id="theme-toggle" class="icon-btn" type="button" title="Cambiar modo oscuro / claro"><span id="theme-icon">☀</span></button>
-        <button id="cart-open-btn" class="cart-btn" type="button">
-          <span>Bolsa</span>
-          <span id="cart-count" class="cart-badge mono-xs">0</span>
-        </button>
+      <nav class="nav-center">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#cotizar">Cotizar</a>
       </nav>
+
+      <div class="nav-actions">
+        <button id="theme-toggle" class="icon-btn" type="button" title="Cambiar tema" aria-label="Cambiar modo oscuro o claro"></button>
+        <button id="cart-open-btn" class="cart-trigger" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>Bolsa</span>
+          <span id="cart-count" class="cart-count">0</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Hero + Tarjeta Translúcida en Vivo -->
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-main">
-        <div class="eyebrow mono-xs">ESTUDIO DE SISTEMAS &amp; TIENDA DE SOLUCIONES</div>
-        <h1 id="hero-title">Construimos sistemas que trabajan por tu negocio<span class="text-accent">.</span></h1>
-        <p id="hero-subtitle">Explora demos reales, selecciona paquetes listos para implementar o arma una solución a medida para operar sin fricción.</p>
-        <div class="hero-actions">
-          <a href="#catalogo" class="btn btn-primary">Explorar tienda &darr;</a>
-          <a href="#cotizar" class="btn btn-ghost">Proyecto a medida</a>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-wrap">
+          <div class="hero-pill">
+            <span class="status-dot"></span>
+            <span>Agenda abierta &middot; Guatemala</span>
+          </div>
+          <h1 id="hero-title">Sistemas digitales diseñados para vender y escalar<span class="text-accent">.</span></h1>
+          <p id="hero-subtitle">Elige un paquete listo para implementar o cotiza una solución a medida. Páginas web, tiendas, automatización y analítica conectadas a tu operación.</p>
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn btn-primary btn-lg">Explorar catálogo</a>
+            <a href="#" id="hero-whatsapp" class="btn btn-secondary btn-lg" target="_blank" rel="noopener">Hablar por WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="trust-bar">
+          <div class="trust-item">
+            <strong>Entrega en 7 a 14 días</strong>
+            <span>Alcance claro y avances verificables desde el inicio.</span>
+          </div>
+          <div class="trust-item">
+            <strong>Sin rentas obligatorias</strong>
+            <span>Infraestructura en tus propias cuentas, 100% tuya.</span>
+          </div>
+          <div class="trust-item">
+            <strong>50% inicio · 50% entrega</strong>
+            <span>Pagos flexibles por transferencia o tarjeta.</span>
+          </div>
         </div>
       </div>
+    </section>
 
-      <aside class="hero-spec-card glass-surface">
-        <div class="spec-header mono-xs">
-          <span>ZENDA // TELEMETRÍA</span>
-          <span class="spec-status">ONLINE</span>
+    <section id="catalogo" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">Tienda de servicios</span>
+            <h2>Paquetes y soluciones</h2>
+            <p class="section-sub">Filtra por etiqueta, cambia la vista o haz clic en cualquier paquete para ver su galería completa.</p>
+          </div>
         </div>
-        <div class="spec-row"><span class="spec-label">Entrega promedio</span><strong class="mono-val">7 — 14 días</strong></div>
-        <div class="spec-row"><span class="spec-label">Modalidad de pago</span><strong class="mono-val">50% inicio · 50% entrega</strong></div>
-        <div class="spec-row"><span class="spec-label">Propiedad</span><strong class="mono-val">100% tuyo, sin rentas</strong></div>
-        <div class="spec-footer">
-          <button type="button" id="copy-email-btn" class="copy-chip mono-xs">Copiar correo del estudio</button>
-        </div>
-      </aside>
-    </div>
-  </section>
 
-  <!-- 01 // Vitrina Translúcida Rotativa de Demos y Referencias -->
-  <section id="demos" class="section section-divider">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <span class="section-code mono-xs">01 // DEMOS &amp; REFERENCIAS EN VIVO</span>
-          <h2>Vista previa de lo que entregamos<span class="text-accent">.</span></h2>
-        </div>
-        <div class="showcase-controls">
-          <button id="showcase-prev" class="icon-btn" type="button" aria-label="Anterior">&larr;</button>
-          <span id="showcase-counter" class="mono-xs" style="color:var(--text-muted)">01 / 01</span>
-          <button id="showcase-next" class="icon-btn" type="button" aria-label="Siguiente">&rarr;</button>
-        </div>
-      </div>
+        <div class="catalog-toolbar">
+          <div id="filtros-categorias" class="tag-bar"></div>
 
-      <div id="showcase-stage" class="showcase-stage">
-        <div class="showcase-bg" id="showcase-bg"></div>
-        <div class="showcase-media" id="showcase-media">
-          <div class="loading-state mono-xs">CARGANDO DEMOS...</div>
-        </div>
-        <div class="showcase-overlay glass-surface">
-          <span id="showcase-cat" class="mono-xs text-accent">// DEMO</span>
-          <h3 id="showcase-title">Sincronizando catálogo...</h3>
-          <p id="showcase-desc"></p>
-          <div class="showcase-footer">
-            <span id="showcase-price" class="mono-val text-accent"></span>
-            <div style="display:flex; gap:8px;">
-              <button id="showcase-add-btn" class="btn btn-primary btn-sm" type="button">+ Agregar a bolsa</button>
-              <button id="showcase-detail-btn" class="btn btn-outline btn-sm" type="button">Ver galería</button>
+          <div class="toolbar-right">
+            <div class="search-box">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="search" id="search-input" placeholder="Buscar paquete..." />
+            </div>
+
+            <div class="view-switch" role="group" aria-label="Tipo de vista">
+              <button type="button" class="active" data-view="grid" title="Vista cuadrícula">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              </button>
+              <button type="button" data-view="list" title="Vista lista">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </button>
             </div>
           </div>
-          <div class="showcase-progress"><div id="showcase-bar" class="showcase-bar"></div></div>
+        </div>
+
+        <div id="catalogo-grid" class="catalog-grid">
+          <div class="empty-state">Cargando catálogo...</div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 02 // Tienda y Catálogo de Paquetes -->
-  <section id="catalogo" class="section section-divider">
-    <div class="container">
-      <div class="section-head">
+    <section id="proceso" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">Cómo trabajamos</span>
+            <h2>Simple, rápido y transparente</h2>
+          </div>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <span class="step-num">1</span>
+            <h3>Eliges o cotizas</h3>
+            <p>Agrega uno o varios paquetes a tu bolsa o envíanos tu necesidad específica. Confirmamos fechas y entregables.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">2</span>
+            <h3>Construimos con avances reales</h3>
+            <p>Te compartimos un enlace de pruebas en vivo para revisar diseño, flujos y ajustes antes de lanzar.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-num">3</span>
+            <h3>Publicación y control total</h3>
+            <p>Dejamos todo conectado a tus cuentas y te capacitamos para gestionar tu catálogo y pedidos en minutos.</p>
+          </div>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>¿Cómo funciona el pago al comprar un paquete?</summary>
+            <p>Confirmas tu pedido en la bolsa, se genera tu orden y puedes iniciar con el 50% de anticipo (transferencia o link de pago) y el 50% restante contra entrega.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Tengo que pagar servidores costosos cada mes?</summary>
+            <p>En nuestros paquetes estándar trabajamos con infraestructura cloud de costo cero de mantenimiento mensual, pagando solo tu dominio si deseas uno propio.</p>
+          </details>
+          <details class="faq-item">
+            <summary>¿Puedo agregar funciones nuevas después?</summary>
+            <p>Sí, todo queda modular para escalar con integraciones de CRM, WhatsApp, facturación o reportes cuando tu negocio lo necesite.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="cotizar" class="section">
+      <div class="container quote-grid">
         <div>
-          <span class="section-code mono-xs">02 // TIENDA DE PAQUETES</span>
-          <h2>Elige, combina y adquiere en línea<span class="text-accent">.</span></h2>
+          <span class="section-kicker">A medida</span>
+          <h2>¿Necesitas algo distinto al catálogo?</h2>
+          <p class="section-sub">Cuéntanos qué proceso quieres mejorar o qué sistema necesitas. Te respondemos en menos de 24 horas hábiles.</p>
+
+          <div class="contact-card">
+            <a href="#" id="direct-whatsapp" class="btn btn-primary btn-full" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+            <button type="button" id="copy-email-btn" class="btn btn-secondary btn-full">Copiar correo del estudio</button>
+          </div>
         </div>
-        <div class="store-toolbar">
-          <input type="search" id="search-input" class="search-input" placeholder="Buscar servicio..." />
-          <div id="filtros-categorias" class="filter-bar"></div>
-        </div>
+
+        <form id="quote-form" class="form-card">
+          <div class="form-row">
+            <div class="field"><label for="nombre">Nombre o empresa *</label><input type="text" id="nombre" required placeholder="Ej. Ana López" /></div>
+            <div class="field"><label for="telefono">WhatsApp *</label><input type="tel" id="telefono" required placeholder="+502 0000-0000" /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="correo">Correo electrónico *</label><input type="email" id="correo" required placeholder="nombre@empresa.com" /></div>
+            <div class="field"><label for="paquete">Paquete de interés</label><select id="paquete"><option value="Proyecto a medida">Proyecto a medida</option></select></div>
+          </div>
+          <div class="field">
+            <label for="presupuesto">Presupuesto estimado</label>
+            <select id="presupuesto">
+              <option value="Por definir">Aún por definir</option>
+              <option value="Menos de Q1,500">Menos de Q1,500</option>
+              <option value="Q1,500 - Q3,500">Q1,500 - Q3,500</option>
+              <option value="Q3,500 - Q7,000">Q3,500 - Q7,000</option>
+              <option value="Más de Q7,000">Más de Q7,000</option>
+            </select>
+          </div>
+          <div class="field"><label for="mensaje">Cuéntanos sobre tu proyecto *</label><textarea id="mensaje" rows="4" required placeholder="Objetivos, tiempos o herramientas que usas hoy..."></textarea></div>
+          <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar solicitud</button>
+          <p id="form-status" class="status-msg"></p>
+        </form>
       </div>
+    </section>
+  </main>
 
-      <div id="catalogo-grid" class="bento-grid">
-        <div class="loading-state mono-xs">SINCRONIZANDO TIENDA...</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 03 // Metodología y Garantías -->
-  <section id="proceso" class="section section-divider">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <span class="section-code mono-xs">03 // METODOLOGÍA &amp; GARANTÍA</span>
-          <h2>Proceso claro, resultados medibles<span class="text-accent">.</span></h2>
-        </div>
-        <p class="section-note">Sin mensualidades ocultas ni dependencia técnica. Todo queda funcionando en tus propias cuentas.</p>
-      </div>
-
-      <div class="process-strip">
-        <div class="process-item">
-          <span class="mono-step">FASE 01</span>
-          <h3>Selección o diagnóstico</h3>
-          <p>Compras tu paquete directo en la tienda o envías una cotización a medida. Confirmamos alcance y fecha exacta.</p>
-        </div>
-        <div class="process-item">
-          <span class="mono-step">FASE 02</span>
-          <h3>Desarrollo con demo en vivo</h3>
-          <p>Recibes un enlace privado para probar avances reales mientras conectamos tus hojas, automatizaciones o pagos.</p>
-        </div>
-        <div class="process-item">
-          <span class="mono-step">FASE 03</span>
-          <h3>Entrega + Capacitación</h3>
-          <p>Publicamos en producción y te enseñamos a usar tu panel administrativo para que controles todo sin pagar extras.</p>
-        </div>
-      </div>
-
-      <div class="faq-grid">
-        <details class="faq-item">
-          <summary>¿Cómo funciona el pago al comprar un paquete?</summary>
-          <p>Al confirmar tu pedido en la bolsa se genera un número de orden y puedes iniciar con el 50% de anticipo vía transferencia bancaria o link de pago, y el 50% restante al recibir tu sistema funcionando.</p>
-        </details>
-        <details class="faq-item">
-          <summary>¿Necesito pagar hosting o servidores costosos cada mes?</summary>
-          <p>No en nuestros paquetes base. Aprovechamos infraestructura en la nube de GitHub y Google Workspace para que operes con costo cero de mantenimiento mensual, pagando únicamente tu dominio si deseas uno propio.</p>
-        </details>
-        <details class="faq-item">
-          <summary>¿Puedo pedir funciones adicionales después de lanzar?</summary>
-          <p>Sí. Todos nuestros sistemas se construyen de forma modular para que puedas agregar integraciones con WhatsApp, CRM, facturación o analítica cuando tu negocio crezca.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- 04 // Cotización a medida -->
-  <section id="cotizar" class="section section-divider">
-    <div class="container quote-layout">
-      <div class="quote-aside">
-        <span class="section-code mono-xs">04 // PROYECTO A MEDIDA</span>
-        <h2>¿Buscas algo fuera del catálogo<span class="text-accent">?</span></h2>
-        <p>Cuéntanos qué proceso quieres automatizar o qué sistema necesitas construir. Respondemos en menos de 24 horas hábiles.</p>
-        <div class="direct-box">
-          <div class="mono-xs" style="color:var(--text-muted); margin-bottom:8px;">ATENCIÓN DIRECTA</div>
-          <a href="#" id="direct-whatsapp" class="btn btn-outline btn-full" target="_blank" rel="noopener">Escribir por WhatsApp &nearr;</a>
-        </div>
-      </div>
-
-      <form id="quote-form" class="quote-form">
-        <div class="form-row">
-          <div class="form-group"><label for="nombre">Nombre / Empresa *</label><input type="text" id="nombre" required placeholder="Ej. Carlos Méndez" /></div>
-          <div class="form-group"><label for="telefono">WhatsApp *</label><input type="tel" id="telefono" required placeholder="+502 0000-0000" /></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label for="correo">Correo electrónico *</label><input type="email" id="correo" required placeholder="nombre@empresa.com" /></div>
-          <div class="form-group"><label for="paquete">Solución de interés</label><select id="paquete"><option value="Sistema a medida">Sistema a medida</option></select></div>
-        </div>
-        <div class="form-group">
-          <label for="presupuesto">Rango de inversión estimado</label>
-          <select id="presupuesto">
-            <option value="Por definir">Aún por definir</option>
-            <option value="Menos de Q1,500">Menos de Q1,500</option>
-            <option value="Q1,500 - Q3,500">Q1,500 - Q3,500</option>
-            <option value="Q3,500 - Q7,000">Q3,500 - Q7,000</option>
-            <option value="Más de Q7,000">Más de Q7,000</option>
-          </select>
-        </div>
-        <div class="form-group"><label for="mensaje">Describe tu proyecto *</label><textarea id="mensaje" rows="4" required placeholder="Cuéntanos objetivos, tiempos o herramientas que usas hoy..."></textarea></div>
-        <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar solicitud &rarr;</button>
-        <p id="form-status" class="form-status"></p>
-      </form>
-    </div>
-  </section>
-
-  <!-- Footer con acceso secreto (5 clics en el punto azul) -->
-  <footer class="footer section-divider">
+  <footer class="footer">
     <div class="container footer-inner">
-      <div class="brand-logo" style="user-select:none;">
-        <span>zs</span><span id="secret-dot" class="brand-dot" title="zenda studio"></span>
-      </div>
-      <div class="mono-xs footer-meta">GUATEMALA &middot; &copy; <span id="year"></span> ZENDA STUDIO</div>
+      <div class="brand-logo"><span>zs</span><span id="secret-dot" class="brand-dot" title="zenda studio"></span></div>
+      <span>&copy; <span id="year"></span> zenda studio. Guatemala.</span>
     </div>
   </footer>
 
-  <!-- Carrito / Checkout deslizable -->
-  <div id="cart-drawer-backdrop" class="drawer-backdrop" hidden>
-    <aside class="cart-drawer" role="dialog" aria-label="Bolsa de compra">
-      <div class="drawer-head">
+  <!-- Carrito deslizable -->
+  <div id="cart-overlay" class="overlay" hidden>
+    <aside class="drawer" role="dialog" aria-label="Bolsa de compra">
+      <div class="drawer-header">
         <div>
-          <span class="mono-xs text-accent">// CHECKOUT</span>
-          <h3>Tu bolsa de servicios</h3>
+          <h3 style="font-size:1.15rem;">Tu bolsa</h3>
+          <span style="font-size:0.82rem; color:var(--text-muted);">Revisa tus paquetes y confirma tu orden</span>
         </div>
         <button id="cart-close-btn" class="icon-btn" type="button">&times;</button>
       </div>
 
-      <div id="cart-items" class="cart-items"></div>
+      <div id="cart-items" class="cart-list"></div>
 
-      <div id="cart-checkout-area" class="cart-checkout-area" hidden>
-        <div class="cart-summary">
+      <div id="cart-checkout-area" hidden>
+        <div class="cart-total-row">
           <span>Total estimado</span>
-          <strong id="cart-total" class="mono-val text-accent">Q0</strong>
+          <strong id="cart-total" class="text-accent">Q0</strong>
         </div>
 
-        <form id="checkout-form" class="checkout-form">
-          <div class="form-group"><label>Tu nombre / empresa *</label><input type="text" id="chk-nombre" required placeholder="Ej. María Gómez" /></div>
+        <form id="checkout-form">
+          <div class="field"><label>Nombre o empresa *</label><input type="text" id="chk-nombre" required placeholder="Ej. María Gómez" /></div>
           <div class="form-row">
-            <div class="form-group"><label>WhatsApp *</label><input type="tel" id="chk-tel" required placeholder="+502 0000-0000" /></div>
-            <div class="form-group"><label>Correo *</label><input type="email" id="chk-correo" required placeholder="tu@correo.com" /></div>
+            <div class="field"><label>WhatsApp *</label><input type="tel" id="chk-tel" required placeholder="+502 0000-0000" /></div>
+            <div class="field"><label>Correo *</label><input type="email" id="chk-correo" required placeholder="tu@correo.com" /></div>
           </div>
-          <div class="form-group">
-            <label>Modalidad de pago</label>
+          <div class="field">
+            <label>Forma de pago</label>
             <select id="chk-pago">
-              <option value="50% Anticipo (Transferencia BI / BAC)">50% Anticipo (Transferencia bancaria)</option>
+              <option value="50% Anticipo (Transferencia)">50% Anticipo (Transferencia bancaria)</option>
               <option value="Pago completo (Transferencia)">Pago completo (Transferencia)</option>
               <option value="Link de pago con Tarjeta">Link de pago con Tarjeta</option>
             </select>
           </div>
-          <div class="form-group"><label>Notas del pedido (opcional)</label><input type="text" id="chk-notas" placeholder="Ej. Lo necesito para fin de mes..." /></div>
-          <button type="submit" id="btn-checkout" class="btn btn-primary btn-full">Confirmar pedido &rarr;</button>
-          <p id="chk-status" class="form-status"></p>
+          <div class="field"><label>Notas adicionales (opcional)</label><input type="text" id="chk-notas" placeholder="Ej. Fecha ideal de entrega..." /></div>
+          <button type="submit" id="btn-checkout" class="btn btn-primary btn-full">Confirmar pedido</button>
+          <p id="chk-status" class="status-msg"></p>
         </form>
       </div>
     </aside>
   </div>
 
-  <!-- Modal de Galería y Especificaciones -->
-  <div id="service-modal" class="modal-backdrop" hidden>
-    <div class="modal-panel" role="dialog" aria-modal="true">
+  <!-- Modal Galería -->
+  <div id="service-modal" class="modal-overlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true">
       <button type="button" id="modal-close" class="modal-close">&times;</button>
       <div id="modal-media" class="modal-media"></div>
       <div id="modal-thumbs" class="modal-thumbs"></div>
       <div class="modal-body">
-        <span id="modal-cat" class="mono-xs text-accent"></span>
-        <h3 id="modal-title"></h3>
-        <div id="modal-price" class="modal-price mono-val"></div>
-        <p id="modal-desc"></p>
-        <div class="mono-xs" style="margin:18px 0 8px; color:var(--text-muted);">ENTREGABLES INCLUIDOS</div>
-        <ul id="modal-features" class="card-features"></ul>
+        <span id="modal-cat" class="section-kicker"></span>
+        <div class="card-head">
+          <h3 id="modal-title" style="font-size:1.45rem;"></h3>
+          <span id="modal-price" class="card-price" style="font-size:1.35rem;"></span>
+        </div>
+        <p id="modal-desc" class="card-desc"></p>
+        <ul id="modal-features" class="feature-list"></ul>
         <div class="modal-actions">
-          <button type="button" id="modal-add-btn" class="btn btn-primary">+ Agregar a la bolsa</button>
-          <button type="button" id="modal-quote-btn" class="btn btn-ghost">Cotizar variante</button>
-          <a href="#" id="modal-wa-btn" target="_blank" rel="noopener" class="btn btn-outline">WhatsApp &nearr;</a>
+          <button type="button" id="modal-add-btn" class="btn btn-primary">Agregar a la bolsa</button>
+          <button type="button" id="modal-quote-btn" class="btn btn-secondary">Cotizar variante</button>
+          <a href="#" id="modal-wa-btn" target="_blank" rel="noopener" class="btn btn-ghost">Consultar por WhatsApp</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="toast" class="toast mono-xs" hidden></div>
+  <div id="toast" class="toast" hidden></div>
   <script src="js/app.js"></script>
 </body>
 </html>
