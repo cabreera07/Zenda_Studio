@@ -1,106 +1,245 @@
 ﻿<!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>zenda studio. | Soluciones Digitales y Servicios</title>
+  <title>zenda studio. | Ingeniería Digital & Sistemas</title>
+  <meta name="description" content="Sistemas web, automatización y soluciones digitales a medida por Zenda Studio." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+  <div class="grid-backdrop" aria-hidden="true"></div>
 
+  <!-- Barra de anuncio controlable desde Sheets -->
+  <div id="promo-bar" class="promo-bar" hidden>
+    <span class="mono-tag">AVISO</span>
+    <span id="promo-text"></span>
+  </div>
+
+  <!-- Navegación arquitectónica -->
   <header class="navbar">
-    <div class="container nav-content">
-      <a href="#" class="brand-logo"><span>zenda studio</span><span class="brand-dot"></span></a>
+    <div class="container nav-inner">
+      <div class="nav-left">
+        <a href="#" class="brand-logo" aria-label="zenda studio">
+          <span>zenda studio</span><span class="brand-dot"></span>
+        </a>
+        <div class="live-pill" title="Horario de atención en Guatemala">
+          <span class="pulse-dot"></span>
+          <span class="mono-xs">DISPONIBLE &middot; <span id="live-clock">GUA --:--</span></span>
+        </div>
+      </div>
+
       <nav class="nav-links">
-        <a href="#catalogo">Servicios</a>
-        <a href="#proceso">Proceso</a>
-        <a href="#cotizar">Cotizar</a>
-        <a href="#" id="nav-whatsapp" class="btn btn-primary btn-sm" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="#catalogo"><span class="mono-num">01</span> Servicios</a>
+        <a href="#proceso"><span class="mono-num">02</span> Proceso</a>
+        <a href="#cotizar"><span class="mono-num">03</span> Cotizar</a>
+        <button id="theme-toggle" class="icon-btn" type="button" title="Cambiar modo oscuro / claro" aria-label="Cambiar tema">
+          <span id="theme-icon">☀</span>
+        </button>
+        <a href="#" id="nav-whatsapp" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Iniciar charla &rarr;</a>
       </nav>
     </div>
   </header>
 
+  <!-- Hero Editorial + Panel Técnico -->
   <section class="hero">
-    <div class="container hero-content">
-      <span class="badge">Estudio Digital &bull; Servicios a Medida</span>
-      <h1>Soluciones diseñadas para hacer crecer tu negocio<span class="text-accent">.</span></h1>
-      <p>Explora nuestros paquetes de servicios, conoce exactamente qué incluye cada entrega y solicita tu cotización en minutos.</p>
-      <div class="hero-actions">
-        <a href="#catalogo" class="btn btn-primary">Ver Catálogo</a>
-        <a href="#cotizar" class="btn btn-outline">Cotizar Proyecto</a>
+    <div class="container hero-grid">
+      <div class="hero-main">
+        <div class="eyebrow mono-xs">ESTUDIO DE SISTEMAS &amp; PRODUCTO DIGITAL</div>
+        <h1 id="hero-title">Construimos sistemas que trabajan por tu negocio<span class="text-accent">.</span></h1>
+        <p id="hero-subtitle">Desarrollo web, automatización de flujos y arquitectura digital diseñada para vender más y operar sin fricción.</p>
+        <div class="hero-actions">
+          <a href="#catalogo" class="btn btn-primary">Explorar soluciones &darr;</a>
+          <a href="#cotizar" class="btn btn-ghost">Cotizar a medida</a>
+        </div>
       </div>
+
+      <aside class="hero-spec-card">
+        <div class="spec-header mono-xs">
+          <span>ZENDA // TELEMETRÍA</span>
+          <span class="spec-status">ONLINE</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Entrega promedio</span>
+          <strong class="mono-val">7 — 14 días</strong>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Arquitectura</span>
+          <strong class="mono-val">Web &middot; APIs &middot; Datos</strong>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Soporte directo</span>
+          <strong class="mono-val">Sin intermediarios</strong>
+        </div>
+        <div class="spec-footer">
+          <button type="button" id="copy-email-btn" class="copy-chip mono-xs">
+            <span id="copy-email-label">Copiar correo del estudio</span>
+          </button>
+        </div>
+      </aside>
     </div>
   </section>
 
-  <section id="catalogo" class="section">
+  <!-- Cinta técnica sutil -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track mono-xs">
+      <span>SISTEMAS WEB A MEDIDA</span><span>/</span>
+      <span>AUTOMATIZACIÓN &amp; FLUJOS</span><span>/</span>
+      <span>TIENDAS Y CATÁLOGOS DINÁMICOS</span><span>/</span>
+      <span>DASHBOARDS &amp; ANALÍTICA</span><span>/</span>
+      <span>IDENTIDAD DIGITAL</span><span>/</span>
+      <span>INTEGRACIONES CLOUD</span><span>/</span>
+      <span>SISTEMAS WEB A MEDIDA</span><span>/</span>
+      <span>AUTOMATIZACIÓN &amp; FLUJOS</span><span>/</span>
+      <span>TIENDAS Y CATÁLOGOS DINÁMICOS</span><span>/</span>
+      <span>DASHBOARDS &amp; ANALÍTICA</span><span>/</span>
+    </div>
+  </div>
+
+  <!-- 01 // Catálogo Bento -->
+  <section id="catalogo" class="section section-divider">
     <div class="container">
-      <div class="section-header">
+      <div class="section-head">
         <div>
-          <h2>Catálogo de Servicios<span class="text-accent">.</span></h2>
-          <p class="subtitle">Selecciona un paquete para cotizarlo directamente o consultar por WhatsApp.</p>
+          <span class="section-code mono-xs">01 // CATÁLOGO DE SERVICIOS</span>
+          <h2>Paquetes diseñados para escalar<span class="text-accent">.</span></h2>
         </div>
         <div id="filtros-categorias" class="filter-bar"></div>
       </div>
-      <div id="catalogo-grid" class="catalog-grid">
-        <div class="loading-state">Cargando catálogo desde Google Sheets...</div>
+
+      <div id="catalogo-grid" class="bento-grid">
+        <div class="loading-state mono-xs">SINCRONIZANDO CATÁLOGO...</div>
       </div>
     </div>
   </section>
 
-  <section id="proceso" class="section section-alt">
+  <!-- 02 // Proceso -->
+  <section id="proceso" class="section section-divider">
     <div class="container">
-      <div class="section-header"><h2>Cómo trabajamos<span class="text-accent">.</span></h2></div>
-      <div class="steps-grid">
-        <div class="step-card"><span class="step-num">01</span><h3>Eliges tu paquete</h3><p>Selecciona un servicio del catálogo o cuéntanos tu requerimiento específico.</p></div>
-        <div class="step-card"><span class="step-num">02</span><h3>Propuesta clara</h3><p>Recibes alcance, tiempos de entrega y presupuesto sin costos ocultos.</p></div>
-        <div class="step-card"><span class="step-num">03</span><h3>Ejecución y entrega</h3><p>Desarrollamos tu proyecto con avances transparentes hasta la entrega final.</p></div>
+      <div class="section-head">
+        <div>
+          <span class="section-code mono-xs">02 // METODOLOGÍA</span>
+          <h2>Cómo pasamos de idea a producción<span class="text-accent">.</span></h2>
+        </div>
+        <p class="section-note">Sin reuniones eternas ni costos sorpresa. Cada fase tiene entregables medibles.</p>
+      </div>
+
+      <div class="process-strip">
+        <div class="process-item">
+          <span class="mono-step">FASE 01</span>
+          <h3>Diagnóstico y alcance</h3>
+          <p>Eliges un paquete o nos cuentas tu cuello de botella. Definimos arquitectura, precio cerrado y fechas exactas.</p>
+        </div>
+        <div class="process-item">
+          <span class="mono-step">FASE 02</span>
+          <h3>Construcción transparente</h3>
+          <p>Te damos enlace de pruebas en vivo desde el día uno para que veas avances reales y ajustes en caliente.</p>
+        </div>
+        <div class="process-item">
+          <span class="mono-step">FASE 03</span>
+          <h3>Despliegue y autonomía</h3>
+          <p>Publicamos tu sistema, conectamos tus bases de datos y te entregamos control total para administrarlo.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="cotizar" class="section">
-    <div class="container quote-wrapper">
-      <div class="quote-info">
-        <h2>Solicita tu cotización<span class="text-accent">.</span></h2>
-        <p>Completa los datos y tu solicitud quedará registrada de inmediato. Si prefieres atención directa, escríbenos por WhatsApp.</p>
-        <a href="#" id="direct-whatsapp" class="btn btn-whatsapp" target="_blank" rel="noopener">Hablar por WhatsApp ahora</a>
+  <!-- 03 // Cotización -->
+  <section id="cotizar" class="section section-divider">
+    <div class="container quote-layout">
+      <div class="quote-aside">
+        <span class="section-code mono-xs">03 // COTIZACIÓN DIRECTA</span>
+        <h2>Hablemos de tu próximo sistema<span class="text-accent">.</span></h2>
+        <p>Cuéntanos qué necesitas resolver. Tu solicitud entra directo a nuestro tablero y respondemos en menos de 24 horas hábiles.</p>
+
+        <div class="direct-box">
+          <div class="mono-xs" style="color:var(--text-muted); margin-bottom:8px;">CANAL RÁPIDO</div>
+          <a href="#" id="direct-whatsapp" class="btn btn-outline btn-full" target="_blank" rel="noopener">
+            Escribir por WhatsApp &nearr;
+          </a>
+        </div>
       </div>
+
       <form id="quote-form" class="quote-form">
         <div class="form-row">
-          <div class="form-group"><label for="nombre">Nombre completo *</label><input type="text" id="nombre" required placeholder="Ej. Ana López" /></div>
-          <div class="form-group"><label for="telefono">WhatsApp / Teléfono *</label><input type="tel" id="telefono" required placeholder="+502 0000-0000" /></div>
+          <div class="form-group">
+            <label for="nombre">Nombre / Empresa *</label>
+            <input type="text" id="nombre" required placeholder="Ej. Carlos Méndez" />
+          </div>
+          <div class="form-group">
+            <label for="telefono">WhatsApp *</label>
+            <input type="tel" id="telefono" required placeholder="+502 0000-0000" />
+          </div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label for="correo">Correo electrónico *</label><input type="email" id="correo" required placeholder="nombre@empresa.com" /></div>
-          <div class="form-group"><label for="paquete">Servicio / Paquete de interés</label><select id="paquete"><option value="Proyecto a medida">Proyecto a medida</option></select></div>
+          <div class="form-group">
+            <label for="correo">Correo electrónico *</label>
+            <input type="email" id="correo" required placeholder="nombre@empresa.com" />
+          </div>
+          <div class="form-group">
+            <label for="paquete">Solución de interés</label>
+            <select id="paquete">
+              <option value="Sistema a medida">Sistema a medida</option>
+            </select>
+          </div>
         </div>
         <div class="form-group">
-          <label for="presupuesto">Presupuesto estimado</label>
+          <label for="presupuesto">Rango de inversión estimado</label>
           <select id="presupuesto">
-            <option value="Por definir">Aún no definido</option>
+            <option value="Por definir">Aún por definir</option>
             <option value="Menos de Q1,500">Menos de Q1,500</option>
             <option value="Q1,500 - Q3,500">Q1,500 - Q3,500</option>
-            <option value="Más de Q3,500">Más de Q3,500</option>
+            <option value="Q3,500 - Q7,000">Q3,500 - Q7,000</option>
+            <option value="Más de Q7,000">Más de Q7,000</option>
           </select>
         </div>
-        <div class="form-group"><label for="mensaje">Cuéntanos sobre tu proyecto *</label><textarea id="mensaje" rows="4" required placeholder="Describe brevemente qué necesitas..."></textarea></div>
-        <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar Cotización</button>
+        <div class="form-group">
+          <label for="mensaje">¿Qué problema quieres resolver? *</label>
+          <textarea id="mensaje" rows="4" required placeholder="Cuéntanos brevemente tu proyecto, tiempos o herramientas que usas hoy..."></textarea>
+        </div>
+        <button type="submit" id="btn-submit" class="btn btn-primary btn-full">Enviar solicitud &rarr;</button>
         <p id="form-status" class="form-status"></p>
       </form>
     </div>
   </section>
 
-  <footer class="footer">
-    <div class="container footer-content">
-      <div class="brand-logo"><span>zs</span><span class="brand-dot"></span></div>
-      <p>&copy; <span id="year"></span> zenda studio. Todos los derechos reservados.</p>
+  <!-- Footer con gatillo secreto (5 clics en el punto azul) -->
+  <footer class="footer section-divider">
+    <div class="container footer-inner">
+      <div class="brand-logo" style="user-select:none;">
+        <span>zs</span><span id="secret-dot" class="brand-dot" title="zenda studio"></span>
+      </div>
+      <div class="mono-xs footer-meta">
+        <span>GUATEMALA &middot; &copy; <span id="year"></span> ZENDA STUDIO</span>
+      </div>
     </div>
   </footer>
 
-  <a href="#" id="float-whatsapp" class="whatsapp-float" target="_blank" rel="noopener">WhatsApp</a>
+  <!-- Modal de Vista Rápida / Especificaciones -->
+  <div id="service-modal" class="modal-backdrop" hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true">
+      <button type="button" id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
+      <div id="modal-media" class="modal-media"></div>
+      <div class="modal-body">
+        <span id="modal-cat" class="mono-xs text-accent"></span>
+        <h3 id="modal-title"></h3>
+        <div id="modal-price" class="modal-price mono-val"></div>
+        <p id="modal-desc"></p>
+        <div class="mono-xs" style="margin:18px 0 8px; color:var(--text-muted);">ENTREGABLES INCLUIDOS</div>
+        <ul id="modal-features" class="card-features"></ul>
+        <div class="modal-actions">
+          <button type="button" id="modal-quote-btn" class="btn btn-primary">Cotizar este paquete &rarr;</button>
+          <a href="#" id="modal-wa-btn" target="_blank" rel="noopener" class="btn btn-outline">Consultar por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast discreto para micro-gestos -->
+  <div id="toast" class="toast mono-xs" hidden></div>
+
   <script src="js/app.js"></script>
 </body>
 </html>
