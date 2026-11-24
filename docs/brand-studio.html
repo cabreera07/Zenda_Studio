@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>zenda studio. — Brand Studio v2 (4K + GIF)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --panel: #14171f;
+      --panel-2: #1b1f2a;
+      --text: #f5f7fa;
+      --muted: #a3abba;
+      --border: rgba(255,255,255,.1);
+      --accent: #0066ff;
+      --c1: #0066ff;
+      --c2: #38bdf8;
+      --c3: #6366f1;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 3px 58px 1fr;
+    }
+    .prism-top { background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3)); }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px; border-bottom: 1px solid var(--border); background: var(--panel);
+      gap: 12px;
+    }
+    .logo { font-weight: 800; font-size: 1.15rem; letter-spacing: -0.04em; }
+    .logo span { color: var(--accent); }
+    .header-badges { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .badge {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 700;
+      padding: 4px 10px; border-radius: 99px; background: var(--panel-2); color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .badge-accent { color: #fff; background: var(--accent); border-color: var(--accent); }
+    main {
+      display: grid; grid-template-columns: 380px 1fr;
+      height: calc(100vh - 61px); overflow: hidden;
+    }
+    aside {
+      background: var(--panel); border-right: 1px solid var(--border);
+      padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+    }
+    .group {
+      background: var(--panel-2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 9px;
+    }
+    .group-title {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    label { display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+    select, input[type="text"], textarea, input[type="number"] {
+      width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border);
+      border-radius: 9px; padding: 7px 10px; font-family: inherit; font-size: 0.82rem;
+    }
+    textarea { resize: vertical; min-height: 52px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .swatch {
+      height: 28px; border-radius: 8px; border: 2px solid transparent; cursor: pointer;
+      transition: transform .15s, border-color .15s;
+    }
+    .swatch.active { border-color: #fff; transform: scale(1.06); }
+    .checks { display: flex; flex-wrap: wrap; gap: 10px; }
+    .check {
+      display: flex; align-items: center; gap: 6px; font-size: 0.76rem;
+      color: var(--text); cursor: pointer; font-weight: 600; flex-direction: row;
+    }
+    .btn {
+      border: 1px solid var(--border); background: var(--bg); color: var(--text);
+      padding: 8px 11px; border-radius: 10px; font-family: inherit; font-weight: 700;
+      font-size: 0.8rem; cursor: pointer; transition: .15s;
+    }
+    .btn:hover:not(:disabled) { border-color: var(--accent); }
+    .btn:disabled { opacity: 0.55; cursor: wait; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover:not(:disabled) { filter: brightness(1.12); }
+    .btn-gif { background: #6366f1; border-color: #6366f1; color: #fff; }
+    .btn-gif:hover:not(:disabled) { filter: brightness(1.12); }
+    .btn-kit { background: #16a34a; border-color: #16a34a; color: #fff; }
+    .btn-kit:hover:not(:disabled) { filter: brightness(1.1); }
+
+    .progress-wrap {
+      display: none; flex-direction: column; gap: 5px;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px;
+    }
+    .progress-wrap.active { display: flex; }
+    .progress-label { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text); }
+    .progress-track { height: 6px; border-radius: 99px; background: var(--panel-2); overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width .08s linear; }
+
+    .stage-wrap {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 22px; gap: 12px; overflow: auto;
+      background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+    .canvas-shell {
+      border-radius: 12px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,.55);
+      border: 1px solid var(--border); max-width: 100%; max-height: calc(100vh - 165px);
+      display: flex; align-items: center; justify-content: center;
+      background-image:
+        linear-gradient(45deg, #252936 25%, transparent 25%),
+        linear-gradient(-45deg, #252936 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #252936 75%),
+        linear-gradient(-45deg, transparent 75%, #252936 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+      background-color: #1b1f2a;
+    }
+    canvas { display: block; max-width: 100%; max-height: calc(100vh - 168px); width: auto; height: auto; }
+    .meta-bar {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--muted);
+    }
+    @media (max-width: 960px) {
+      main { grid-template-columns: 1fr; height: auto; overflow: visible; }
+      aside { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+  <div class="prism-top"></div>
+  <header>
+    <div class="logo">zenda studio<span>.</span> <span style="font-weight:600;color:var(--muted);font-size:.82rem;">Brand Studio v2</span></div>
+    <div class="header-badges">
+      <div class="badge" id="dim-badge">1600 × 400 px</div>
+      <div class="badge badge-accent" id="export-badge">Salida PNG: 3200 × 800 px (2x)</div>
+    </div>
+  </header>
+
+  <main>
+    <aside>
+      <!-- 01 · PIEZA Y RESOLUCIÓN -->
+      <div class="group">
+        <div class="group-title">01 · Pieza, Formato y Resolución</div>
+        <label>Tipo de activo
+          <select id="mode">
+            <option value="letterhead" selected>Membrete / Cabecera (Docs · Correo · Video)</option>
+            <option value="logo">Logotipo oficial (zenda studio.)</option>
+            <option value="logo_tagline">Logotipo + Promesa de marca</option>
+            <option value="monogram">Monograma oficial (zs.)</option>
+            <option value="mascot">Mascota Esfera (único degradado)</option>
+            <option value="logo_mascot">Mascota + Logotipo combinado</option>
+            <option value="social_post">Post Comercial / Redes Sociales</option>
+            <option value="youtube_thumb">Miniatura / Portada YouTube</option>
+            <option value="contact_card">Firma Visual / Tarjeta de Contacto</option>
+          </select>
+        </label>
+
+        <label>Formato y relación de aspecto
+          <select id="preset">
+            <option value="1600x400" selected>Membrete / Cabecera HD (1600 × 400)</option>
+            <option value="2000x700">Logo Horizontal HD (2000 × 700)</option>
+            <option value="3200x1120">Logo Horizontal 4K (3200 × 1120)</option>
+            <option value="1080x1080">Avatar / Perfil IG · WA · YT (1080 × 1080 · 1:1)</option>
+            <option value="512x512">Favicon / App Icon (512 × 512 · 1:1)</option>
+            <option value="1080x1200">Formato 9:10 (1080 × 1200 · 9:10)</option>
+            <option value="1080x1350">Instagram Post Vertical (1080 × 1350 · 4:5)</option>
+            <option value="1080x1920">Reels / TikTok / YT Shorts (1080 × 1920 · 9:16)</option>
+            <option value="1920x1080">YouTube Miniatura Full HD (1920 × 1080 · 16:9)</option>
+            <option value="2560x1440">YouTube Banner de Canal (2560 × 1440 · 16:9)</option>
+            <option value="1200x630">Portada Web / LinkedIn / OG (1200 × 630)</option>
+            <option value="1200x360">Firma de Correo / Banner WA (1200 × 360)</option>
+            <option value="custom">Personalizado (ancho × alto)</option>
+          </select>
+        </label>
+
+        <div class="row-2" id="custom-dims" style="display:none;">
+          <label>Ancho (px)<input type="number" id="custom-w" value="1600" min="128" max="4096" /></label>
+          <label>Alto (px)<input type="number" id="custom-h" value="400" min="128" max="4096" /></label>
+        </div>
+
+        <div class="row-2">
+          <label>Resolución Imagen
+            <select id="res-mult">
+              <option value="1">1x (Estándar)</option>
+              <option value="2" selected>2x (Ultra HD · Recomendado)</option>
+              <option value="3">3x (4K / Impresión)</option>
+            </select>
+          </label>
+          <label>Escala visual (%)
+            <input type="number" id="scale" value="100" min="50" max="160" step="5" />
+          </label>
+        </div>
+      </div>
+
+      <!-- 02 · ANIMACIÓN PARA GIF Y VIDEO -->
+      <div class="group">
+        <div class="group-title">
+          <span>02 · Animación (GIF & Video Loop)</span>
+          <button class="btn" id="btn-play" style="padding:3px 9px;font-size:.72rem;">⏸ Pausar</button>
+        </div>
+        <label>Estilo de movimiento
+          <select id="anim-type">
+            <option value="none">Estático (sin animación)</option>
+            <option value="bounce" selected>Salto elástico (rebote vivo)</option>
+            <option value="dot_jump">Punto travieso (el punto . salta)</option>
+            <option value="float">Flotación suave (levitación)</option>
+            <option value="typewriter">Escritura técnica (tipo consola)</option>
+            <option value="slide_in">Entrada de membrete (desliza + destello)</option>
+            <option value="pulse">Pulso y brillo comercial</option>
+          </select>
+        </label>
+        <div class="row-3">
+          <label>Duración
+            <select id="anim-dur">
+              <option value="1.5">1.5 s</option>
+              <option value="2" selected>2.0 s</option>
+              <option value="3">3.0 s</option>
+              <option value="4">4.0 s</option>
+            </select>
+          </label>
+          <label>FPS GIF
+            <select id="anim-fps">
+              <option value="15">15 fps</option>
+              <option value="20" selected>20 fps</option>
+              <option value="24">24 fps</option>
+              <option value="30">30 fps</option>
+            </select>
+          </label>
+          <label>Ancho GIF
+            <select id="gif-maxw">
+              <option value="720">720px (Ligero)</option>
+              <option value="1080" selected>1080px (HD)</option>
+              <option value="1440">1440px (Ultra)</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <!-- 03 · PALETA Y TEMA -->
+      <div class="group">
+        <div class="group-title">03 · Paleta Oficial y Tema (Regla 90/10)</div>
+        <div class="swatches" id="swatches"></div>
+        <label>Tema de fondo
+          <select id="theme">
+            <option value="dark">Oscuro Web (#0b0c10)</option>
+            <option value="slate">Gris Portada (#181b22)</option>
+            <option value="light" selected>Claro Docs / Membrete (#ffffff)</option>
+            <option value="transparent_dark">Transparente · Texto Oscuro (PNG/GIF)</option>
+            <option value="transparent_light">Transparente · Texto Blanco (PNG/GIF)</option>
+          </select>
+        </label>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="show-bar" checked /> Barra superior</label>
+          <label class="check"><input type="checkbox" id="bar-prism" /> Barra prismática</label>
+          <label class="check"><input type="checkbox" id="show-grid" /> Cuadrícula</label>
+          <label class="check"><input type="checkbox" id="show-guides" /> Zona segura</label>
+        </div>
+      </div>
+
+      <!-- 04 · TEXTOS EDITABLES -->
+      <div class="group">
+        <div class="group-title">04 · Textos Editables</div>
+        <label>Etiqueta técnica (Mono)
+          <input type="text" id="tag-text" value="SISTEMAS · AUTOMATIZACIÓN" />
+        </label>
+        <label>Titular principal (Posts / YouTube)
+          <textarea id="headline">Deja de responder "¿precio?" uno por uno</textarea>
+        </label>
+        <label>Subtítulo / Promesa
+          <textarea id="subtext">Construimos sistemas que trabajan por tu negocio, publicados a tu nombre y listos para crecer contigo.</textarea>
+        </label>
+        <div class="row-2">
+          <label>Botón / CTA<input type="text" id="cta-text" value="Cotiza por WhatsApp →" /></label>
+          <label>Contacto pie<input type="text" id="footer-text" value="@zenda.studio.gt · +502 5879-8301" /></label>
+        </div>
+      </div>
+
+      <!-- 05 · EXPORTAR -->
+      <div class="group">
+        <div class="group-title">05 · Exportar (Ultra HD · GIF · Video)</div>
+        <div class="row-2">
+          <button class="btn btn-primary" id="btn-png">⬇ PNG Ultra HD</button>
+          <button class="btn" id="btn-svg">⬇ SVG Vector</button>
+        </div>
+        <div class="row-2">
+          <button class="btn" id="btn-jpg">⬇ JPG Ultra HD</button>
+          <button class="btn" id="btn-webp">⬇ WebP Ultra HD</button>
+        </div>
+        <button class="btn btn-gif" id="btn-gif">🎬 Generar GIF Animado (.gif)</button>
+        <button class="btn" id="btn-webm">🎥 Grabar Video HD Loop (.webm)</button>
+        <button class="btn btn-kit" id="btn-kit">⚡ Exportar Kit Base Ultra HD (6 PNGs)</button>
+
+        <div class="progress-wrap" id="progress-wrap">
+          <div class="progress-label" id="progress-label">Preparando...</div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+      </div>
+    </aside>
+
+    <section class="stage-wrap">
+      <div class="canvas-shell">
+        <canvas id="canvas" width="1600" height="400"></canvas>
+      </div>
+      <div class="meta-bar">
+        <span id="meta-info">Modo: Membrete · Azul Eléctrico (#0066ff)</span>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* ==================== CONFIGURACIÓN DE MARCA ==================== */
+    const PALETTES = [
+      { id: 'azul',      name: 'Azul Eléctrico (Ancla)', c1: '#0066ff', c2: '#38bdf8', c3: '#6366f1' },
+      { id: 'naranja',   name: 'Naranja Pulso',          c1: '#e8470f', c2: '#fb923c', c3: '#f43f5e' },
+      { id: 'esmeralda', name: 'Verde Esmeralda',        c1: '#059669', c2: '#0ea5e9', c3: '#14b8a6' },
+      { id: 'indigo',    name: 'Indigo Prisma',          c1: '#6366f1', c2: '#a855f7', c3: '#38bdf8' },
+      { id: 'carmesi',   name: 'Carmesí Vivo',           c1: '#e11d48', c2: '#fb7185', c3: '#8b5cf6' }
+    ];
+
+    const THEMES = {
+      dark:              { bg: '#0b0c10', surface: '#14171f', surface2: '#1b1f2a', text: '#f5f7fa', muted: '#a3abba', border: 'rgba(255,255,255,0.11)', grid: 'rgba(255,255,255,0.035)', isLight: false },
+      slate:             { bg: '#181b22', surface: '#20242e', surface2: '#272c38', text: '#f5f7fa', muted: '#a3abba', border: 'rgba(255,255,255,0.12)', grid: 'rgba(255,255,255,0.035)', isLight: false },
+      light:             { bg: '#ffffff', surface: '#f8f9fb', surface2: '#f2f4f7', text: '#0f1115', muted: '#525866', border: '#eaecf0',                grid: 'rgba(15,17,21,0.04)',     isLight: true  },
+      transparent_dark:  { bg: null,      surface: '#f8f9fb', surface2: '#f2f4f7', text: '#0f1115', muted: '#525866', border: 'rgba(15,17,21,0.14)',    grid: null,                      isLight: true  },
+      transparent_light: { bg: null,      surface: '#14171f', surface2: '#1b1f2a', text: '#ffffff', muted: '#c2cad6', border: 'rgba(255,255,255,0.18)', grid: null,                      isLight: false }
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const canvas = $('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    let activePalette = PALETTES[0];
+    let isPlaying = true;
+    let animStart = performance.now();
+    let isExporting = false;
+
+    // Swatches de paletas
+    const swWrap = $('swatches');
+    PALETTES.forEach((p, idx) => {
+      const b = document.createElement('button');
+      b.className = 'swatch' + (idx === 0 ? ' active' : '');
+      b.title = p.name;
+      b.style.background = `linear-gradient(135deg, ${p.c1}, ${p.c2}, ${p.c3})`;
+      b.onclick = () => {
+        activePalette = p;
+        document.documentElement.style.setProperty('--accent', p.c1);
+        document.documentElement.style.setProperty('--c1', p.c1);
+        document.documentElement.style.setProperty('--c2', p.c2);
+        document.documentElement.style.setProperty('--c3', p.c3);
+        swWrap.querySelectorAll('.swatch').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        drawPreviewFrame(currentProgress());
+      };
+      swWrap.appendChild(b);
+    });
+
+    function getDims() {
+      const val = $('preset').value;
+      if (val === 'custom') {
+        return [
+          Math.max(128, Math.min(4096, Number($('custom-w').value) || 1600)),
+          Math.max(128, Math.min(4096, Number($('custom-h').value) || 400))
+        ];
+      }
+      return val.split('x').map(Number);
+    }
+
+    function updateBadges() {
+      const [W, H] = getDims();
+      const mult = Number($('res-mult').value) || 2;
+      $('dim-badge').textContent = `${W} × ${H} px`;
+      $('export-badge').textContent = `Salida PNG: ${W * mult} × ${H * mult} px (${mult}x)`;
+      const animName = $('anim-type').selectedOptions[0].text;
+      $('meta-info').textContent = `${$('mode').selectedOptions[0].text} · ${activePalette.name} · ${animName}`;
+    }
+
+    /* ==================== FUNCIONES DE EASING Y ANIMACIÓN ==================== */
+    function easeOutCubic(x) { return 1 - Math.pow(1 - x, 3); }
+    function easeInOutQuad(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+
+    function getAnimState(animType, t) {
+      const st = {
+        offsetY: 0, offsetX: 0,
+        scaleX: 1, scaleY: 1,
+        dotY: 0, dotRipple: 0,
+        alpha: 1,
+        shimmer: -1, // 0..1 sweep
+        typeRatio: 1,
+        blink: false,
+        pulse: 0
+      };
+
+      if (animType === 'none') return st;
+
+      if (animType === 'bounce') {
+        // Salto con anticipación, impulso aéreo y caída elástica (loop limpio)
+        if (t >= 0.08 && t < 0.16) {
+          const p = (t - 0.08) / 0.08;
+          const sq = Math.sin(p * Math.PI);
+          st.scaleX = 1 + sq * 0.14;
+          st.scaleY = 1 - sq * 0.14;
+          st.offsetY = sq * 0.04;
+        } else if (t >= 0.16 && t < 0.56) {
+          const p = (t - 0.16) / 0.40;
+          const jump = Math.sin(p * Math.PI);
+          st.offsetY = -jump * 0.24;
+          const stretch = Math.sin(p * Math.PI * 2) * 0.06;
+          st.scaleX = 1 - Math.abs(stretch) * 0.7;
+          st.scaleY = 1 + Math.abs(stretch);
+        } else if (t >= 0.56 && t < 0.72) {
+          const p = (t - 0.56) / 0.16;
+          const sq = Math.sin(p * Math.PI) * (1 - p * 0.4);
+          st.scaleX = 1 + sq * 0.15;
+          st.scaleY = 1 - sq * 0.15;
+          st.offsetY = sq * 0.045;
+        } else if (t >= 0.72 && t < 0.88) {
+          const p = (t - 0.72) / 0.16;
+          st.offsetY = -Math.sin(p * Math.PI) * 0.07;
+        }
+        st.pulse = 0.5 + 0.5 * Math.sin(t * Math.PI * 2);
+      }
+
+      else if (animType === 'dot_jump') {
+        if (t >= 0.12 && t < 0.48) {
+          const p = (t - 0.12) / 0.36;
+          st.dotY = -Math.sin(p * Math.PI) * 0.58;
+        } else if (t >= 0.48 && t < 0.78) {
+          st.dotRipple = (t - 0.48) / 0.30;
+          if (t < 0.62) {
+            const p = (t - 0.48) / 0.14;
+            st.dotY = -Math.sin(p * Math.PI) * 0.16;
+          }
+        }
+        st.offsetY = Math.sin(t * Math.PI * 2) * 0.018;
+      }
+
+      else if (animType === 'float') {
+        const s = Math.sin(t * Math.PI * 2);
+        st.offsetY = s * 0.075;
+        st.scaleX = 1 + s * 0.02;
+        st.scaleY = 1 + s * 0.02;
+        st.pulse = 0.5 + 0.5 * Math.cos(t * Math.PI * 2);
+      }
+
+      else if (animType === 'typewriter') {
+        if (t < 0.48) {
+          st.typeRatio = Math.max(0.08, t / 0.48);
+        } else if (t < 0.86) {
+          st.typeRatio = 1;
+        } else {
+          st.alpha = Math.max(0, 1 - (t - 0.86) / 0.14);
+        }
+        st.blink = Math.floor(t * 10) % 2 === 0;
+        st.shimmer = t;
+      }
+
+      else if (animType === 'slide_in') {
+        if (t < 0.20) {
+          const p = easeOutCubic(t / 0.20);
+          st.offsetX = -(1 - p) * 0.16;
+          st.alpha = p;
+        } else if (t < 0.82) {
+          st.offsetX = 0;
+          st.alpha = 1;
+          if (t >= 0.36 && t <= 0.64) {
+            st.shimmer = (t - 0.36) / 0.28;
+          }
+        } else {
+          const p = easeInOutQuad((t - 0.82) / 0.18);
+          st.offsetX = p * 0.12;
+          st.alpha = 1 - p;
+        }
+      }
+
+      else if (animType === 'pulse') {
+        const wave = 0.5 - 0.5 * Math.cos(t * Math.PI * 2);
+        st.scaleX = 1 + wave * 0.045;
+        st.scaleY = 1 + wave * 0.045;
+        st.pulse = wave;
+        st.shimmer = t;
+      }
+
+      return st;
+    }
+
+    /* ==================== COMPONENTES DE DIBUJO ==================== */
+    function roundRect(c, x, y, w, h, r) {
+      const rad = Math.min(r, w / 2, h / 2);
+      c.beginPath();
+      c.moveTo(x + rad, y);
+      c.arcTo(x + w, y, x + w, y + h, rad);
+      c.arcTo(x + w, y + h, x, y + h, rad);
+      c.arcTo(x, y + h, x, y, rad);
+      c.arcTo(x, y, x + w, y, rad);
+      c.closePath();
+    }
+
+    function wrapLines(c, text, maxW) {
+      const out = [];
+      String(text || '').split('\n').forEach(para => {
+        const words = para.trim().split(/\s+/);
+        let line = '';
+        words.forEach(w => {
+          const test = line ? line + ' ' + w : w;
+          if (c.measureText(test).width > maxW && line) {
+            out.push(line);
+            line = w;
+          } else {
+            line = test;
+          }
+        });
+        if (line) out.push(line);
+      });
+      return out;
+    }
+
+    function drawWordmark(c, cx, cy, size, textColor, accentColor, align = 'center', anim = {}) {
+      c.save();
+      c.font = `800 ${size}px "Plus Jakarta Sans", sans-serif`;
+      c.textBaseline = 'middle';
+
+      const fullBase = 'zenda studio';
+      const showChars = anim.typeRatio !== undefined && anim.typeRatio < 1
+        ? Math.max(1, Math.floor(fullBase.length * anim.typeRatio))
+        : fullBase.length;
+      const base = fullBase.slice(0, showChars);
+      const showDot = showChars === fullBase.length;
+
+      const wFullBase = c.measureText(fullBase).width;
+      const wDot = c.measureText('.').width;
+      const total = wFullBase + wDot;
+      const startX = align === 'center' ? cx - total / 2 : (align === 'right' ? cx - total : cx);
+
+      c.textAlign = 'left';
+      c.fillStyle = textColor;
+      c.fillText(base, startX, cy);
+
+      if (showDot) {
+        const dotX = startX + wFullBase;
+        const dotOffsetY = (anim.dotY || 0) * size;
+        // Onda expansiva cuando el punto cae
+        if (anim.dotRipple > 0) {
+          c.save();
+          const r = size * (0.10 + anim.dotRipple * 0.45);
+          c.beginPath();
+          c.arc(dotX + wDot * 0.5, cy + size * 0.24, r, 0, Math.PI * 2);
+          c.strokeStyle = accentColor;
+          c.globalAlpha = Math.max(0, (1 - anim.dotRipple) * 0.7);
+          c.lineWidth = Math.max(2, size * 0.04);
+          c.stroke();
+          c.restore();
+        }
+        c.fillStyle = accentColor;
+        c.fillText('.', dotX, cy + dotOffsetY);
+      } else if (anim.blink) {
+        const curX = startX + c.measureText(base).width + size * 0.06;
+        c.fillStyle = accentColor;
+        c.fillRect(curX, cy - size * 0.38, Math.max(3, size * 0.06), size * 0.78);
+      }
+      c.restore();
+      return total;
+    }
+
+    function drawMonogram(c, cx, cy, boxSize, accentColor, isLightBg, anim = {}) {
+      c.save();
+      c.translate(cx, cy);
+      c.scale(anim.scaleX || 1, anim.scaleY || 1);
+
+      const x = -boxSize / 2;
+      const y = -boxSize / 2;
+      const rad = boxSize * 0.22;
+
+      roundRect(c, x, y, boxSize, boxSize, rad);
+      c.fillStyle = '#0f1115';
+      c.fill();
+      c.lineWidth = Math.max(2, boxSize * 0.025);
+      c.strokeStyle = isLightBg ? 'rgba(15,17,21,0.14)' : 'rgba(255,255,255,0.18)';
+      c.stroke();
+
+      const fSize = boxSize * 0.46;
+      c.font = `800 ${fSize}px "Plus Jakarta Sans", sans-serif`;
+      c.textBaseline = 'middle';
+      const wZS = c.measureText('zs').width;
+      const dotR = boxSize * 0.068;
+      const totalW = wZS + dotR * 2.5;
+      const sx = -totalW / 2;
+
+      c.textAlign = 'left';
+      c.fillStyle = '#ffffff';
+      c.fillText('zs', sx, boxSize * 0.02);
+
+      const dotCX = sx + wZS + dotR * 1.45;
+      const dotCY = fSize * 0.25 + (anim.dotY || 0) * fSize * 0.7;
+
+      if (anim.dotRipple > 0) {
+        c.save();
+        c.beginPath();
+        c.arc(dotCX, fSize * 0.25, dotR * (1 + anim.dotRipple * 2.8), 0, Math.PI * 2);
+        c.strokeStyle = accentColor;
+        c.globalAlpha = Math.max(0, 1 - anim.dotRipple);
+        c.lineWidth = Math.max(2, boxSize * 0.022);
+        c.stroke();
+        c.restore();
+      }
+
+      c.beginPath();
+      c.arc(dotCX, dotCY, dotR, 0, Math.PI * 2);
+      c.fillStyle = accentColor;
+      c.fill();
+      c.restore();
+    }
+
+    function drawMascot(c, cx, cy, r, pal, anim = {}) {
+      c.save();
+      c.translate(cx, cy);
+      c.scale(anim.scaleX || 1, anim.scaleY || 1);
+
+      // Sombra de piso cuando salta o flota
+      if (anim.offsetY < -0.02) {
+        c.save();
+        const factor = Math.max(0.45, 1 + anim.offsetY * 1.5);
+        c.fillStyle = 'rgba(0,0,0,0.16)';
+        c.beginPath();
+        c.ellipse(0, r * 1.15 - anim.offsetY * r * 1.6, r * 0.65 * factor, r * 0.14 * factor, 0, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+
+      c.shadowColor = pal.c1 + '66';
+      c.shadowBlur = r * (0.42 + (anim.pulse || 0) * 0.16);
+      c.shadowOffsetY = r * 0.12;
+
+      const grad = c.createLinearGradient(-r, -r, r, r);
+      grad.addColorStop(0, pal.c1);
+      grad.addColorStop(0.52, pal.c2);
+      grad.addColorStop(1, pal.c3);
+
+      c.beginPath();
+      c.arc(0, 0, r, 0, Math.PI * 2);
+      c.fillStyle = grad;
+      c.fill();
+
+      c.shadowColor = 'transparent';
+      const gloss = c.createRadialGradient(-r * 0.32, -r * 0.36, r * 0.05, -r * 0.2, -r * 0.2, r * 0.95);
+      gloss.addColorStop(0, 'rgba(255,255,255,0.62)');
+      gloss.addColorStop(0.45, 'rgba(255,255,255,0.10)');
+      gloss.addColorStop(1, 'rgba(0,0,0,0.16)');
+      c.beginPath();
+      c.arc(0, 0, r, 0, Math.PI * 2);
+      c.fillStyle = gloss;
+      c.fill();
+
+      c.lineWidth = Math.max(2, r * 0.055);
+      c.strokeStyle = 'rgba(255,255,255,0.70)';
+      c.stroke();
+
+      // Carita con pequeño parpadeo expresivo
+      c.fillStyle = '#ffffff';
+      const eyeY = -r * 0.08;
+      const eyeOff = r * 0.24;
+      const eyeR = r * 0.095;
+      c.beginPath(); c.arc(-eyeOff, eyeY, eyeR, 0, Math.PI * 2); c.fill();
+      c.beginPath(); c.arc(eyeOff, eyeY, eyeR, 0, Math.PI * 2); c.fill();
+
+      c.beginPath();
+      c.arc(0, r * 0.05, r * 0.24, 0.18 * Math.PI, 0.82 * Math.PI);
+      c.strokeStyle = '#ffffff';
+      c.lineWidth = Math.max(2.5, r * 0.075);
+      c.lineCap = 'round';
+      c.stroke();
+      c.restore();
+    }
+
+    function drawBackground(c, W, H, theme, pal, showBar, barPrism, showGrid, anim) {
+      c.clearRect(0, 0, W, H);
+      if (theme.bg) {
+        c.fillStyle = theme.bg;
+        c.fillRect(0, 0, W, H);
+      }
+      if (showGrid && theme.grid) {
+        const step = Math.round(Math.min(W, H) / 10);
+        c.strokeStyle = theme.grid;
+        c.lineWidth = 1;
+        for (let x = step; x < W; x += step) {
+          c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke();
+        }
+        for (let y = step; y < H; y += step) {
+          c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke();
+        }
+      }
+      if (showBar) {
+        const barH = Math.max(6, Math.round(H * 0.018));
+        if (barPrism) {
+          const g = c.createLinearGradient(0, 0, W, 0);
+          g.addColorStop(0, pal.c1);
+          g.addColorStop(0.5, pal.c2);
+          g.addColorStop(1, pal.c3);
+          c.fillStyle = g;
+        } else {
+          c.fillStyle = pal.c1;
+        }
+        c.fillRect(0, 0, W, barH);
+
+        // Destello sutil animado sobre la barra
+        if (anim.shimmer >= 0) {
+          const sx = (anim.shimmer * 1.4 - 0.2) * W;
+          const sg = c.createLinearGradient(sx - W * 0.12, 0, sx + W * 0.12, 0);
+          sg.addColorStop(0, 'rgba(255,255,255,0)');
+          sg.addColorStop(0.5, 'rgba(255,255,255,0.65)');
+          sg.addColorStop(1, 'rgba(255,255,255,0)');
+          c.fillStyle = sg;
+          c.fillRect(0, 0, W, barH);
+        }
+      }
+    }
+
+    /* ==================== RENDER PRINCIPAL (CON MULTIPLICADOR) ==================== */
+    function renderScene(targetCtx, W, H, t, overrides = {}, hideGuides = false) {
+      const mode = overrides.mode || $('mode').value;
+      const themeKey = overrides.theme || $('theme').value;
+      const pal = overrides.palette || activePalette;
+      const scale = (overrides.scale || Number($('scale').value) || 100) / 100;
+      const animType = overrides.animType !== undefined ? overrides.animType : $('anim-type').value;
+      const showBar = overrides.showBar !== undefined ? overrides.showBar : $('show-bar').checked;
+      const barPrism = overrides.barPrism !== undefined ? overrides.barPrism : $('bar-prism').checked;
+      const showGrid = overrides.showGrid !== undefined ? overrides.showGrid : $('show-grid').checked;
+      const showGuides = !hideGuides && $('show-guides').checked;
+
+      const theme = THEMES[themeKey];
+      const anim = getAnimState(animType, t);
+
+      drawBackground(targetCtx, W, H, theme, pal, showBar, barPrism, showGrid, anim);
+
+      const minSide = Math.min(W, H);
+      const pad = Math.round(minSide * 0.09);
+      const tag = $('tag-text').value.trim();
+      const headline = $('headline').value.trim();
+      const subtext = $('subtext').value.trim();
+      const cta = $('cta-text').value.trim();
+      const foot = $('footer-text').value.trim();
+
+      targetCtx.save();
+      targetCtx.globalAlpha = anim.alpha;
+
+      const moveX = anim.offsetX * W;
+      const moveY = anim.offsetY * minSide * 0.65;
+
+      /* ---- MODO 1: MEMBRETE / CABECERA ANIMADA ---- */
+      if (mode === 'letterhead') {
+        const cy = H * 0.52;
+        const leftX = Math.max(pad, W * 0.045) + moveX;
+        const orbR = Math.min(H * 0.24, W * 0.055) * scale;
+
+        // Mascota con salto/flotación independiente
+        drawMascot(targetCtx, leftX + orbR, cy + moveY, orbR, pal, anim);
+
+        // Logotipo + promesa
+        const textX = leftX + orbR * 2 + orbR * 0.55;
+        const logoSize = Math.min(H * 0.25, W * 0.058) * scale;
+        drawWordmark(targetCtx, textX, cy - logoSize * 0.20, logoSize, theme.text, pal.c1, 'left', anim);
+
+        targetCtx.save();
+        targetCtx.font = `600 ${Math.round(logoSize * 0.28)}px "Plus Jakarta Sans", sans-serif`;
+        targetCtx.fillStyle = theme.muted;
+        targetCtx.textAlign = 'left';
+        targetCtx.textBaseline = 'middle';
+        const shortSub = (subtext || 'Construimos sistemas que trabajan por tu negocio.').split(',')[0];
+        targetCtx.fillText(shortSub, textX, cy + logoSize * 0.45);
+
+        // Lado derecho: etiqueta técnica + contacto
+        const rightX = W - Math.max(pad, W * 0.045);
+        if (tag) {
+          const tf = Math.round(logoSize * 0.24);
+          targetCtx.font = `700 ${tf}px "JetBrains Mono", monospace`;
+          const tw = targetCtx.measureText(tag).width;
+          const ph = tf * 2.15;
+          const pw = tw + tf * 2.0;
+          const px = rightX - pw;
+          const py = cy - ph - logoSize * 0.04;
+          roundRect(targetCtx, px, py, pw, ph, 999);
+          targetCtx.fillStyle = pal.c1 + '1d';
+          targetCtx.fill();
+          targetCtx.strokeStyle = pal.c1 + '66';
+          targetCtx.lineWidth = Math.max(1.5, H * 0.004);
+          targetCtx.stroke();
+
+          targetCtx.fillStyle = pal.c1;
+          targetCtx.textAlign = 'center';
+          targetCtx.fillText(tag, px + pw / 2, py + ph / 2);
+        }
+
+        if (foot) {
+          const ff = Math.round(logoSize * 0.24);
+          targetCtx.font = `700 ${ff}px "JetBrains Mono", monospace`;
+          targetCtx.fillStyle = theme.muted;
+          targetCtx.textAlign = 'right';
+          targetCtx.fillText(foot, rightX, cy + logoSize * 0.36);
+        }
+
+        // Línea inferior fina de cierre del membrete
+        if (theme.border) {
+          targetCtx.fillStyle = theme.border;
+          targetCtx.fillRect(Math.max(pad, W * 0.045), H - Math.max(4, H * 0.02), W - Math.max(pad, W * 0.045) * 2, Math.max(2, H * 0.005));
+        }
+        targetCtx.restore();
+      }
+
+      /* ---- MODO 2: LOGOTIPO ---- */
+      else if (mode === 'logo') {
+        const fSize = Math.min(W * 0.115, H * 0.34) * scale;
+        targetCtx.save();
+        targetCtx.translate(W / 2 + moveX, H / 2 + moveY);
+        targetCtx.scale(anim.scaleX, anim.scaleY);
+        drawWordmark(targetCtx, 0, 0, fSize, theme.text, pal.c1, 'center', anim);
+        targetCtx.restore();
+      }
+
+      /* ---- MODO 3: LOGOTIPO + PROMESA ---- */
+      else if (mode === 'logo_tagline') {
+        const fSize = Math.min(W * 0.105, H * 0.28) * scale;
+        drawWordmark(targetCtx, W / 2 + moveX, H / 2 - fSize * 0.32 + moveY * 0.6, fSize, theme.text, pal.c1, 'center', anim);
+        targetCtx.save();
+        targetCtx.font = `600 ${Math.round(fSize * 0.22)}px "Plus Jakarta Sans", sans-serif`;
+        targetCtx.fillStyle = theme.muted;
+        targetCtx.textAlign = 'center';
+        targetCtx.textBaseline = 'middle';
+        const lines = wrapLines(targetCtx, subtext || 'Construimos sistemas que trabajan por tu negocio.', W * 0.78);
+        lines.slice(0, 2).forEach((ln, i) => {
+          targetCtx.fillText(ln, W / 2 + moveX, H / 2 + fSize * 0.42 + i * fSize * 0.30);
+        });
+        targetCtx.restore();
+      }
+
+      /* ---- MODO 4: MONOGRAMA ---- */
+      else if (mode === 'monogram') {
+        const box = minSide * 0.60 * scale;
+        drawMonogram(targetCtx, W / 2 + moveX, H / 2 + moveY, box, pal.c1, theme.isLight, anim);
+      }
+
+      /* ---- MODO 5: MASCOTA ESFERA ---- */
+      else if (mode === 'mascot') {
+        const r = minSide * 0.30 * scale;
+        drawMascot(targetCtx, W / 2 + moveX, H / 2 + moveY, r, pal, anim);
+      }
+
+      /* ---- MODO 6: MASCOTA + LOGOTIPO ---- */
+      else if (mode === 'logo_mascot') {
+        const r = Math.min(W * 0.082, H * 0.22) * scale;
+        const fSize = r * 1.45;
+        targetCtx.font = `800 ${fSize}px "Plus Jakarta Sans", sans-serif`;
+        const wText = targetCtx.measureText('zenda studio.').width;
+        const gap = r * 0.65;
+        const total = r * 2 + gap + wText;
+        const startX = W / 2 - total / 2 + moveX;
+        drawMascot(targetCtx, startX + r, H / 2 + moveY, r, pal, anim);
+        drawWordmark(targetCtx, startX + r * 2 + gap, H / 2, fSize, theme.text, pal.c1, 'left', anim);
+      }
+
+      /* ---- MODO 7 & 8: POST COMERCIAL / MINIATURA YOUTUBE ---- */
+      else if (mode === 'social_post' || mode === 'youtube_thumb') {
+        const isWide = W > H * 1.2;
+        const topY = pad + minSide * 0.04;
+        const logoSize = Math.round(minSide * 0.048 * scale);
+        drawWordmark(targetCtx, pad, topY, logoSize, theme.text, pal.c1, 'left', anim);
+
+        if (tag) {
+          targetCtx.save();
+          const tagF = Math.round(minSide * 0.022 * scale);
+          targetCtx.font = `700 ${tagF}px "JetBrains Mono", monospace`;
+          const tw = targetCtx.measureText(tag).width;
+          const ph = tagF * 2.1;
+          const pw = tw + tagF * 2.2;
+          const px = W - pad - pw;
+          const py = topY - ph / 2;
+          roundRect(targetCtx, px, py, pw, ph, 999);
+          targetCtx.fillStyle = pal.c1 + '22';
+          targetCtx.fill();
+          targetCtx.strokeStyle = pal.c1 + '66';
+          targetCtx.lineWidth = 2;
+          targetCtx.stroke();
+          targetCtx.fillStyle = pal.c1;
+          targetCtx.textAlign = 'center';
+          targetCtx.textBaseline = 'middle';
+          targetCtx.fillText(tag, px + pw / 2, topY);
+          targetCtx.restore();
+        }
+
+        const orbR = Math.round(minSide * (isWide ? 0.13 : 0.085) * scale);
+        drawMascot(targetCtx, W - pad - orbR, (isWide ? H * 0.52 : H - pad - orbR - minSide * 0.06) + moveY, orbR, pal, anim);
+
+        const maxTextW = isWide ? W * 0.64 : W - pad * 2;
+        const hSize = Math.round(minSide * (isWide ? 0.092 : 0.080) * scale);
+        targetCtx.save();
+        targetCtx.font = `800 ${hSize}px "Plus Jakarta Sans", sans-serif`;
+        targetCtx.fillStyle = theme.text;
+        targetCtx.textAlign = 'left';
+        targetCtx.textBaseline = 'top';
+        const hLines = wrapLines(targetCtx, headline, maxTextW);
+        let curY = isWide ? H * 0.25 : H * 0.24;
+        hLines.forEach(ln => {
+          targetCtx.fillText(ln, pad + moveX, curY);
+          curY += hSize * 1.12;
+        });
+
+        if (subtext) {
+          curY += hSize * 0.26;
+          const sSize = Math.round(minSide * 0.031 * scale);
+          targetCtx.font = `400 ${sSize}px "Plus Jakarta Sans", sans-serif`;
+          targetCtx.fillStyle = theme.muted;
+          const sLines = wrapLines(targetCtx, subtext, isWide ? maxTextW : W - pad * 2);
+          sLines.slice(0, 4).forEach(ln => {
+            targetCtx.fillText(ln, pad + moveX, curY);
+            curY += sSize * 1.46;
+          });
+        }
+
+        if (cta) {
+          curY += minSide * 0.04;
+          const cSize = Math.round(minSide * 0.029 * scale);
+          targetCtx.font = `700 ${cSize}px "Plus Jakarta Sans", sans-serif`;
+          const cw = targetCtx.measureText(cta).width + cSize * 2.4;
+          const ch = cSize * 2.4;
+          const sc = 1 + (anim.pulse || 0) * 0.03;
+          targetCtx.save();
+          targetCtx.translate(pad + cw / 2 + moveX, curY + ch / 2);
+          targetCtx.scale(sc, sc);
+          roundRect(targetCtx, -cw / 2, -ch / 2, cw, ch, 14);
+          targetCtx.fillStyle = pal.c1;
+          targetCtx.fill();
+          targetCtx.fillStyle = '#ffffff';
+          targetCtx.textAlign = 'center';
+          targetCtx.textBaseline = 'middle';
+          targetCtx.fillText(cta, 0, 0);
+          targetCtx.restore();
+        }
+
+        if (foot) {
+          const fF = Math.round(minSide * 0.022 * scale);
+          targetCtx.font = `700 ${fF}px "JetBrains Mono", monospace`;
+          targetCtx.fillStyle = theme.muted;
+          targetCtx.textBaseline = 'bottom';
+          targetCtx.fillText(foot, pad, H - pad * 0.72);
+        }
+        targetCtx.restore();
+      }
+
+      /* ---- MODO 9: FIRMA VISUAL / TARJETA ---- */
+      else if (mode === 'contact_card') {
+        const cardX = pad;
+        const cardY = pad;
+        const cardW = W - pad * 2;
+        const cardH = H - pad * 2;
+        roundRect(targetCtx, cardX, cardY, cardW, cardH, 24);
+        targetCtx.fillStyle = theme.surface;
+        targetCtx.fill();
+        targetCtx.strokeStyle = theme.border;
+        targetCtx.lineWidth = 2;
+        targetCtx.stroke();
+
+        const mSize = Math.min(cardH * 0.50, cardW * 0.22) * scale;
+        drawMonogram(targetCtx, cardX + mSize * 0.85, H / 2 + moveY * 0.5, mSize, pal.c1, theme.isLight, anim);
+
+        const tx = cardX + mSize * 1.55 + moveX;
+        const lSize = Math.min(cardH * 0.20, cardW * 0.055) * scale;
+        drawWordmark(targetCtx, tx, H / 2 - lSize * 0.85, lSize, theme.text, pal.c1, 'left', anim);
+
+        targetCtx.save();
+        targetCtx.font = `600 ${Math.round(lSize * 0.42)}px "Plus Jakarta Sans", sans-serif`;
+        targetCtx.fillStyle = theme.muted;
+        targetCtx.textAlign = 'left';
+        targetCtx.textBaseline = 'middle';
+        targetCtx.fillText(tag || 'Sistemas Web & Automatización Digital', tx, H / 2 + lSize * 0.05);
+
+        targetCtx.font = `700 ${Math.round(lSize * 0.36)}px "JetBrains Mono", monospace`;
+        targetCtx.fillStyle = pal.c1;
+        targetCtx.fillText(foot || '@zenda.studio.gt  ·  +502 5879-8301', tx, H / 2 + lSize * 0.85);
+        targetCtx.restore();
+      }
+
+      targetCtx.restore();
+
+      // Guía zona segura (solo vista previa)
+      if (showGuides) {
+        targetCtx.save();
+        targetCtx.setLineDash([10, 8]);
+        targetCtx.strokeStyle = '#f59e0b';
+        targetCtx.lineWidth = 3;
+        if (W === 2560 && H === 1440) {
+          targetCtx.strokeRect((W - 1546) / 2, (H - 423) / 2, 1546, 423);
+        } else {
+          targetCtx.strokeRect(W * 0.06, H * 0.12, W * 0.88, H * 0.76);
+        }
+        targetCtx.restore();
+      }
+    }
+
+    function currentProgress() {
+      const durMs = (Number($('anim-dur').value) || 2) * 1000;
+      return ((performance.now() - animStart) % durMs) / durMs;
+    }
+
+    function drawPreviewFrame(t) {
+      const [W, H] = getDims();
+      if (canvas.width !== W || canvas.height !== H) {
+        canvas.width = W;
+        canvas.height = H;
+      }
+      updateBadges();
+      renderScene(ctx, W, H, t, {}, false);
+    }
+
+    function tick() {
+      if (!isExporting && isPlaying && $('anim-type').value !== 'none') {
+        drawPreviewFrame(currentProgress());
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /* ==================== EXPORTACIÓN ESTÁTICA ULTRA HD ==================== */
+    function renderHighResCanvas(overrides = {}) {
+      const [W, H] = overrides.dims || getDims();
+      const mult = overrides.mult !== undefined ? overrides.mult : (Number($('res-mult').value) || 2);
+      const off = document.createElement('canvas');
+      off.width = Math.round(W * mult);
+      off.height = Math.round(H * mult);
+      const octx = off.getContext('2d');
+      octx.scale(mult, mult);
+      renderScene(octx, W, H, 0, { ...overrides, animType: 'none' }, true);
+      return off;
+    }
+
+    function downloadImage(mime, ext) {
+      const off = renderHighResCanvas();
+      const mult = Number($('res-mult').value) || 2;
+      const a = document.createElement('a');
+      a.download = `zenda_${$('mode').value}_${activePalette.id}_${off.width}x${off.height}_${mult}x.${ext}`;
+      a.href = off.toDataURL(mime, 0.96);
+      a.click();
+    }
+
+    function downloadSVG() {
+      const [W, H] = getDims();
+      const mode = $('mode').value;
+      const theme = THEMES[$('theme').value];
+      const pal = activePalette;
+      const bgRect = theme.bg ? `<rect width="${W}" height="${H}" fill="${theme.bg}"/>` : '';
+
+      let inner = '';
+      if (mode === 'monogram') {
+        const s = Math.min(W, H) * 0.60;
+        const x = (W - s) / 2, y = (H - s) / 2;
+        inner = `
+          <rect x="${x}" y="${y}" width="${s}" height="${s}" rx="${s * 0.22}" fill="#0f1115"/>
+          <text x="${W / 2 - s * 0.05}" y="${H / 2 + s * 0.16}" text-anchor="middle"
+            font-family="Plus Jakarta Sans, sans-serif" font-weight="800" font-size="${s * 0.46}" fill="#ffffff">zs</text>
+          <circle cx="${W / 2 + s * 0.25}" cy="${H / 2 + s * 0.12}" r="${s * 0.068}" fill="${pal.c1}"/>`;
+      } else if (mode === 'mascot') {
+        const r = Math.min(W, H) * 0.30;
+        inner = `
+          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="${pal.c1}"/><stop offset="52%" stop-color="${pal.c2}"/><stop offset="100%" stop-color="${pal.c3}"/>
+          </linearGradient></defs>
+          <circle cx="${W / 2}" cy="${H / 2}" r="${r}" fill="url(#g)" stroke="rgba(255,255,255,0.72)" stroke-width="${r * 0.055}"/>
+          <circle cx="${W / 2 - r * 0.24}" cy="${H / 2 - r * 0.08}" r="${r * 0.095}" fill="#fff"/>
+          <circle cx="${W / 2 + r * 0.24}" cy="${H / 2 - r * 0.08}" r="${r * 0.095}" fill="#fff"/>
+          <path d="M ${W / 2 - r * 0.20} ${H / 2 + r * 0.18} Q ${W / 2} ${H / 2 + r * 0.38} ${W / 2 + r * 0.20} ${H / 2 + r * 0.18}"
+            fill="none" stroke="#fff" stroke-width="${r * 0.075}" stroke-linecap="round"/>`;
+      } else {
+        const fs = Math.min(W * 0.115, H * 0.34);
+        inner = `<text x="${W / 2}" y="${H / 2 + fs * 0.33}" text-anchor="middle"
+          font-family="Plus Jakarta Sans, sans-serif" font-weight="800" font-size="${fs}" fill="${theme.text}">zenda studio<tspan fill="${pal.c1}">.</tspan></text>`;
+      }
+
+      const svg = `<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${bgRect}${inner}</svg>`;
+      const a = document.createElement('a');
+      a.download = `zenda_${mode}_${pal.id}.svg`;
+      a.href = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
+      a.click();
+    }
+
+    async function exportBrandKit() {
+      const lote = [
+        { file: '01_logo_claro_4K.png',            dims: [2000, 700],  mult: 2, mode: 'logo',       theme: 'light',             showBar: false, showGrid: false },
+        { file: '02_logo_oscuro_4K.png',           dims: [2000, 700],  mult: 2, mode: 'logo',       theme: 'dark',              showBar: false, showGrid: false },
+        { file: '03_logo_transparente_oscuro.png', dims: [2000, 700],  mult: 2, mode: 'logo',       theme: 'transparent_dark',  showBar: false, showGrid: false },
+        { file: '04_logo_transparente_blanco.png', dims: [2000, 700],  mult: 2, mode: 'logo',       theme: 'transparent_light', showBar: false, showGrid: false },
+        { file: '05_monograma_2160.png',           dims: [1080, 1080], mult: 2, mode: 'monogram',   theme: 'transparent_dark',  showBar: false, showGrid: false },
+        { file: '06_mascota_esfera_2160.png',      dims: [1080, 1080], mult: 2, mode: 'mascot',     theme: 'transparent_dark',  showBar: false, showGrid: false }
+      ];
+      for (const item of lote) {
+        const off = renderHighResCanvas(item);
+        const a = document.createElement('a');
+        a.download = `zenda_${activePalette.id}_${item.file}`;
+        a.href = off.toDataURL('image/png');
+        a.click();
+        await new Promise(r => setTimeout(r, 340));
+      }
+    }
+
+    /* ==================== CODIFICADOR GIF89a NATIVO (CERO DEPENDENCIAS) ==================== */
+    function hexToRgb(hex) {
+      if (!hex || hex[0] !== '#') return null;
+      const n = parseInt(hex.slice(1), 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    }
+
+    function buildPalette(framesRgba, seedColors, hasAlpha) {
+      const maxColors = hasAlpha ? 255 : 256;
+      const samples = [];
+      for (const rgba of framesRgba) {
+        const step = Math.max(4, Math.floor((rgba.length / 4) / 8000)) * 4;
+        for (let i = 0; i < rgba.length; i += step) {
+          if (rgba[i + 3] >= 128) samples.push([rgba[i], rgba[i + 1], rgba[i + 2]]);
+        }
+      }
+
+      // Median-cut simple sobre las muestras
+      let buckets = samples.length ? [samples] : [[[15, 17, 21], [255, 255, 255]]];
+      const targetBuckets = Math.max(16, maxColors - seedColors.length);
+      while (buckets.length < targetBuckets) {
+        let bestIdx = -1, bestRange = -1, bestCh = 0;
+        for (let i = 0; i < buckets.length; i++) {
+          const b = buckets[i];
+          if (b.length < 2) continue;
+          for (let ch = 0; ch < 3; ch++) {
+            let mn = 255, mx = 0;
+            for (let j = 0; j < b.length; j++) {
+              const v = b[j][ch];
+              if (v < mn) mn = v;
+              if (v > mx) mx = v;
+            }
+            if (mx - mn > bestRange) { bestRange = mx - mn; bestIdx = i; bestCh = ch; }
+          }
+        }
+        if (bestIdx === -1 || bestRange <= 2) break;
+        const b = buckets.splice(bestIdx, 1)[0];
+        b.sort((a, c) => a[bestCh] - c[bestCh]);
+        const mid = b.length >> 1;
+        buckets.push(b.slice(0, mid), b.slice(mid));
+      }
+
+      const pal = [];
+      const seen = new Set();
+      const pushColor = (rgb) => {
+        if (!rgb || pal.length >= maxColors) return;
+        const key = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
+        if (!seen.has(key)) { seen.add(key); pal.push(rgb); }
+      };
+
+      seedColors.forEach(pushColor);
+      buckets.forEach(b => {
+        let r = 0, g = 0, bl = 0;
+        for (let i = 0; i < b.length; i++) { r += b[i][0]; g += b[i][1]; bl += b[i][2]; }
+        pushColor([Math.round(r / b.length), Math.round(g / b.length), Math.round(bl / b.length)]);
+      });
+      while (pal.length < 256) pal.push([0, 0, 0]);
+      return pal;
+    }
+
+    function mapFrameToIndices(rgba, pal, hasAlpha) {
+      const len = rgba.length >> 2;
+      const out = new Uint8Array(len);
+      const maxIdx = hasAlpha ? 255 : 256;
+      const cache = new Int16Array(32768);
+      cache.fill(-1);
+
+      for (let i = 0, p = 0; i < len; i++, p += 4) {
+        if (hasAlpha && rgba[p + 3] < 128) { out[i] = 255; continue; }
+        const r = rgba[p], g = rgba[p + 1], b = rgba[p + 2];
+        const key = ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+        let best = cache[key];
+        if (best === -1) {
+          let bestDist = 1e9;
+          for (let c = 0; c < maxIdx; c++) {
+            const dr = r - pal[c][0], dg = g - pal[c][1], db = b - pal[c][2];
+            const d = dr * dr * 2 + dg * dg * 4 + db * db;
+            if (d < bestDist) { bestDist = d; best = c; if (d === 0) break; }
+          }
+          cache[key] = best;
+        }
+        out[i] = best;
+      }
+      return out;
+    }
+
+    function lzwEncode(indices) {
+      const clearCode = 256, eoiCode = 257;
+      let nextCode = 258, codeSize = 9;
+      const hKeys = new Int32Array(8192);
+      const hVals = new Int32Array(8192);
+      hKeys.fill(-1);
+
+      const bytes = [];
+      const sub = [];
+      let bitBuf = 0, bitCnt = 0;
+
+      function flushSub() {
+        if (sub.length > 0) {
+          bytes.push(sub.length);
+          for (let i = 0; i < sub.length; i++) bytes.push(sub[i]);
+          sub.length = 0;
+        }
+      }
+      function writeCode(code, size) {
+        bitBuf |= (code << bitCnt);
+        bitCnt += size;
+        while (bitCnt >= 8) {
+          sub.push(bitBuf & 0xff);
+          bitBuf >>>= 8;
+          bitCnt -= 8;
+          if (sub.length === 255) flushSub();
+        }
+      }
+
+      bytes.push(8); // LZW minimum code size
+      writeCode(clearCode, codeSize);
+
+      let prefix = indices[0];
+      for (let i = 1; i < indices.length; i++) {
+        const k = indices[i];
+        const key = (prefix << 8) | k;
+        let idx = (Math.imul(key, 2654435761) >>> 19) & 8191;
+        while (hKeys[idx] !== -1 && hKeys[idx] !== key) idx = (idx + 1) & 8191;
+
+        if (hKeys[idx] === key) {
+          prefix = hVals[idx];
+        } else {
+          writeCode(prefix, codeSize);
+          if (nextCode === (1 << codeSize) && codeSize < 12) codeSize++;
+          if (nextCode < 4096) {
+            hKeys[idx] = key;
+            hVals[idx] = nextCode++;
+          } else {
+            writeCode(clearCode, codeSize);
+            hKeys.fill(-1);
+            nextCode = 258;
+            codeSize = 9;
+          }
+          prefix = k;
+        }
+      }
+
+      writeCode(prefix, codeSize);
+      if (nextCode === (1 << codeSize) && codeSize < 12) codeSize++;
+      writeCode(eoiCode, codeSize);
+
+      if (bitCnt > 0) sub.push(bitBuf & 0xff);
+      flushSub();
+      bytes.push(0); // Fin de sub-bloques
+      return bytes;
+    }
+
+    function pushLE16(arr, v) { arr.push(v & 0xff, (v >> 8) & 0xff); }
+
+    async function exportGIF() {
+      if (isExporting) return;
+      isExporting = true;
+      setProgress(true, 4, 'Preparando cuadros del GIF...');
+      toggleExportButtons(true);
+
+      try {
+        const [origW, origH] = getDims();
+        const maxW = Number($('gif-maxw').value) || 1080;
+        const ratio = Math.min(1, maxW / Math.max(origW, origH));
+        const W = Math.max(64, Math.round(origW * ratio));
+        const H = Math.max(64, Math.round(origH * ratio));
+
+        const dur = Number($('anim-dur').value) || 2;
+        const fps = Number($('anim-fps').value) || 20;
+        const totalFrames = $('anim-type').value === 'none' ? 1 : Math.max(6, Math.round(dur * fps));
+        const delayCs = Math.max(2, Math.round(100 / fps));
+        const themeKey = $('theme').value;
+        const hasAlpha = THEMES[themeKey].bg === null;
+
+        const off = document.createElement('canvas');
+        off.width = W;
+        off.height = H;
+        const octx = off.getContext('2d', { willReadFrequently: true });
+
+        const framesRgba = [];
+        for (let f = 0; f < totalFrames; f++) {
+          const t = f / totalFrames;
+          octx.save();
+          octx.setTransform(W / origW, 0, 0, H / origH, 0, 0);
+          renderScene(octx, origW, origH, t, {}, true);
+          octx.restore();
+          framesRgba.push(octx.getImageData(0, 0, W, H).data);
+          setProgress(true, 5 + Math.round((f / totalFrames) * 35), `Capturando cuadro ${f + 1}/${totalFrames}...`);
+          await new Promise(r => setTimeout(r, 0));
+        }
+
+        setProgress(true, 42, 'Optimizando paleta de colores Zenda...');
+        await new Promise(r => setTimeout(r, 0));
+
+        const th = THEMES[themeKey];
+        const seeds = [
+          hexToRgb(th.bg), hexToRgb(th.surface), hexToRgb(th.text), hexToRgb(th.muted),
+          hexToRgb(activePalette.c1), hexToRgb(activePalette.c2), hexToRgb(activePalette.c3),
+          [255, 255, 255], [15, 17, 21]
+        ].filter(Boolean);
+
+        const sampleSubset = framesRgba.length > 4
+          ? [framesRgba[0], framesRgba[Math.floor(framesRgba.length * 0.35)], framesRgba[Math.floor(framesRgba.length * 0.7)]]
+          : framesRgba;
+        const palette = buildPalette(sampleSubset, seeds, hasAlpha);
+
+        const out = [0x47, 0x49, 0x46, 0x38, 0x39, 0x61]; // GIF89a
+        pushLE16(out, W);
+        pushLE16(out, H);
+        out.push(0xf7, 0x00, 0x00); // Global color table 256 colores
+
+        for (let i = 0; i < 256; i++) out.push(palette[i][0], palette[i][1], palette[i][2]);
+
+        // Extensión NETSCAPE2.0 para bucle infinito
+        out.push(0x21, 0xff, 0x0b, 0x4e, 0x45, 0x54, 0x53, 0x43, 0x41, 0x50, 0x45, 0x32, 0x2e, 0x30, 0x03, 0x01, 0x00, 0x00, 0x00);
+
+        for (let f = 0; f < framesRgba.length; f++) {
+          const indices = mapFrameToIndices(framesRgba[f], palette, hasAlpha);
+          const lzw = lzwEncode(indices);
+
+          // Graphic Control Extension (disposal=2 limpia el cuadro previo para evitar fantasmas)
+          out.push(0x21, 0xf9, 0x04, hasAlpha ? 0x09 : 0x08);
+          pushLE16(out, delayCs);
+          out.push(hasAlpha ? 255 : 0, 0x00);
+
+          // Image Descriptor
+          out.push(0x2c);
+          pushLE16(out, 0); pushLE16(out, 0);
+          pushLE16(out, W); pushLE16(out, H);
+          out.push(0x00);
+
+          for (let j = 0; j < lzw.length; j++) out.push(lzw[j]);
+
+          setProgress(true, 45 + Math.round(((f + 1) / framesRgba.length) * 53), `Codificando GIF ${f + 1}/${framesRgba.length}...`);
+          await new Promise(r => setTimeout(r, 0));
+        }
+
+        out.push(0x3b); // Trailer GIF
+        const blob = new Blob([new Uint8Array(out)], { type: 'image/gif' });
+        const a = document.createElement('a');
+        a.download = `zenda_${$('mode').value}_${$('anim-type').value}_${activePalette.id}_${W}x${H}.gif`;
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        setProgress(true, 100, `✅ GIF listo (${(blob.size / 1024).toFixed(0)} KB)`);
+        setTimeout(() => setProgress(false), 2600);
+      } catch (err) {
+        alert('Error generando GIF: ' + err.message);
+        setProgress(false);
+      } finally {
+        isExporting = false;
+        toggleExportButtons(false);
+      }
+    }
+
+    /* ==================== GRABADOR VIDEO HD LOOP (.WEBM) ==================== */
+    async function exportWebM() {
+      if (isExporting) return;
+      if (typeof MediaRecorder === 'undefined') {
+        alert('Tu navegador no soporta MediaRecorder. Usa Chrome o Edge.');
+        return;
+      }
+      isExporting = true;
+      toggleExportButtons(true);
+      setProgress(true, 5, 'Grabando video HD en bucle...');
+
+      try {
+        const [W, H] = getDims();
+        const off = document.createElement('canvas');
+        off.width = W;
+        off.height = H;
+        const octx = off.getContext('2d');
+
+        const mime = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm']
+          .find(m => MediaRecorder.isTypeSupported(m)) || '';
+        const stream = off.captureStream(30);
+        const rec = new MediaRecorder(stream, { mimeType: mime || undefined, videoBitsPerSecond: 8000000 });
+        const chunks = [];
+        rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+        const durMs = (Number($('anim-dur').value) || 2) * 1000;
+        const done = new Promise(res => { rec.onstop = res; });
+        rec.start();
+
+        const start = performance.now();
+        await new Promise(resolve => {
+          function step() {
+            const elapsed = performance.now() - start;
+            const t = Math.min(0.999, elapsed / durMs);
+            renderScene(octx, W, H, t, {}, true);
+            setProgress(true, Math.round(t * 95), `Grabando video HD (${Math.round(t * 100)}%)...`);
+            if (elapsed < durMs) requestAnimationFrame(step);
+            else resolve();
+          }
+          requestAnimationFrame(step);
+        });
+
+        rec.stop();
+        await done;
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const a = document.createElement('a');
+        a.download = `zenda_${$('mode').value}_${$('anim-type').value}_${activePalette.id}_${W}x${H}.webm`;
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        setProgress(true, 100, `✅ Video WebM listo (${(blob.size / 1024).toFixed(0)} KB)`);
+        setTimeout(() => setProgress(false), 2600);
+      } finally {
+        isExporting = false;
+        toggleExportButtons(false);
+      }
+    }
+
+    function setProgress(show, pct = 0, text = '') {
+      $('progress-wrap').classList.toggle('active', show);
+      $('progress-fill').style.width = pct + '%';
+      if (text) $('progress-label').textContent = text;
+    }
+
+    function toggleExportButtons(disabled) {
+      ['btn-png', 'btn-svg', 'btn-jpg', 'btn-webp', 'btn-gif', 'btn-webm', 'btn-kit']
+        .forEach(id => $(id).disabled = disabled);
+    }
+
+    /* ==================== EVENTOS ==================== */
+    ['mode','preset','res-mult','scale','anim-type','anim-dur','anim-fps','gif-maxw','theme',
+     'custom-w','custom-h','show-bar','bar-prism','show-grid','show-guides','tag-text','headline','subtext','cta-text','footer-text']
+      .forEach(id => $(id).addEventListener('input', () => {
+        $('custom-dims').style.display = $('preset').value === 'custom' ? 'grid' : 'none';
+        drawPreviewFrame($('anim-type').value === 'none' ? 0 : currentProgress());
+      }));
+
+    $('btn-play').onclick = () => {
+      isPlaying = !isPlaying;
+      $('btn-play').textContent = isPlaying ? '⏸ Pausar' : '▶ Reproducir';
+      if (!isPlaying) drawPreviewFrame(0);
+    };
+
+    $('btn-png').onclick  = () => downloadImage('image/png', 'png');
+    $('btn-jpg').onclick  = () => downloadImage('image/jpeg', 'jpg');
+    $('btn-webp').onclick = () => downloadImage('image/webp', 'webp');
+    $('btn-svg').onclick  = downloadSVG;
+    $('btn-gif').onclick  = exportGIF;
+    $('btn-webm').onclick = exportWebM;
+    $('btn-kit').onclick  = exportBrandKit;
+
+    document.fonts.ready.then(() => {
+      drawPreviewFrame(0);
+      requestAnimationFrame(tick);
+    });
+  </script>
+</body>
+</html>
